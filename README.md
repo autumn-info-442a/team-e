@@ -1,4 +1,4 @@
-# team-e
+# team-escape (e)
 INFO 442 Team Escape
 
 Hello! We are Team Escape in INFO 442: Cooperative Software Development. This repo will be used to host the hard work of our team for the duration of this class.
