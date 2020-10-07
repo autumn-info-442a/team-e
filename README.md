@@ -13,4 +13,4 @@ Team roles are broken up as follows:
 
 Mission Statement: Facilitating meaningful connections.
 
-Problem Statement: 
+Problem Statement: COVID-19, quarantine, online-schooling, and online work will forever shape the way students interact with others. Students today are being forced to mingle through instant messengers and even meet cohorts of friends through video chat which can be exceptionally more difficult to make meaningful connections with one another. Social interaction is a pivotal part of the college experience, and finding others with similar interests as you is a much larger challenge now.
