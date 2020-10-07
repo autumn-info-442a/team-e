@@ -1,7 +1,7 @@
-# team-escape (e)
-INFO 442 Team Escape
+# team-explore (e)
+INFO 442 Team Explore
 
-Hello! We are Team Escape in INFO 442: Cooperative Software Development. This repo will be used to host the hard work of our team for the duration of this class.
+Hello! We are Team Explore in INFO 442: Cooperative Software Development. This repo will be used to host the hard work of our team for the duration of this class.
 
 Our team consists of four undergraduate students: Greyson Fields, Jayson Edwards, Rajoshi Chakravarti, and Andy Cahill.
 
