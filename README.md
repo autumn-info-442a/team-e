@@ -3,12 +3,12 @@ INFO 442 Team Explore
 
 Hello! We are Team Explore in INFO 442: Cooperative Software Development. This repo will be used to host the hard work of our team for the duration of this class.
 
-Our team consists of four undergraduate students: Greyson Fields, Jayson Edwards, Rajoshi Chakravarti, and Andy Cahill.
+Our team consists of four undergraduate students: Greyson Fields, Jayson Edwards, Rajoshi Chakravarty, and Andy Cahill.
 
 Team roles are broken up as follows:
 - Product Manager: Greyson Fields
 - Designer: Jayson Edwards
-- Developer: Rajoshi Chakravarti
+- Developer: Rajoshi Chakravarty
 - Developer: Andy Cahill
 
 Mission Statement: Facilitating meaningful connections.
