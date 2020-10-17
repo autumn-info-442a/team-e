@@ -6,7 +6,7 @@ COVID-19, quarantine, online-schooling, and online work will forever shape the w
 
 We envisioned a web application that will allow users to browse categories of interest, join groups, and post updated to groups. This type of platform fosters social interaction with one another and hosts an avenue of making new friends and exploring new interests. We will leverage a card layout for the content on the page, sizable to the screen being used by the user.
 
-<img src="/public/img/explore.png" style="width:700;border:black">
+<img src="/public/img/explore.png" width="700">
 
 On the *Explore* page, there are many interactions that a user can make. To start with, *Log in*. Clicking the log in button on the *Explore* page will navigate the user to the log in page, prompting them to enter an email and password. The user can then log in, and be routed to *Explore*. If the user doesn’t have an account, they can create an account by filling out a few questions.
 
@@ -57,3 +57,7 @@ Users can like and comment on posts they choose. When hitting submit post, the u
 My Groups will show the groups that the user has joined, allowing for quick access. If the user is an admin, they will be able to see pending join requests under the Admin Groups tab where they can either decline or accept the potential group member.
 
 <img src="/public/img/mygroups.png" width="700">
+
+<img src="/public/img/admintab.png" width="700">
+
+<img src="/public/img/adminadmit.png" width="700">
