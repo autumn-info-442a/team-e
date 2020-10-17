@@ -10,7 +10,7 @@ On the *Explore* page, there are many interactions that a user can make. To star
 
 <!-- ![Home page, Explore page | 75x75, 25%](/public/img/homepage.png) -->
 
-<img src="/public/img/homepage.png" width="300">
+<img src="/public/img/homepage.png" width="700">
 
 The questions the user will answer allows the web application to generate recommended interest groups. The process flow for filling out the questions are as follows: enter your name > choose at least 3 interests > hit ok > route back to *Explore*. While the user fills out the questions, a progress bar will move closer to 100% as the user completes the survey. Some errors that may occur during this process flow are: “what is your name? “ is mandatory and won’t let the user click next until there are letters in the text area, given interests will change color once selected, the “OK” button won’t be activated until 3 interests have been selected. Users can always return to *Explore* by hitting the logo on the top left of each page, or the *Explore* button in the header. This route of navigation is present on all pages.
 
