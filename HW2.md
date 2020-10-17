@@ -1,6 +1,6 @@
 # Problem
 
-COVID-19, quarantine, online-schooling, and online work will forever shape the way students interact with others. Due to to the lack of social interaction, students are unable to make meaningful connections with others who have similar interests. Social interaction is a pivotal aspect of the college experience as according to Hurst, B., Wallace, R., & Nixon, S. B. (2013), it improves learning by enhancing knowledge of literacy, ciritcal thinking, and problem-solving skills. Finding other students with similar interests is a much larger challenge now than every before as students are quarantined and taking classes from behind a screen. How might we enable students to make meaningful connections with one another in a virtual environment?
+COVID-19, quarantine, online-schooling, and online work will forever shape the way students interact with others. Due to to the lack of social interaction, students are unable to make meaningful connections with others who have similar interests. Social interaction is a pivotal aspect of the college experience as according to Hurst, B., Wallace, R., & Nixon, S. B. (2013, it improves learning by enhancing knowledge of literacy, ciritcal thinking, and problem-solving skills. Finding other students with similar interests is a much larger challenge now than every before as students are quarantined and taking classes from behind a screen. How might we enable students to make meaningful connections with one another in a virtual environment?
 
 # Solution
 
@@ -20,7 +20,7 @@ The questions the user will answer allows the web application to generate recomm
 
 Some errors that may occur during this process flow are: “what is your name? “ is mandatory and won’t let the user click next until there are letters in the text area, given interests will change color once selected, the “OK” button won’t be activated until 3 interests have been selected. Users can always return to *Explore* by hitting the logo on the top left of each page, or the *Explore* button in the header. This route of navigation is available on all pages.
 
-From *Explore*, a user can view a category which will bring them to the underlying groups in that category. 
+From *Explore*, a user can view a category which will bring them to the underlying groups in that category as seen below. The groups listed will be related to the ccategory that was clicked on.
 
 <img src="/public/img/grouplist.png" width="700">
  
@@ -28,31 +28,31 @@ The search bar can be utilized to filter out the groups in real time.
 
 <img src="/public/img/searchgroup.png" width="700">
 
-If a group doesn’t exist, the user will be prompted to create a new group. 
+If a group doesn’t exist after a user searches for it, the user will be prompted to create a new group if they would like.
 
 <img src="/public/img/groupnotexist.png" width="700">
 
-A form will appear asking for group name, category, and search tags. From there, the the group will then be created. The group creator will then become the group admin.
+A form will appear asking for group name, category, and search tags. From there, the group will then be created. The group creator will then become the group admin.
 
 <img src="/public/img/newgroupdetails.png" width="700">
 
-When viewing a group as a user that hasn’t joined it yet, you will see the option to join the group.
+When viewing a group as the user that hasn’t joined yet, they will see the option to join the group. The back button will route the user to the group list page. The page will show group details.
 
 <img src="/public/img/groupoverview.png" width="700">
 
-You can only join or post within a group if you have an account. Clicking either of these buttons will redirect to the log in page. Once joined, the join button will be switched to pending as the group admin will admit you to the group.
+Users can only join or post within a group if they have an account. Clicking either of these buttons will redirect to the log in page. Once joined, the join button will change to pending as the group admin will admit the user to the group.
 
 <img src="/public/img/pendingjoin.png" width="700">
 
 When viewing a group as a user that has already joined, the recent posts in that group will appear in chronological order. When creating a post, a title and description are required. An image is optional. 
 
-<img src="/public/img/createpost.png" width="700">
+<img src="/public/img/groupblog.png" width="700">
 
 Users can like and comment on posts they choose. When hitting submit post, the user will be prompted with a confirmation message in which they can cancel and continue editing their post, or confirm the post to the group.
 
-<img src="/public/img/postconfirmation.png" width="700">
+<img src="/public/img/createpost.png" width="700">
 
-<img src="/public/img/groupblog.png" width="700">
+<img src="/public/img/postconfirmation.png" width="700">
 
 My Groups will show the groups that the user has joined, allowing for quick access. If the user is an admin, they will be able to see pending join requests under the Admin Groups tab where they can either decline or accept the potential group member.
 
