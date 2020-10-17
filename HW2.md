@@ -44,20 +44,26 @@ Users can only join or post within a group if they have an account. Clicking eit
 
 <img src="/public/img/pendingjoin.png" width="700">
 
-When viewing a group as a user that has already joined, the recent posts in that group will appear in chronological order. When creating a post, a title and description are required. An image is optional. 
+When viewing a group as a user that has already joined, the recent posts in that group will appear in chronological order. Users can like and comment on posts they choose.
 
 <img src="/public/img/groupblog.png" width="700">
 
-Users can like and comment on posts they choose. When hitting submit post, the user will be prompted with a confirmation message in which they can cancel and continue editing their post, or confirm the post to the group.
+When creating a post, a title and description are required. An image is optional. The user can hit the back button to return to the recent posts within the group.
 
 <img src="/public/img/createpost.png" width="700">
 
+When hitting submit post, the user will be prompted with a confirmation message in which they can cancel and continue editing their post, or confirm the post to the group.
+
 <img src="/public/img/postconfirmation.png" width="700">
 
-My Groups will show the groups that the user has joined, allowing for quick access. If the user is an admin, they will be able to see pending join requests under the Admin Groups tab where they can either decline or accept the potential group member.
+My Groups will show the groups that the user has joined, allowing for quick access. 
 
 <img src="/public/img/mygroups.png" width="700">
 
+If the user is an admin, they will be able to see pending join requests under the Admin Groups tab where they can either decline or accept the potential group member.
+
 <img src="/public/img/admintab.png" width="700">
+
+The admin user will be prompted a confirmation message if they would like to admit the new user to the group.
 
 <img src="/public/img/adminadmit.png" width="700">
