@@ -1,5 +1,4 @@
-# team-explore (e)
-INFO 442 Team Explore
+# Team Explore
 
 Hello! We are Team Explore in INFO 442: Cooperative Software Development. This repo will be used to host the hard work of our team for the duration of this class.
 
