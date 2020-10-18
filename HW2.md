@@ -8,6 +8,8 @@ COVID-19, quarantine, online-schooling, and online work will forever shape the w
 
 We envisioned a web application that will allow users to browse categories of interest, join groups, and post updated to groups. This type of platform fosters social interaction with one another and hosts an avenue of making new friends and exploring new interests. We will leverage a card layout for the content on the page, sizable to the screen being used by the user.
 
+This service is for UW students, but could be expanded to other institutions in the future. This platform is meant for broad and specific groups, (i.e. "Studying" or "IMA pick-up basketball 5-7pm). The overarching goal is to facilitate meaningful connections with other students.
+
 <img src="/public/img/explore.png" width="700">
 
 ## Log In
