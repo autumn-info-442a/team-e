@@ -1,12 +1,12 @@
 # Problem
 
-COVID-19, quarantine, online-schooling, and online work will forever shape the way students interact with others. Due to the lack of social interaction, students are unable to make meaningful connections with others who have similar interests. Social interaction is a pivotal aspect of the college experience as according to Hurst, B., Wallace, R., & Nixon, S. B. (2013. It improves learning by enhancing knowledge of literacy, ciritcal thinking, and problem-solving skills. Finding other students with similar interests is a much larger challenge now than every before as students are quarantined and taking classes from behind a screen. How might we enable students to make meaningful connections with one another in a virtual environment?
+COVID-19, quarantine, online-schooling, and online work will forever shape the way students interact with others. Due to the lack of social interaction, students are unable to make meaningful connections with others who have similar interests. Social interaction is a pivotal aspect of the college experience as according to Hurst, B., Wallace, R., & Nixon, S. B. (2013). It improves learning by enhancing knowledge of literacy, critical thinking, and problem-solving skills. Finding other students with similar interests is a much larger challenge now than every before as students are quarantined and taking classes from behind a screen. How might we enable students to make meaningful connections with one another in a virtual environment?
 
 # Solution
 
 ## Explore
 
-We envisioned a web application that will allow users to browse categories of interest, join groups, and post updated to groups. This type of platform fosters social interaction with one another and hosts an avenue of making new friends and exploring new interests. We will leverage a card layout for the content on the page, sizable to the screen being used by the user.
+We envisioned a web application that will allow users to browse categories of interest, join groups, and post updates to groups. This type of platform fosters social interaction with one another and hosts an avenue of making new friends and exploring new interests. We will leverage a card layout for the content on the pages, sizable to the screen being used by the user.
 
 This service is for UW students, but could be expanded to other institutions in the future. This platform is meant for broad and specific groups, (i.e. "Studying" or "IMA pick-up basketball 5-7pm"). The overarching goal is to facilitate meaningful connections with other students.
 
@@ -14,7 +14,7 @@ This service is for UW students, but could be expanded to other institutions in 
 
 ## Log In
 
-On the *Explore* page, there are many interactions that a user can make. To start with, *Log in*. Clicking the log in button on the *Explore* page will navigate the user to the log in page, prompting them to enter an email and password. The user can then log in, and be routed to *Explore*. If the user doesn’t have an account, they can create an account by filling out a few questions.
+On the *Explore* page, there are many interactions that a user can make. To start with, *Log in*. Clicking the log in button on the *Explore* page will navigate the user to the log in page, prompting them to enter an email and password. The user can then log in, and be routed to *Explore*. If the user doesn’t have an account, they can create an account by filling out a few questions. To log out of their account, the user simply needs to hit the log out button.
 
 <img src="/public/img/login.png" width="700">
 
@@ -30,7 +30,7 @@ Some errors that may occur during this process flow are: “what is your name? �
 
 ## Groups
 
-From *Explore*, a user can view a category which will bring them to the underlying groups in that category as seen below. The groups listed will be related to the ccategory that was clicked on.
+From *Explore*, a user can view a category which will bring them to the underlying groups in that category as seen below. The groups listed will be related to the category that was clicked on.
 
 <img src="/public/img/grouplist.png" width="700">
  
@@ -78,7 +78,7 @@ When hitting submit post, the user will be prompted with a confirmation message 
 
 ## My Groups
 
-My Groups will show the groups that the user has joined, allowing for quick access. 
+My Groups will show the groups that the user has joined, allowing for quick access. To leave a group that the user has previously joined, the user will only have to hit the leave button on the group tile.
 
 <img src="/public/img/mygroups.png" width="700">
 
