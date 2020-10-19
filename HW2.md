@@ -1,6 +1,6 @@
 # Problem
 
-COVID-19, quarantine, online-schooling, and online work will forever shape the way students interact with others. Due to the lack of social interaction, students are unable to make meaningful connections with others who have similar interests. Social interaction is a pivotal aspect of the college experience as according to Hurst, B., Wallace, R., & Nixon, S. B. (2013). It improves learning by enhancing knowledge of literacy, critical thinking, and problem-solving skills. Finding other students with similar interests is a much larger challenge now than every before as students are quarantined and taking classes from behind a screen. How might we enable students to make meaningful connections with one another in a virtual environment?
+COVID-19, quarantine, online-schooling, and online work will forever shape the way students interact with others. Due to the lack of social interaction, students are unable to make meaningful connections with others who have similar interests. Social interaction is a pivotal aspect of the college experience as according to Hurst, B., Wallace, R., & Nixon, S. B. (2013). It improves learning by enhancing knowledge of literacy, critical thinking, and problem-solving skills. Finding other students with similar interests is a much larger challenge now than ever before as students are quarantined and taking classes from behind a screen. How might we enable students to make meaningful connections with one another in a virtual environment?
 
 # Solution
 
@@ -26,7 +26,7 @@ The questions the user will answer allows the web application to generate recomm
 
 <img src="/public/img/interestselector.png" width="700" padding="2">
 
-Some errors that may occur during this process flow are: “what is your name? “ is mandatory and won’t let the user click next until there are letters in the text area, given interests will change color once selected, the “OK” button won’t be activated until 3 interests have been selected. Users can always return to *Explore* by hitting the logo on the top left of each page, or the *Explore* button in the header. This route of navigation is available on all pages.
+Some errors that may occur during this process flow are: “what is your name?“ is mandatory and won’t let the user click next until there are letters in the text area, given interests will change color once selected, the “OK” button won’t be activated until 3 interests have been selected. Users can always return to *Explore* by hitting the logo on the top left of each page, or the *Explore* button in the header. This route of navigation is available on all pages.
 
 ## Groups
 
@@ -50,7 +50,7 @@ A form will appear asking for group name, category, and search tags. From there,
 
 <img src="/public/img/newgroupdetails.png" width="700">
 
-## View Group: Unjoined
+## View Group: Not Joined
 
 When viewing a group as the user that hasn’t joined yet, they will see the option to join the group. The back button will route the user to the group list page. The page will show group details.
 
