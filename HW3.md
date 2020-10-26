@@ -66,59 +66,58 @@
 43. The system might allow the user to submit a photo for a group picture.
 44. The system might give the group a default photo if no other photo is updated.
 
-### View Group: Not Joined
+### View Group
 
-45. The system must display the group description to the user, as defined by the group admin.
+45. The system must display the group name, description and category to the user, as defined by the group admin.
 46. The group administrator’s email should be displayed if the user is in the group. 
 47. The system must allow the user to route back to the previous page by clicking the back arrow.
 48. If the user is logged in and not in the group, the system must allow the user to request to join the group by clicking the ask to join button.
 49. The system must change the join status to pending if they requested to join. The join button will now say pending and will be greyed out.
 50. The system must limit the number of group members to 10, displaying an error message if a user requests to join and the member count is already 10.
 51. The user must be able to leave any group that they have joined by clicking on the “leave group” button.
-52. The system should display comments in chronological order with the most recent comment being at the top.
-53. Users must be able to view and reply to comments on each post from a thread system below the post.
-54. The system should only display the three most recent comments unless “load more comments” is pressed.
-55. Users should be able to save the group so they can return to the page at a later date (through my groups page) by clicking on the save button. Once saved, you can click it again to unsave.
+52. The system should allow users to leave comments by clicking on the comment button, and each comment should have a max character count where the user is unable to keep typing if they hit the limit.
+53  The system should display comments below the group information and show these comments in chronological order with the most recent comment being at the top.
+54. Users must be able to view and reply to comments on each post from a thread system below the post.
+55. The system should only display the three most recent comments unless “load more comments” is pressed.
+56. Users should be able to save the group so they can return to the page at a later date (through the my groups page) by clicking on the save button. Once saved, you can click it again to unsave.
+57. The system should have a mini-navbar at the top of the group page, allowing you to tab to the blog post section of the group page. (see next section)
 
-### View Group: Joined
+### View Group: Blog Tab
 
-56. The system must display the posts in the group in chronological order (recent first).
-57. The system must allow the user to route back to the previous page by clicking the back arrow .
-58. The system must show the name of the group the user clicked on, at the top of the page.
-59. Users should be routed to the “create post” screen if they click on the “post” button.
-60. The system should only allow users to post if they have already joined the group by only displaying the add post button to group members. 
-61. Users must be able to comment on any post in the group by clicking the comment button.
-62. The system must display comments in the comment section (below) each post.
-63. The user should be able to view saved posts by click on the “saved posts” button.
+58. The system must display blog posts in the group in chronological order (recent first).
+59. For each blog post, the system should display the post title, author, desciption, and may show an image if the post has one.
+60. Users should be routed to the “create post” screen if they click on the “post” button.
+61. The system should only allow users to post if they have already joined the group by only displaying the add post button to group members. 
+62. Users must be able to comment on any post in the group by clicking the comment button (comments work the same was as in the view group tab).
 
 ### Create Blog Post
 
-64. The system must allow the user to route back to the previous page by clicking the back arrow.
-65. The system must allow the user to enter a title for their post, including letters and numbers with a maximum of 50 characters.
-66. The system must allow the user to enter a description for their post.  including letters and numbers with a maximum of 240 characters.
-67. The system must allow the user to upload an image for their post of file type jpeg or png.
-68. The system must allow the user to submit their post by hitting the submit button. 
-69. The system must display an error if the title or description are empty, not allowing the user to post until satisfied.
-70. The system must display a confirmation, ensuring that the user wants to post to the group or not by either clicking the post or cancel button.
+63. The system must allow the user to route back to the previous page by clicking the back arrow.
+64. The system must allow the user to enter a title for their post, including letters and numbers with a maximum of 50 characters.
+65. The system must allow the user to enter a description (body text) for their post. Including letters and numbers with a maximum of 1,000 characters.
+66. The system might allow the user to upload an image for their post of file type jpeg or png.
+67. The system must allow the user to submit their post by hitting the submit button. 
+68. The system must display an error if the title or description are empty, not allowing the user to post until satisfied.
+69. The system must display a confirmation, ensuring that the user wants to post to the group or not by either clicking the post or cancel button.
 
 ### My Groups
 
-71. The system must display every group that the user has joined.
-72. For each displayed group, there should be a “leave group” button within the tile that allows users to leave groups that they have previously joined. 
-73. When hitting the leave button, the system must display a confirmation, ensuring that the user wants to leave the group by clicking the confirm or cancel button.
-74. The system must show the groups that the user is an admin for if they click on the “Admin Groups” button.
-75. The system must display the groups that they have joined in chronological order.
-76. The system must route the user to the specific group page when clicked on.
-77. The user should be able to create a new group by clicking on the “Create group” button.
+70. The system must display every group that the user has joined.
+71. For each displayed group, there should be a “leave group” button within the tile that allows users to leave groups that they have previously joined. 
+72. When hitting the leave button, the system must display a confirmation, ensuring that the user wants to leave the group by clicking the confirm or cancel button.
+73. The system must show the groups that the user is an admin for if they click on the “Admin Groups” button.
+74. The system must display the groups that they have joined in chronological order.
+75. The system must route the user to the specific group page when clicked on.
+76. The user should be able to create a new group by clicking on the “Create group” button.
 
 ### Admin User
 
-78. The system must allow the user to access the Admin Panel tab on the My Groups page, giving access to the user’s Admin groups and pending group requests. 
-79. For each group the user is an admin in, the system must display the name of each user pending.
-80. The system must allow the Admin user to click on a pending request to make the decision to admit them.
-81. The system must display a confirmation when the Admin user clicks on a pending request, allowing them to click yes or no.
-82. The system must allow the pending user to access the group if they are admitted by setting the user as a group member or cancel the request if they are denied.
-83. The system must be able to recognize when a user is an admin for a group (a group they created), giving them the ability to delete the group if desired from the “Your Admin Groups” tab by hitting the delete button.
-84. The system must display a delete confirmation screen, allowing the user to delete the group by clicking yes, or no to not delete the group.
-85. The system must remove the pending request from the Admin user’s view after a decision has been made.
-86. The system must display new groups requests in My Groups > Admin Groups so that the group Admin can admit or decline the pending member.
+77. The system must allow the user to access the Admin Panel tab on the My Groups page, giving access to the user’s Admin groups and pending group requests. 
+78. For each group the user is an admin in, the system must display the name of each user pending.
+79. The system must allow the Admin user to click on a pending request to make the decision to admit them.
+80. The system must display a confirmation when the Admin user clicks on a pending request, allowing them to click yes or no.
+81. The system must allow the pending user to access the group if they are admitted by setting the user as a group member or cancel the request if they are denied.
+82. The system must be able to recognize when a user is an admin for a group (a group they created), giving them the ability to delete the group if desired from the “Your Admin Groups” tab by hitting the delete button.
+83. The system must display a delete confirmation screen, allowing the user to delete the group by clicking yes, or no to not delete the group.
+84. The system must remove the pending request from the Admin user’s view after a decision has been made.
+85. The system must display new groups requests in My Groups > Admin Groups so that the group Admin can admit or decline the pending member.
