@@ -76,7 +76,7 @@
 50. The system must limit the number of group members to 10, displaying an error message if a user requests to join and the member count is already 10.
 51. The user must be able to leave any group that they have joined by clicking on the “leave group” button.
 52. The system should allow users to leave comments by clicking on the comment button, and each comment should have a max character count where the user is unable to keep typing if they hit the limit.
-53  The system should display comments below the group information and show these comments in chronological order with the most recent comment being at the top.
+53. The system should display comments below the group information and show these comments in chronological order with the most recent comment being at the top.
 54. Users must be able to view and reply to comments on each post from a thread system below the post.
 55. The system should only display the three most recent comments unless “load more comments” is pressed.
 56. Users should be able to save the group so they can return to the page at a later date (through the my groups page) by clicking on the save button. Once saved, you can click it again to unsave.
