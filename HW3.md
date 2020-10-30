@@ -21,8 +21,8 @@
 ### Search Bar
 
 12. Users must be able to type into the search bar while the system updates search results as the user types.
-13. The system must query the term inputted against groups if on the group page.
-14. The system must query the term inputted against categories if on the category page.
+13. The system must query the term inputted against groups if on the group page, displaying the matching or partially matching results to the user.
+14. The system must query the term inputted against categories if on the category page, displaying the matching or partially matching results to the user.
 15. The system should display search results in alphabetical order.
 16. The system should display search results in alphabetical order when the user submits their search query.
 
@@ -51,7 +51,7 @@
 31. Users must be able to type their email into the email field when on the survey email page.
 32. Users should be able to select up to 3 interests from a group of categories on the survey interest page, highlighting the selected categories in an accessible color when selected.
 33. The system shouldn’t let the user move to the next question if they have not entered information correctly; name must be >0 characters, email should be a valid email address, and the user must select 3 categories for the interest selection, graying out the next button until this is satisfied.
-34. The system must be able to generate recommended categories on the home page based on the user’s selected interests.
+34. The system must be able to generate recommended categories on the home page based on the user’s selected interests, matching their interests to existing categories.
 
 ### Create New Group
 
