@@ -23,8 +23,8 @@
 12. Users must be able to type into the search bar while the system updates search results as the user types.
 13. The system must query the term inputted against groups if on the group page, displaying the matching or partially matching results to the user.
 14. The system must query the term inputted against categories if on the category page, displaying the matching or partially matching results to the user.
-15. The system should display search results in alphabetical order.
-16. The system should display search results in alphabetical order when the user submits their search query.
+15. The system should display search results for groups in alphabetical order.
+16. The system should display search results for categories in alphabetical order.
 
 ### Navigation Bar
 
