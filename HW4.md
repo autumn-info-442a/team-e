@@ -84,7 +84,7 @@ The **GroupView** component communicates with **GroupController** by:
 
 This component is a controller that updates models and receives alerts from views about the user searching for items.
 
-The **SearchView** component communicates with SearchController by:
+The **SearchView** component communicates with **SearchController** by:
 * The **SearchView** sends user input to **SearchController** when the user clicks in the search bar and begins typing a search query for categories.
 * The **SearchView** sends user input to **SearchController** when the user clicks in the search bar and begins typing a search query for groups.
 
@@ -280,7 +280,7 @@ The **BlogModel** component communicates with **NewBlogView** by:
 This component is a view that grabs model data to update itself and alerts controllers of events when the user creates a new blog post.
 
 The **GroupModel** component communicates with **GroupIntroView** by: 
-* The **GroupModel** updates G**roupIntroView** with the information of the group that the user clicked on, including the description and current amount of users.
+* The **GroupModel** updates **GroupIntroView** with the information of the group that the user clicked on, including the description and current amount of users.
 
 ### SavedGroupView
 
