@@ -1,6 +1,5 @@
-
 //All handlers take in a header that has the user making the request in addition to other inputs. This allows the back-end to know who is making the request; needed for creating new groups/comments/posts / knowing if the user is in a group/pending request in a group/is group admin etc.
-//All inputs will be either part of the request url or in the request body. Specifying how exactly feels to implementation-y to be explained here.
+//All inputs will be either part of the request url or in the request body. Specifying how exactly feels too implementation-y to be explained here.
 
 //CategoriesHandler is the CategoryHandler, handles requests about categories.
 func CategoriesHandler(w http.ResponseWriter, r *http.Request) {

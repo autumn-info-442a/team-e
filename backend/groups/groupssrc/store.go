@@ -24,7 +24,8 @@ type GroupsStore interface {
 	DeleteBlogPost(blogPostId) error
 
 	//MembershipRequest model methods
-	CreateMembershipRequest(groupId, userId) (MembershipRequest, error)	GetMembershipRequests(groupId) ([]MembershipRequest, error)
+	CreateMembershipRequest(groupId, userId) (MembershipRequest, error)
+	GetMembershipRequests(groupId) ([]MembershipRequest, error)
 	AcceptMembershipRequest(membershipRequest) error
 	DeclineMembershipRequest(membershipRequest) error
 }
