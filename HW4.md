@@ -9,8 +9,7 @@ This component is a model that stores all of the categories that the user will b
 The model resides only on the server.
 
 * The **CategoryController** and **SearchController** communicate with the model. They communicate:
-* The **CategoryController** can ask the **CategoryModel** for the subsequent categories as the user scrolls for more.
-* The **CategoryController** can ask the **CategoryModel** for the groups within a category.
+* The **CategoryController** can ask the **CategoryModel** to load the categories.
 * The **SearchController** can ask the **CategoryModel** for matching category search results.
 
 ### GroupModel
@@ -19,13 +18,15 @@ This component is a model that stores all of the group information that the user
 
 The model resides only on the server.
 
-The **GroupController**, **SearchController**, **NewGroupController**, **GroupIntroController**, and **PopUpController** communicate with the model. They communicate:
+The **GroupController**, **SearchController**, **NewGroupController**, **GroupIntroController**, **PopUpController**, **CategoryController**, and **BlogController** communicate with the model. They communicate:
 * The **GroupController** can ask the **GroupModel** for subsequent groups in a category as the user scrolls.
 * The **SearchController** can ask the **GroupModel** for matching group search results.
 * The **NewGroupController** can ask the **GroupModel** to update with a new group.
 * The **GroupIntroController** can ask the **GroupModel** for the group information: current amount of users, description.
 * The **GroupIntroController** can ask the **GroupModel** for the joined users of the group.
 * The **PopUpController** can ask the **GroupModel** for user and group information.
+* The **CategoryController** can ask the **CategoryModel** for the groups in a category.
+* The **BlogController** can ask the **GroupModel** for the group info and users.
 
 ### UserModel
 
@@ -33,16 +34,16 @@ This component is a model that stores all of the user information so that the us
 
 The model resides only on the server.
 
-The **AdminController**, **GroupController**, **PostContoller**, **SurveyController**, **NavBarController**, **LoginController**, **SavedGroupController**, **BlogController**, and **PopUpController** communicate with the model. They communicate:
+The **AdminController**, **GroupController**, **PostContoller**, **SurveyController**, **NavBarController**, **LoginController**, **SavedGroupController**, and **PopUpController** communicate with the model. They communicate:
 * The **AdminController** can ask the **UserModel** for the admin groups and admin user information.
 * The **GroupController** can ask the **UserModel** for groups the user has joined or saved.
+* The **GroupController** can ask the **UserModel** for joined users of a group.
 * The **PostController** can ask the **UserModel** for matching a post with a user.
 * The **SurveyController** can ask the **UserModel** for creation of a new user based on survey results.
 * The **NavBarController** can ask the **UserModel** for creation of a new user.
 * The **LoginController** can ask the **UserModel** for user login information, if it exists.
 * The **LoginController** can ask the **UserModel** to create a new user.
 * The **SavedGroupController** can ask the **UserModel** for the user’s saved groups.
-* The **BlogController** can ask the **UserModel** for joined users of a group.
 * The **PopUpController** can ask the **UserModel** for post and user information.
 
 ### CommentModel
