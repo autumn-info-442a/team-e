@@ -23,7 +23,7 @@ class Groups extends Component {
     // input: form information to create the group along with user's ID
     // output: a request to the server to create the new group
     createGroup(newGroupFormInfo, user) {
-        validateInfo(newGroupFormInfo) // calidates all the user info entered is correct
+        validateInfo(newGroupFormInfo) // validates that all the user info entered is correct
 
     }
 
