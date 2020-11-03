@@ -121,7 +121,7 @@ The **AdminView** and **PopUpView** components communicate with **AdminControlle
 * The **AdminView** sends user input to **AdminController** when the user clicks on the Admin Panel to manage their admin groups.
 * The **PopUpView** sends user input to **AdminController** when an admin user clicks to confirm a join request.
 
-### NewGroupContoller
+### NewGroupController
 
 This component is a controller that updates models and receives alerts from views about the new groups being created.
 
