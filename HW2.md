@@ -1,28 +1,38 @@
 # Problem
 
-COVID-19, quarantine, online-schooling, and online work will forever shape the way students interact with others. Due to the lack of social interaction, students are unable to make meaningful connections with others who have similar interests. Social interaction is a pivotal aspect of the college experience as according to Hurst, B., Wallace, R., & Nixon, S. B. (2013). It improves learning by enhancing knowledge of literacy, critical thinking, and problem-solving skills. Finding other students with similar interests is a much larger challenge now than ever before as students are quarantined and taking classes from behind a screen. How might we enable students to make meaningful connections with one another in a virtual environment?
+COVID-19, quarantine, online-schooling, and online work will forever shape the way students interact with others. Instead of being able to interact with others in a physical environment, students are now forced to interact purely through virtual means which can be very difficult when it comes to meeting new people. Social interaction is a pivotal aspect of the college experience as according to Hurst, B., Wallace, R., & Nixon, S. B. (2013). Finding other students with similar interests is a much larger challenge now than ever before as students are quarantined and taking classes from behind a screen. How might we enable students to make meaningful connections with one another in a virtual environment?
 
 # Solution
 
-## Explore
+## Homescreen & Categories
 
 We envisioned a web application that will allow users to browse categories of interest, join groups, and post updates to groups. This type of platform fosters social interaction with one another and hosts an avenue of making new friends and exploring new interests. We will leverage a card layout for the content on the pages, sizable to the screen being used by the user.
 
 This service is for UW students, but could be expanded to other institutions in the future. This platform is meant for broad and specific groups, (i.e. "Studying" or "IMA pick-up basketball 5-7pm"). The overarching goal is to facilitate meaningful connections with other students.
 
+On the *Categories* page, there will be a set amount of predetermined categories that we believe encompass a wide range of topics. The user will be able to scroll down the page to view more categories.
+
+If the user is signed in, the user can click on the “recommended” button to show them recommended categories based on preferences they selected when creating the account. If the user is not logged in, the recommended button will alert the user to log in to receive category recommendations.
+
 <img src="/public/img/explore.png" width="700">
 
 ## Log In
 
-On the *Explore* page, there are many interactions that a user can make. To start with, *Log in*. Clicking the log in button on the *Explore* page will navigate the user to the log in page, prompting them to enter an email and password. The user can then log in, and be routed to *Explore*. If the user doesn’t have an account, they can create an account by filling out a few questions. To log out of their account, the user simply needs to hit the log out button.
+On the *Categories* page, there are many interactions that a user can make. To start with, *Log in*. Clicking the log in button on the *Categories* page will navigate the user to the log in page, prompting them to enter an email and password. The user can then log in, and be routed to *Categories*. If the user doesn’t have an account, they can create an account by filling out a few questions. To log out of their account, the user simply needs to hit the log out button.
 
 <img src="/public/img/login.png" width="700">
 
+If the user types in incorrect login information, there will be an error that shows up that explains the email and/or password is incorrect.
+
+<img src="/public/img/incorrectlogin.png" width="700">
+
 ## New Account Survey
 
-The questions the user will answer allows the web application to generate recommended interest groups. The process flow for filling out the questions are as follows: enter your name > choose at least 3 interests > hit ok > route back to *Explore*. While the user fills out the questions, a progress bar will move closer to 100% as the user completes the survey. 
+The questions the user will answer allows the web application to generate recommended interest groups. The process flow for filling out the questions are as follows: enter your name > choose at least 3 interests > hit ok > route back to *Explore*. While the user fills out the questions, a progress bar will move closer to 100% as the user completes the survey.
 
 <img src="/public/img/surveyname.png" width="700">
+
+<img src="/public/img/emailinput.png" width="700" padding="2">
 
 <img src="/public/img/interestselector.png" width="700" padding="2">
 
@@ -46,7 +56,7 @@ If a group doesn’t exist after a user searches for it, the user will be prompt
 
 <img src="/public/img/groupnotexist.png" width="700">
 
-A form will appear asking for group name, category, and search tags. From there, the group will then be created. The group creator will then become the group admin.
+A form will appear asking for group name, category, and search tags. From there, the group will then be created. The group creator will then become the group admin. In order to create a group, the user MUST be logged into an account. If the user is not logged in, it will prompt them to log in or create an account.
 
 <img src="/public/img/newgroupdetails.png" width="700">
 
@@ -56,15 +66,19 @@ When viewing a group as the user that hasn’t joined yet, they will see the opt
 
 <img src="/public/img/groupoverview.png" width="700">
 
-Users can only join or post within a group if they have an account. Clicking either of these buttons will redirect to the log in page. Once joined, the join button will change to pending as the group admin will admit the user to the group.
+Users can only join or post within a group if they have an account. Clicking either of these buttons will redirect to the log in page. Once joined, the join button will change to pending as the group admin will admit the user to the group. And after the user is accepted into a group, the pending button will change to a “leave group” button if they decide they want to leave the group. Leaving a group will prompt the user with a confirmation message so that the user does not accidentally leave the group.
+
+Users can “star” a group which will highlight that certain group in the *My Groups* screen below. 
 
 <img src="/public/img/pendingjoin.png" width="700">
 
 ## View Group: Joined
 
-When viewing a group as a user that has already joined, the recent posts in that group will appear in chronological order. Users can like and comment on posts they choose.
+When viewing a group as a user that has already joined, the recent posts in that group will appear in chronological order. Users can comment on posts they choose by clicking on the comment button. This will give them the option to comment and view other comments. Users can then click on “Load more comments” to view more comments if there are more than three comments.
 
 <img src="/public/img/groupblog.png" width="700">
+
+<img src="/public/img/loadmorecomments.png" width="700" padding="2">
 
 ## Create Post
 
@@ -78,15 +92,17 @@ When hitting submit post, the user will be prompted with a confirmation message 
 
 ## My Groups
 
-My Groups will show the groups that the user has joined, allowing for quick access. To leave a group that the user has previously joined, the user will only have to hit the leave button on the group tile.
+My Groups will show the groups that the user has joined, allowing for quick access. By clicking on the “Admin Groups” button, it will display groups that the user is an admin for.
 
 <img src="/public/img/mygroups.png" width="700">
 
 ## Admin User
 
-If the user is an admin, they will be able to see pending join requests under the Admin Groups tab where they can either decline or accept the potential group member.
+If the user is an admin, they will be able to see pending join requests in the group admin screen. Instead of being asked to join on the group screen, the admin will have a different view where they can edit the group description and manage member requests to join that specific group.
 
-<img src="/public/img/admintab.png" width="700">
+<img src="/public/img/groupadminview.png" width="700">
+
+<img src="/public/img/adminrequests.png" width="700" padding="2">
 
 The admin user will be prompted a confirmation message if they would like to admit the new user to the group.
 
