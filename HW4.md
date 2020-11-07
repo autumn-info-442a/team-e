@@ -9,8 +9,7 @@ This component is a model that stores all of the categories that the user will b
 The model resides only on the server.
 
 * The **CategoryController** and **SearchController** communicate with the model. They communicate:
-* The **CategoryController** can ask the **CategoryModel** for the subsequent categories as the user scrolls for more.
-* The **CategoryController** can ask the **CategoryModel** for the groups within a category.
+* The **CategoryController** can ask the **CategoryModel** to load the categories.
 * The **SearchController** can ask the **CategoryModel** for matching category search results.
 
 ### GroupModel
@@ -19,13 +18,14 @@ This component is a model that stores all of the group information that the user
 
 The model resides only on the server.
 
-The **GroupController**, **SearchController**, **NewGroupController**, **GroupIntroController**, and **PopUpController** communicate with the model. They communicate:
-* The **GroupController** can ask the **GroupModel** for subsequent groups in a category as the user scrolls.
+The **GroupTileController**, **SearchController**, **NewGroupController**, **GroupController**, **CategoryController**, and **BlogController** communicate with the model. They communicate:
+* The **GroupTileController** can ask the **GroupModel** for subsequent groups in a category as the user scrolls.
 * The **SearchController** can ask the **GroupModel** for matching group search results.
 * The **NewGroupController** can ask the **GroupModel** to update with a new group.
-* The **GroupIntroController** can ask the **GroupModel** for the group information: current amount of users, description.
-* The **GroupIntroController** can ask the **GroupModel** for the joined users of the group.
-* The **PopUpController** can ask the **GroupModel** for user and group information.
+* The **GroupController** can ask the **GroupModel** for the group information: current amount of users, description.
+* The **GroupController** can ask the **GroupModel** for the joined users of the group.
+* The **CategoryController** can ask the **CategoryModel** for the groups in a category.
+* The **BlogController** can ask the **GroupModel** for the group info and users.
 
 ### UserModel
 
@@ -33,17 +33,15 @@ This component is a model that stores all of the user information so that the us
 
 The model resides only on the server.
 
-The **AdminController**, **GroupController**, **PostContoller**, **SurveyController**, **NavBarController**, **LoginController**, **SavedGroupController**, **BlogController**, and **PopUpController** communicate with the model. They communicate:
+The **AdminController**, **GroupController**, **PostContoller**, **SurveyController**, **LoginController**, and **SavedGroupController** communicate with the model. They communicate:
 * The **AdminController** can ask the **UserModel** for the admin groups and admin user information.
 * The **GroupController** can ask the **UserModel** for groups the user has joined or saved.
+* The **GroupController** can ask the **UserModel** for joined users of a group.
 * The **PostController** can ask the **UserModel** for matching a post with a user.
 * The **SurveyController** can ask the **UserModel** for creation of a new user based on survey results.
-* The **NavBarController** can ask the **UserModel** for creation of a new user.
 * The **LoginController** can ask the **UserModel** for user login information, if it exists.
 * The **LoginController** can ask the **UserModel** to create a new user.
 * The **SavedGroupController** can ask the **UserModel** for the user’s saved groups.
-* The **BlogController** can ask the **UserModel** for joined users of a group.
-* The **PopUpController** can ask the **UserModel** for post and user information.
 
 ### CommentModel
 
@@ -62,23 +60,25 @@ The model resides only on the server.
 
 The **BlogController** communicates with the model. They communicate:
 * The **BlogController** can ask the **BlogModel** for the blog posts in a group.
+* The **BlogController** can ask the **BlogModel** for tnew blog creation.
 
-### NewBlogController
+### MemberRequestModel
 
-This component is a controller that updates models and receives alerts from views about posts.
+This component is a model that stores all member request information in a specific group.
 
-The **NewBlogView** component communicates with **NewBlogController** by:
-* The **NewBlogView** sends user input to **NewBlogController** when the user clicks to create a new blog post in a group.
-* The **NewBlogView** sends user input to **NewBlogController** when the user clicks to submit a new blog post in a group.
+The model resides only on the server.
 
-### GroupController
+* The **MemberGroupController** communicates with the model. They communicate:
+* The **MemberGroupController** can ask the **MemberRequestModel** for the member requests in a group.
+
+### GroupTileController
 
 This component is a controller that updates models and receives alerts from views about groups.
 
-The **GroupView** component communicates with **GroupController** by:
-* The **GroupView** sends user input to **GroupController** when the user clicks to view a group within a category.
-* The **GroupView** sends user input to **GroupController** when the user clicks to join a group within a category.
-* The **GroupView** sends user input to **GroupController** when the user clicks to leave a group within a category.
+The **GroupTileView** component communicates with **GroupTileController** by:
+* The **GroupTileView** sends user input to **GroupTileController** when the user clicks to view a group within a category.
+* The **GroupTileView** sends user input to **GroupTileController** when the user clicks to join a group within a category.
+* The **GroupTileView** sends user input to **GroupTileController** when the user clicks to leave a group within a category.
 
 ### SearchController
 
@@ -109,21 +109,25 @@ This component is a controller that updates models and receives alerts from view
 
 The **BlogView** component communicates with **BlogController** by:
 * The **BlogView** sends user input to **BlogController** when the user scrolls through the blog posts of a specific group.
+* The **BlogView** sends user input to **BlogController** when the user clicks to create a new blog post in a group.
+* The **BlogView** sends user input to **BlogController** when the user clicks to submit a new blog post in a group.
 
 ### AdminController
 
 This component is a controller that updates models and receives alerts from views about the user’s admin page.
 
-The **AdminView** component communicates with **AdminController** by:
+The **AdminView** and **PopUpView** components communicate with **AdminController** by:
 * The **AdminView** sends user input to **AdminController** when the user clicks on the Admin Panel to view their admin groups and pending requests.
 * The **AdminView** sends user input to **AdminController** when the user clicks on the Admin Panel to manage their admin groups.
+* The **PopUpView** sends user input to **AdminController** when an admin user clicks to confirm a join request.
 
-### NewGroupContoller
+### NewGroupController
 
 This component is a controller that updates models and receives alerts from views about the new groups being created.
 
-The **NewGroupView** component communicates with **NewGroupController** by:
+The **NewGroupView** and **PopUpView** components communicate with **NewGroupController** by:
 * The **NewGroupView** sends user input to **NewGroupController** when the user clicks to create a new group.
+* The **PopUpView** sends user input to **NewGroupController** when a user clicks to create a new group.
 
 ### SurveyController
 
@@ -133,13 +137,6 @@ The **SurveyView** component communicates with **SurveyController** by:
 * The **SurveyView** sends user input to **SurveyController** when the user doesn’t have an account and fills out the new user survey through multiple steps.
 * The **SurveyView** sends user input to **SurveyController** as the user completes the survey.
 
-### NavBarController
-
-This component is a controller that updates models and receives alerts from views about the site navigation.
-
-The **NavbarView** component communicates with **NavBarController** by:
-* The **NavBarView** sends user input to **NavBarController** when the user navigates through different buttons on the nav bar (logo, Explore, My Groups, Log In).
-
 ### LoginController
 
 This component is a controller that updates models and receives alerts from views about the user login process.
@@ -148,12 +145,15 @@ The **LoginView** component communicates with **LoginController** by:
 * The **LoginView** sends user input to **LoginController** when the user navigates through logs in and enters their email and password information.
 * The **LoginView** sends user input to **LoginController** if the user doesn’t have an account, prompting them to sign up.
 
-### GroupIntroController
+### GroupController
 
 This component is a controller that updates models and receives alerts from views about the group information.
 
-The **GroupIntroView** component communicates with **GroupIntroController** by:
-* The **GroupIntroView** sends user input to **GroupIntroController** when the user clicks on a group within a category.
+The **GroupView** and **PopUpView** components communicate with **GroupController** by:
+* The **GroupView** sends user input to **GroupController** when the user clicks on a group within a category.
+* The **PopUpView** sends user input to **GroupController** when the user clicks leave a group.
+* The **PopUpView** sends user input to **GroupController** when an admin user clicks to delete a group.
+* The **PopUpView** sends user input to **GroupController** when a user clicks to join a group at maximum capacity.
 
 ### SavedGroupController
 
@@ -162,24 +162,21 @@ This component is a controller that updates models and receives alerts from view
 The **SavedGroupView** component communicates with **SavedGroupController** by:
 * The **SavedGroupView** sends user input to **SavedGroupController** when the user clicks to save or unsave a group.
 
-### PopUpController
+### MemberGroupController
 
-This component is a controller that updates models and receives alerts from views about the user confirmation actions.
+This component is a controller that updates models and receives alerts from views about member requests.
 
-The **PopUpView** component communicates with **PopUpController** by:
-* The **PopUpView** sends user input to **PopUpController** when the user clicks leave a group.
-* The **PopUpView** sends user input to **PopUpController** when an admin user clicks to delete a group.
-* The **PopUpView** sends user input to **PopUpController** when an admin user clicks to confirm a join request.
-* The **PopUpView** sends user input to **PopUpController** when a user clicks to join a group at maximum capacity.
-* The **PopUpView** sends user input to **PopUpController** when a user clicks to create a new group.
+* The **MemberGroupView** component communicates with **MemberGroupController** by:
+* The **MemberGroupView** sends user input to **MemberGroupController** when the user clicks to join a group.
+* The **MemberGroupView** sends user input to **MemberGroupController** when the admin user accepts or declines the request.
 
-### GroupView
+### GroupTileView
 
 This component is a view that grabs model data to update itself and alerts controllers of events when the user interacts with groups within a category.
 
-The **GroupModel** and **UserModel** components communicate with **GroupView** by:
-* The **GroupModel** updates **GroupView** with the groups within a certain category.
-* The **UserModel** updates **GroupView** with the groups that the user has joined, giving access to the posts and comments.
+The **GroupModel** and **UserModel** components communicate with **GroupTileView** by:
+* The **GroupModel** updates **GroupTileView** with the groups within a certain category.
+* The **UserModel** updates **GroupTileView** with the groups that the user has joined, giving access to the posts and comments.
 
 ### SearchView
 
@@ -217,6 +214,7 @@ This component is a view that grabs model data to update itself and alerts contr
 
 The **BlogModel** component communicates with **BlogView** by:
 * The **BlogModel** updates **BlogView** with the blogs that are supposed to be displayed to the user if they’ve joined the group.
+* The **BlogModel** updates **BlogView** with the information for creating a new blog post (title, description, image).
 
 ### UserView
 
@@ -243,13 +241,6 @@ The **UserModel** component communicates with **LoginView** by:
 * The **UserModel** updates **LoginView** with the login information for returning users.
 * The **UserModel** updates **LoginView** with a sign in prompt if an account doesn’t exist.
 
-### NavBarView
-
-This component is a view that grabs model data to update itself and alerts controllers of events when the user interacts with the NavBar
-
-The **UserModel** component communicates with **NavBarView** by: 
-* The **UserModel** updates **NavBarView** with whether the user is logged in or out.
-
 ### NewGroupView
 
 This component is a view that grabs model data to update itself and alerts controllers of events when the user interacts with the New Group Page
@@ -267,20 +258,14 @@ The **GroupModel** and **UserModel** communicate with **PopUpView** by:
 * The **GroupModel** updates **PopUpView** with a confirmation if a user would like to leave a group.
 * The **UserModel** updates **PopUpView** with a post confirmation when the user tries to create a new post.
 * The **UserModel** updates **PopUpView** with a confirmation message when an admin user tries to admit a new user to a group.
+* The **UserModel** updates **PopUpView** with a confirmation message when when an admin user clicks to confirm a join request.
 
-### NewBlogView
-
-This component is a view that grabs model data to update itself and alerts controllers of events when the user creates a new blog post.
-
-The **BlogModel** component communicates with **NewBlogView** by: 
-* The **BlogModel** updates **NewBlogView** with the information for creating a new blog post (title, description, image).
-
-### GroupIntroView
+### GroupView
 
 This component is a view that grabs model data to update itself and alerts controllers of events when the user creates a new blog post.
 
-The **GroupModel** component communicates with **GroupIntroView** by: 
-* The **GroupModel** updates **GroupIntroView** with the information of the group that the user clicked on, including the description and current amount of users.
+The **GroupModel** component communicates with **GroupView** by: 
+* The **GroupModel** updates **GroupView** with the information of the group that the user clicked on, including the description and current amount of users.
 
 ### SavedGroupView
 
@@ -288,3 +273,10 @@ This component is a view that grabs model data to update itself and alerts contr
 
 The **UserModel** component communicates with **SavedGroupView** by: 
 * The **UserModel** updates **SavedGroupView** with the information if a user has saved a group or not, indicating this to the user.
+
+### MemberGroupView
+
+This component is a view that grabs model data to update itself and alerts controllers of events when the user requests to join a group
+
+* The **MemberRequestModel** components communicate with **MemberGroupView** by:
+* The **MemberRequestModel** updates **MemberGroupView** with the status of the user’s request.
