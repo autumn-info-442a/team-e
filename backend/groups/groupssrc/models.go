@@ -1,26 +1,69 @@
 package groupssrc
 
+import "time"
+
 //User is the UserModel, stores information about a user
 //No user model methods in groups, however there is one in gateway.
 type User struct {
+	UserID    int    `json:"id"`
+	GoogleID  int    `json:"googleId"`
+	Email     string `json:"email"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	PhotoURL  string `json:"photoUrl"`
 }
 
 //Category is the CategoryModel, stores information about a category
 type Category struct {
+	CategoryID   int    `json:"categoryId"`
+	CategoryName string `json:"categoryName`
 }
 
 //Group is the GroupModel, stores information about a group
 type Group struct {
+	GroupID          int       `json:"groupId"`
+	User             *User     `json:"user"`
+	Category         Category  `json:"category"`
+	GroupName        string    `json:"groupName"`
+	GroupDescription string    `json:"groupDescription"`
+	CreatedAt        time.Time `json:"createdAt"`
 }
 
-//Comment is the CommentModel, stores information about a comment. Represents both comments on group pages and group blog posts
-type Comment struct {
+//GroupComment is the CommentModel, stores information about a comment. Represents comments on group pages
+type GroupComment struct {
+	GroupCommentID int           `json:"gropuCommentId"`
+	User           *User         `json:"user"`
+	Group          *Group        `json:"group"`
+	Reply          *GroupComment `json:"reply"`
+	CommentContent string        `json:"commentContent"`
+	CreatedAt      time.Time     `json:"time.Time"`
 }
 
 //BlogPost is the BlogModel, stores information about a blog post
 type BlogPost struct {
+	BlogPostID  int       `json:"blogPostId"`
+	User        *User     `json:"user"`
+	Group       *Group    `json:"group"`
+	PostContent string    `json:"postContent"`
+	CreatedAt   time.Time `json:"createdAt"`
 }
 
-//MembershipRequest is the MembershipRequestModel, stores information about the status of a membership requets
+//BlogComment is the CommentModel, stores information about a comment. Represents comments on blog posts
+type BlogComment struct {
+	BlogCommentID  int          `json:"gropuCommentId"`
+	User           *User        `json:"user"`
+	Group          *Group       `json:"group"`
+	Reply          *BlogComment `json:"reply"`
+	CommentContent string       `json:"commentContent"`
+	CreatedAt      time.Time    `json:"time.Time"`
+}
+
+//MembershipRequest is the MembershipRequestModel, stores information about the status of a membership requets, as well as saved groups
 type MembershipRequest struct {
+	MembershipID int       `json:"membershipID"`
+	User         *User     `json:"user"`
+	Group        *Group    `json:"group"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+	State        string    `json:"state"`
+	Type         string    `json:"string"`
 }
