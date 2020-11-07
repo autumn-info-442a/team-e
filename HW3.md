@@ -135,7 +135,7 @@
 
 54. The system must display blog posts in the group in chronological order (recent first).
 * If the user views the blog posts of any group, the posts should be shown in chronological order with the most recent post being at the top of the page.
-55. For each blog post, the system should display the post title, author, desciption, and may show an image if the post has one.
+55. For each blog post, the system should display the post title, author, description, and may show an image if the post has one.
 * If the user views a blog post, they should be able to view the title, author, the actual post, and an image if the user has added an image to the post.
 56. Users should be routed to the “create post” screen if they click on the “post” button.
 * If the user clicks on the “post” button in the blog page, they should be prompted to create a post in the “Create post” screen. If the user is not logged in, the “post” button should not be displayed.
