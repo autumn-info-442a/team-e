@@ -12,7 +12,47 @@ We will use Discord to communicate, as well as the Jira for commenting on issues
 
 ### Who will own component in your architecture?
 
-List components here and who will be managing them: Front End = Rajoshi, Backend = Andy
+Andy will own the following components:
+
+**Models**
+* CategoryModel
+* GroupModel
+* UserModel
+* CommentModel
+* BlogModel
+* MemberRequestModel
+* Controllers
+* GroupTileController
+* SearchController
+* CommentController
+* CategoryController
+* BlogController
+* AdminController
+* NewGroupController
+* SurveyController
+* LoginController
+* GroupController
+* SavedGroupController
+* MemberGroupController
+
+Rajoshi will own the following components:
+
+**Views**
+* GroupTileView
+* SearchView
+* CommentView
+* NewCommentView
+* CategoryView
+* BlogView
+* UserView
+* SurveyView
+* LoginView
+* NewGroupView
+* PopUpView
+* GroupView
+* SavedGroupView
+* MemberGroupVIew
+* AdminView
 
 ### What is your timeline?
 
