@@ -21,7 +21,8 @@ Andy will own the following components:
 * CommentModel
 * BlogModel
 * MemberRequestModel
-* Controllers
+
+**Controllers**
 * GroupTileController
 * SearchController
 * CommentController
@@ -56,30 +57,27 @@ Rajoshi will own the following components:
 
 ### What is your timeline?
 
-**Week 0**
+**Week 1 (November 9th - November 13th)**
 
 * Figure out log in with Google
 * Database schema and model formats
 * Color scheme
 
-**Week 1**
+**Week 2 (November 16th - November 20th)**
 
 * Begin Handlers
 * Nav bar and home page
 * Log in & identity management
 
-**Week 2**
+**Week 3 (November 23th - November 27th)**
 
 * Categories page
 * Groups page
 * Blog page
+* Admin and mygroups
 * Complete and host back end
 
-**Week 3**
-
-* Admin and mygroups
-
-**Week 4**
+**Week 4 (November 30th - December 4th)**
 
 * Testing and bug fixes
 * Fit, finish, and polish
