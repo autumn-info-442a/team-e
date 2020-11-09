@@ -12,34 +12,72 @@ We will use Discord to communicate, as well as the Jira for commenting on issues
 
 ### Who will own component in your architecture?
 
-List components here and who will be managing them: Front End = Rajoshi, Backend = Andy
+Andy will own the following components:
+
+**Models**
+* CategoryModel
+* GroupModel
+* UserModel
+* CommentModel
+* BlogModel
+* MemberRequestModel
+
+**Controllers**
+* GroupTileController
+* SearchController
+* CommentController
+* CategoryController
+* BlogController
+* AdminController
+* NewGroupController
+* SurveyController
+* LoginController
+* GroupController
+* SavedGroupController
+* MemberGroupController
+
+Rajoshi will own the following components:
+
+**Views**
+* GroupTileView
+* SearchView
+* CommentView
+* NewCommentView
+* CategoryView
+* BlogView
+* UserView
+* SurveyView
+* LoginView
+* NewGroupView
+* PopUpView
+* GroupView
+* SavedGroupView
+* MemberGroupVIew
+* AdminView
 
 ### What is your timeline?
 
-**Week 0**
+**Week 1 (November 9th - November 13th)**
 
 * Figure out log in with Google
 * Database schema and model formats
 * Color scheme
 
-**Week 1**
+**Week 2 (November 16th - November 20th)**
 
 * Begin Handlers
 * Nav bar and home page
 * Log in & identity management
 
-**Week 2**
+**Week 3 (November 23th - November 27th)**
 
 * Categories page
 * Groups page
 * Blog page
+* Admin and mygroups
 * Complete and host back end
 
-**Week 3**
-
-* Admin and mygroups
-
-**Week 4**
+**Week 4 (November 30th - December 4th)**
 
 * Testing and bug fixes
 * Fit, finish, and polish

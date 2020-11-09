@@ -45,7 +45,7 @@ The **AdminController**, **GroupController**, **PostContoller**, **SurveyControl
 
 ### CommentModel
 
-This component is a model that stores all of the user information so that the user will be able to interact with comments.
+This component is a model that stores comment information such as the time stamp, comment text, and the user that commented so that the users will be able to interact with comments on blog posts.
 
 The model resides only on the server.
 
@@ -54,7 +54,7 @@ The **CommentController** communicates with the model. They communicate:
 
 ### BlogModel
 
-This component is a model that stores all of the blog information in a specific group that the user will be able to scroll through.
+This component is a model that stores blog information such as the blog posts in a specific group and who created the blog post so that the users will be able to view all the blog posts within a group.
 
 The model resides only on the server.
 
@@ -114,7 +114,7 @@ The **BlogView** component communicates with **BlogController** by:
 
 ### AdminController
 
-This component is a controller that updates models and receives alerts from views about the user’s admin page.
+This component is a controller that updates models such as the **GroupModel** and **UserModel** and receives alerts from views about the user’s admin page.
 
 The **AdminView** and **PopUpView** components communicate with **AdminController** by:
 * The **AdminView** sends user input to **AdminController** when the user clicks on the Admin Panel to view their admin groups and pending requests.
@@ -278,5 +278,12 @@ The **UserModel** component communicates with **SavedGroupView** by:
 
 This component is a view that grabs model data to update itself and alerts controllers of events when the user requests to join a group
 
-* The **MemberRequestModel** components communicate with **MemberGroupView** by:
+* The **MemberRequestModel** component communicate with **MemberGroupView** by:
 * The **MemberRequestModel** updates **MemberGroupView** with the status of the user’s request.
+
+### AdminView
+
+This component is a view that grabs model data to update itself and alerts controllers of events when the user requests to join a group
+
+* The **GroupModel** component communicate with **AdminView** by:
+* The **GroupModel** updates **AdminView** with the pending member request tiles and admin group tiles.
