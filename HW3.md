@@ -22,17 +22,17 @@
 * If the user clicks on a category they should be routed to the page to view all the existing groups within a category.
 8. Users should be able to scroll down to view more groups if the results do not all fit on one screen.
 * Users should be able to freely scroll up and down on group pages as the page shows subsequent groups if available.
-9. The system should organize the order of the groups based on alphabetical order.
+9. The groups displayed to the user must be in alphabetical order, following a left to right pattern so it is easy to find the exact group they are looking for.
 * The groups displayed to the user must be in alphabetical order, following a left to right pattern.
 10. Users should be able to create a new group if none of the search results were what they were looking for by clicking on a “create group” button. If the user is logged in, it will redirect to the create new group page, otherwise it will redirect the user to the login page to log in.
 * If the user enters a search string and there are no matching groups, a create group button is displayed. If the user is already logged in, the user will be directed to the create new group screen but if the user isn’t logged in, they will be redirected to the log in page where they can log in and then create a new group.
 11. The system might display saved groups at the top of the results.
-* The groups that the user has saved might be displayed at the top of the group results.
+* The groups that the user has saved might be displayed at the top of the group results, allowing the user to view their saved groups at the top of the page.
 
 ### Search Bar (Jayson)
 
 12. Users must be able to type into the search bar while the system updates search results as the user types.
-* If the user types into the search bar, the system should update their search result as the they type.
+* If the user types into the search bar, the system should update their search result as they type.
 13. The system must query the term inputted against groups if on the group page, displaying the matching or partially matching results to the user for each new character inputted.
 * If the user types into the search bar, the search bar should show the updated matching search result after every character that is inputted.
 14. The system must query the term inputted against categories if on the category page, displaying the matching or partially matching results to the user for each new character inputted.
@@ -45,7 +45,7 @@
 ### Navigation Bar (Greyson)
 
 17. The system must display a nav bar at the top of all pages to allow for easy navigation.
-* If the user traverses through all the pages in the application, a navigation bar must be present on all pages.
+* If the user traverses through all the pages in the application, a navigation bar must be present on all pages so the user can access the navigation pages at all times.
 18. The system must have a logo on the nav bar, redirecting the user to the home page when clicked.
 * If the user clicks on the logo on the navigation bar, they must be redirected to the home page.
 19. The system must have a My Groups tab on the nav bar, redirecting the user to the My Groups page when clicked and the user is logged in, otherwise will redirect to the Log In page if the user isn’t logged in.
