@@ -6,7 +6,7 @@ import "time"
 //No user model methods in groups, however there is one in gateway.
 type User struct {
 	UserID    int    `json:"id"`
-	GoogleID  int    `json:"googleId"`
+	GoogleID  string `json:"googleId"`
 	Email     string `json:"email"`
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
