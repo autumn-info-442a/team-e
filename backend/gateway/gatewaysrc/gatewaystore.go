@@ -12,30 +12,36 @@ type SQLStore struct {
 }
 
 //GetUserInfo checks if the user is in the db, and if they are, returns the user info, otherwise creates the user in the databases
-func (sqls *SQLStore) GetUserInfo(googleid string) (int, error) {
-	var userid int
-	insq := "select user_id from user where google_id = ?"
+func (sqls *SQLStore) GetUserInfo(guser *GoogleUser) (*User, error) {
+	user := &User{}
 
-	errQuery := sqls.DB.QueryRow(insq, googleid).Scan(&userid)
+	insq := "select * from user where google_id = ?"
+
+	errQuery := sqls.DB.QueryRow(insq, guser.GoogleID).Scan(&user.UserID, &user.GoogleID, &user.Email, &user.FirstName, &user.LastName, &user.PhotoURL)
 	if errQuery != nil {
 		if errQuery == sql.ErrNoRows {
-			insq = "insert into user(google_id) values(?)"
+			insq = "insert into user(google_id, email, first_name, last_name, photo_url) values(?,?,?,?,?)"
 
-			res, errExec := sqls.DB.Exec(insq, googleid)
+			res, errExec := sqls.DB.Exec(insq, guser.GoogleID, guser.Email, guser.FirstName, guser.LastName, guser.PhotoURL)
 			if errExec != nil {
-				return 0, errExec
+				return nil, errExec
 			}
 
 			id, idErr := res.LastInsertId()
 			if idErr != nil {
-				return 0, idErr
+				return nil, idErr
 			}
-			userid = int(id)
+			user.UserID = int(id)
+			user.GoogleID = guser.GoogleID
+			user.Email = guser.Email
+			user.FirstName = guser.FirstName
+			user.LastName = guser.LastName
+			user.PhotoURL = guser.PhotoURL
 
-			return userid, nil
+			return user, nil
 		}
-		return 0, errQuery
+		return nil, errQuery
 	}
 
-	return userid, nil
+	return user, nil
 }

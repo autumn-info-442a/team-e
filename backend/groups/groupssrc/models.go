@@ -16,7 +16,7 @@ type User struct {
 //Category is the CategoryModel, stores information about a category
 type Category struct {
 	CategoryID   int    `json:"categoryId"`
-	CategoryName string `json:"categoryName`
+	CategoryName string `json:"categoryName"`
 }
 
 //Group is the GroupModel, stores information about a group
@@ -66,4 +66,9 @@ type MembershipRequest struct {
 	UpdatedAt    time.Time `json:"updatedAt"`
 	State        string    `json:"state"`
 	Type         string    `json:"string"`
+}
+
+//GroupContext contains the db context
+type GroupContext struct {
+	GStore GroupsStore
 }

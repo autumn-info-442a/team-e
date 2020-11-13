@@ -69,10 +69,11 @@ func main() {
 		serverName := groupsaddr
 
 		r.Header.Del("X-User")
-		user, err := GetGoogleUserInfo(r)
-		if err != 200 {
-			userid, errGetUserInfo := ctx.GStore.GetUserInfo(user.GoogleID)
-			if errGetUserInfo == nil && userid != 0 {
+		guser, rcode := GetGoogleUserInfo(r)
+		if rcode == 200 {
+			user, errGetUserInfo := ctx.GStore.GetUserInfo(guser)
+			fmt.Println(user.UserID)
+			if errGetUserInfo == nil && user != nil {
 				encoded, _ := json.Marshal(user)
 				r.Header.Set("X-User", string(encoded))
 			} else {
@@ -88,7 +89,7 @@ func main() {
 	mux := mux.NewRouter()
 
 	groupsProxy := &httputil.ReverseProxy{Director: groupsDirector}
-	mux.Handle("/v1/groups", groupsProxy)
+	mux.Handle("/v1/categories", groupsProxy)
 
 	mux.HandleFunc("/", gatewaysrc.HandleHome)
 	mux.HandleFunc("/login", gatewaysrc.HandleLogin)
@@ -101,7 +102,7 @@ func main() {
 }
 
 //GetGoogleUserInfo returns the google info for the auth token
-func GetGoogleUserInfo(r *http.Request) (*gatewaysrc.User, int) {
+func GetGoogleUserInfo(r *http.Request) (*gatewaysrc.GoogleUser, int) {
 	accessToken := r.Header.Get("Authorization")
 	if accessToken == "" {
 		query, ok := r.URL.Query()["auth"]
@@ -116,6 +117,8 @@ func GetGoogleUserInfo(r *http.Request) (*gatewaysrc.User, int) {
 		return nil, resp.StatusCode
 	}
 
+	fmt.Println(resp.StatusCode)
+
 	defer resp.Body.Close()
 
 	responseData, err := ioutil.ReadAll(resp.Body)
@@ -123,8 +126,10 @@ func GetGoogleUserInfo(r *http.Request) (*gatewaysrc.User, int) {
 		return nil, 777
 	}
 
-	user := &gatewaysrc.User{}
-	json.Unmarshal(responseData, &user)
+	guser := &gatewaysrc.GoogleUser{}
+	json.Unmarshal(responseData, &guser)
 
-	return user, 200
+	fmt.Println(guser.GoogleID)
+
+	return guser, 200
 }
