@@ -38,13 +38,42 @@ func (sqls *SQLStore) GetCategories() ([]*Category, error) {
 }
 
 //SaveCategory allows for the ability to save category. Takes an array so multiple can be saved in the same request.
-func (sqls *SQLStore) SaveCategory([]*SavedCategory) error {
+func (sqls *SQLStore) SaveCategory(scs []*SavedCategory) error {
+	for _, sc := range scs {
+		insq := "insert into saved_category(category_id, user_id) values(?,?)"
+
+		_, errExec := sqls.DB.Exec(insq, sc.Category.CategoryID, sc.User.UserID)
+		if errExec != nil {
+			return errExec
+		}
+	}
+
 	return nil
 }
 
 //GetSavedCategories gets the saved categories for a given user
 func (sqls *SQLStore) GetSavedCategories(userid int) ([]*SavedCategory, error) {
-	return nil, nil
+	scts := make([]*SavedCategory, 0)
+	insq := "select sc.sc_id, sc.category_id, sc.user_id, c.category_name, u.google_id, u.email, u.first_name, u.last_name, u.photo_url from saved_category sc join category c on sc.category_id = c.category_id join user u on sc.user_id = u.user_id"
+
+	res, errQuery := sqls.DB.Query(insq)
+	if errQuery != nil {
+		return nil, errQuery
+	}
+	defer res.Close()
+
+	for res.Next() {
+		sct := &SavedCategory{}
+		ct := &Category{}
+		user := &User{}
+		errScan := res.Scan(&sct.SavedCategoryID, &ct.CategoryID, ct.CategoryName, &user.UserID, &user.GoogleID, &user.Email, &user.FirstName, &user.LastName, &user.PhotoURL)
+		if errScan != nil {
+			return nil, errScan
+		}
+		cts = append(cts, ct)
+	}
+
+	return cts, nil
 }
 
 //GROUP DB METHODS
