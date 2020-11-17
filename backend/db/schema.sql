@@ -4,12 +4,20 @@ create table if not exists user (
     email varchar(128) not null,
     first_name varchar(128),
     last_name varchar(128),
-    photo_url varchar(128) 
+    photo_url varchar(512) 
 );
 
 create table if not exists category (
     category_id int not null auto_increment primary key,
     category_name varchar(128) not null
+);
+
+create table if not exists saved_category (
+    sc_id int not null auto_increment primary key,
+    category_id int not null,
+    user_id int not null,
+    foreign key (user_id) REFERENCES user(user_id),
+    foreign key (category_id) REFERENCES category(category_id)
 );
 
 create table if not exists `group` (
@@ -67,3 +75,9 @@ create table if not exists membership (
     foreign key (user_id) REFERENCES user(user_id),
     foreign key (group_id) REFERENCES `group`(group_id)
 );
+
+insert into user(google_id, email, first_name, last_name, photo_url)
+values('118379264076819254762', 'cahillaw@uw.edu', 'Andy', 'Cahill','https://lh5.googleusercontent.com/-kwF_3vBC36g/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucm_8vhE0mrs6Kzu80ATCl5zV4P8jA/s96-c/photo.jpg');
+
+insert into category(category_name)
+values('gaming');

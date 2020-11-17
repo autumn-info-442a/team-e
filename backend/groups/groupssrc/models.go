@@ -19,11 +19,18 @@ type Category struct {
 	CategoryName string `json:"categoryName"`
 }
 
+//SavedCategory is a saved category, saved either from the inital survey or in-site in another fasion
+type SavedCategory struct {
+	SavedCategoryID int       `json:"savedCategoryId"`
+	Category        *Category `json:"category"`
+	User            *User     `json:"user"`
+}
+
 //Group is the GroupModel, stores information about a group
 type Group struct {
 	GroupID          int       `json:"groupId"`
 	User             *User     `json:"user"`
-	Category         Category  `json:"category"`
+	Category         *Category `json:"category"`
 	GroupName        string    `json:"groupName"`
 	GroupDescription string    `json:"groupDescription"`
 	CreatedAt        time.Time `json:"createdAt"`

@@ -15,6 +15,35 @@ type SQLStore struct {
 
 //GetCategories returns all categories
 func (sqls *SQLStore) GetCategories() ([]*Category, error) {
+	cts := make([]*Category, 0)
+	insq := "select * from category"
+
+	res, errQuery := sqls.DB.Query(insq)
+	if errQuery != nil {
+		return nil, errQuery
+	}
+	defer res.Close()
+
+	for res.Next() {
+
+		ct := &Category{}
+		errScan := res.Scan(&ct.CategoryID, ct.CategoryName)
+		if errScan != nil {
+			return nil, errScan
+		}
+		cts = append(cts, ct)
+	}
+
+	return cts, nil
+}
+
+//SaveCategory allows for the ability to save category. Takes an array so multiple can be saved in the same request.
+func (sqls *SQLStore) SaveCategory([]*SavedCategory) error {
+	return nil
+}
+
+//GetSavedCategories gets the saved categories for a given user
+func (sqls *SQLStore) GetSavedCategories(userid int) ([]*SavedCategory, error) {
 	return nil, nil
 }
 

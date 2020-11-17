@@ -1,6 +1,9 @@
 package groupssrc
 
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+)
 
 //All handlers take in a header that has the user making the request in addition to other inputs. This allows the back-end to know who is making the request; needed for creating new groups/comments/posts / knowing if the user is in a group/pending request in a group/is group admin etc.
 //All inputs will be either part of the request url or in the request body. Specifying how exactly feels too implementation-y to be explained here.
@@ -11,9 +14,20 @@ func (ctx *GroupContext) CategoriesHandler(w http.ResponseWriter, r *http.Reques
 	//input: none
 	//output: category struct(s), 200 status code
 	if r.Method == http.MethodGet {
-		userHeader := r.Header.Get("X-User")
+		cts, errDB := ctx.GStore.GetCategories()
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		encoded, errEncode := json.Marshal(cts)
+		if errEncode != nil {
+			http.Error(w, "Error encoding user to JSON", http.StatusBadRequest)
+			return
+		}
+		//userHeader := r.Header.Get("X-User")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(userHeader))
+		w.Write(encoded)
 	}
 }
 
