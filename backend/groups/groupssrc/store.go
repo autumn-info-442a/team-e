@@ -4,8 +4,9 @@ package groupssrc
 type GroupsStore interface {
 	//Category model methods
 	GetCategories() ([]*Category, error)
-	SaveCategory(scs []*SavedCategory) error
-	GetSavedCategories(userid int) ([]*SavedCategory, error)
+	SaveCategory(catid int, userid int) error
+	UnsaveCategory(catid int, userid int) error
+	GetSavedCategories(userid int) ([]*Category, error)
 
 	//Group model methods
 	CreateGroup(gp *Group) (*Group, error)

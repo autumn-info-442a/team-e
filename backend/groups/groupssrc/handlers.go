@@ -3,6 +3,9 @@ package groupssrc
 import (
 	"encoding/json"
 	"net/http"
+	"path"
+	"strconv"
+	"strings"
 )
 
 //All handlers take in a header that has the user making the request in addition to other inputs. This allows the back-end to know who is making the request; needed for creating new groups/comments/posts / knowing if the user is in a group/pending request in a group/is group admin etc.
@@ -14,20 +17,93 @@ func (ctx *GroupContext) CategoriesHandler(w http.ResponseWriter, r *http.Reques
 	//input: none
 	//output: category struct(s), 200 status code
 	if r.Method == http.MethodGet {
+		rCat := &ReturnCategories{}
+
+		userHeader := r.Header.Get("X-User")
+		if len(userHeader) != 0 {
+			user := &User{}
+			errDecode := json.Unmarshal([]byte(userHeader), &user)
+			if errDecode != nil {
+				http.Error(w, "Error getting user", http.StatusInternalServerError)
+				return
+			}
+
+			scts, errGetCts := ctx.GStore.GetSavedCategories(user.UserID)
+			if errGetCts != nil {
+				http.Error(w, errGetCts.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			rCat.SavedCategories = scts
+		} else {
+			scts := make([]*Category, 0)
+			rCat.SavedCategories = scts
+		}
+
 		cts, errDB := ctx.GStore.GetCategories()
 		if errDB != nil {
 			http.Error(w, errDB.Error(), http.StatusInternalServerError)
 			return
 		}
+		rCat.Categories = cts
 
-		encoded, errEncode := json.Marshal(cts)
+		encoded, errEncode := json.Marshal(rCat)
 		if errEncode != nil {
 			http.Error(w, "Error encoding user to JSON", http.StatusBadRequest)
 			return
 		}
-		//userHeader := r.Header.Get("X-User")
+		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write(encoded)
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+//SavedCategoriesHandler handles requests to save and unsave categories
+func (ctx *GroupContext) SavedCategoriesHandler(w http.ResponseWriter, r *http.Request) {
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) == 0 {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
+	}
+
+	user := &User{}
+	errDecode := json.Unmarshal([]byte(userHeader), &user)
+	if errDecode != nil {
+		http.Error(w, "Error getting user", http.StatusInternalServerError)
+		return
+	}
+
+	pathid := path.Base(r.URL.Path)
+	split := strings.Split(pathid, "&")
+	pathid = split[0]
+	pid, errConv := strconv.Atoi(pathid)
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	if r.Method == http.MethodPost {
+		errSave := ctx.GStore.SaveCategory(pid, user.UserID)
+		if errSave != nil {
+			http.Error(w, "Error saving category", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusCreated)
+		w.Write([]byte("category saved"))
+	} else if r.Method == http.MethodDelete {
+		errDelete := ctx.GStore.UnsaveCategory(pid, user.UserID)
+		if errDelete != nil {
+			http.Error(w, "Error unsaving category", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("category unsaved"))
+	} else {
+		http.Error(w, "Method not allowed for", http.StatusMethodNotAllowed)
 	}
 }
 

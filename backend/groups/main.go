@@ -47,6 +47,7 @@ func main() {
 	mux := mux.NewRouter()
 
 	mux.HandleFunc("/v1/categories", ctx.CategoriesHandler)
+	mux.HandleFunc("/v1/categories/{categoryID}", ctx.SavedCategoriesHandler)
 
 	log.Printf("server is lsitening at %s", addr)
 	log.Fatal(http.ListenAndServe(addr, mux))

@@ -26,6 +26,12 @@ type SavedCategory struct {
 	User            *User     `json:"user"`
 }
 
+//ReturnCategories is the return struct type for the getCategories handler
+type ReturnCategories struct {
+	SavedCategories []*Category `json:"savedCategories"` //normal category because we don't need to send user info to front-end.
+	Categories      []*Category `json:"categories"`
+}
+
 //Group is the GroupModel, stores information about a group
 type Group struct {
 	GroupID          int       `json:"groupId"`

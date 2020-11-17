@@ -27,7 +27,7 @@ func (sqls *SQLStore) GetCategories() ([]*Category, error) {
 	for res.Next() {
 
 		ct := &Category{}
-		errScan := res.Scan(&ct.CategoryID, ct.CategoryName)
+		errScan := res.Scan(&ct.CategoryID, &ct.CategoryName)
 		if errScan != nil {
 			return nil, errScan
 		}
@@ -38,23 +38,33 @@ func (sqls *SQLStore) GetCategories() ([]*Category, error) {
 }
 
 //SaveCategory allows for the ability to save category. Takes an array so multiple can be saved in the same request.
-func (sqls *SQLStore) SaveCategory(scs []*SavedCategory) error {
-	for _, sc := range scs {
-		insq := "insert into saved_category(category_id, user_id) values(?,?)"
+func (sqls *SQLStore) SaveCategory(catid int, userid int) error {
+	insq := "insert into saved_category(category_id, user_id) values(?,?)"
 
-		_, errExec := sqls.DB.Exec(insq, sc.Category.CategoryID, sc.User.UserID)
-		if errExec != nil {
-			return errExec
-		}
+	_, errExec := sqls.DB.Exec(insq, catid, userid)
+	if errExec != nil {
+		return errExec
+	}
+
+	return nil
+}
+
+//UnsaveCategory unsaves a previously saved category
+func (sqls *SQLStore) UnsaveCategory(catid int, userid int) error {
+	insq := "delete from saved_category where category_id = ? and user_id = ?"
+
+	_, errExec := sqls.DB.Exec(insq, catid, userid)
+	if errExec != nil {
+		return errExec
 	}
 
 	return nil
 }
 
 //GetSavedCategories gets the saved categories for a given user
-func (sqls *SQLStore) GetSavedCategories(userid int) ([]*SavedCategory, error) {
-	scts := make([]*SavedCategory, 0)
-	insq := "select sc.sc_id, sc.category_id, sc.user_id, c.category_name, u.google_id, u.email, u.first_name, u.last_name, u.photo_url from saved_category sc join category c on sc.category_id = c.category_id join user u on sc.user_id = u.user_id"
+func (sqls *SQLStore) GetSavedCategories(userid int) ([]*Category, error) {
+	cts := make([]*Category, 0)
+	insq := "select sc.category_id, c.category_name from saved_category sc join category c on sc.category_id = c.category_id"
 
 	res, errQuery := sqls.DB.Query(insq)
 	if errQuery != nil {
@@ -63,10 +73,8 @@ func (sqls *SQLStore) GetSavedCategories(userid int) ([]*SavedCategory, error) {
 	defer res.Close()
 
 	for res.Next() {
-		sct := &SavedCategory{}
 		ct := &Category{}
-		user := &User{}
-		errScan := res.Scan(&sct.SavedCategoryID, &ct.CategoryID, ct.CategoryName, &user.UserID, &user.GoogleID, &user.Email, &user.FirstName, &user.LastName, &user.PhotoURL)
+		errScan := res.Scan(&ct.CategoryID, &ct.CategoryName)
 		if errScan != nil {
 			return nil, errScan
 		}
