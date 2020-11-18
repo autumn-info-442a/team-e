@@ -59,10 +59,10 @@ export default function Categories() {
                   />
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Group Name
+                      Category Name
                     </Typography>
                     <Typography>
-                      Group description
+                      Category description
                     </Typography>
                   </CardContent>
                   <CardActions>
