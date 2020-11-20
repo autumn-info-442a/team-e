@@ -27,7 +27,7 @@ export class UserDashboard extends Component {
     // also shows option to approve or reject group members for groups user is 
     // an admin for. 
     render() {
-        let cards = [1, 2, 3];
+        let cards = [1, 2, 3, 4];
 
         return (<div>
             <Container maxWidth="lg">
@@ -70,7 +70,7 @@ export class UserDashboard extends Component {
                     ))}
                 </Grid>
             </Container>
-            < hr style={{ margin: "1rem auto", backgroundColor: "#3399FF", width: "70%", height: "3px" }} />
+            < hr style={{ margin: "1rem auto", backgroundColor: "#3399FF", width: "550px", height: "3px" }} />
             <Container style={{ padding: "1.5rem 0" }} maxWidth="md">
                 <Typography component="h5" align="left" variant="h5" color="textPrimary" style={{ paddingBottom: "10px" }}>
                     Admin Groups
@@ -78,7 +78,7 @@ export class UserDashboard extends Component {
                 {/* End hero unit */}
                 <Grid container spacing={4}>
                     {cards.map((card) => (
-                        <Grid item key={card} xs={6} sm={4} md={3}>
+                        <Grid item key={card} xs={6} sm={4} md={4}>
                             <Card style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                                 <CardMedia
                                     style={{ paddingTop: '56.25%' }}
@@ -100,7 +100,7 @@ export class UserDashboard extends Component {
                     ))}
                 </Grid>
             </Container>
-            < hr style={{ margin: "1rem auto", backgroundColor: "#3399FF", width: "70%", height: "3px" }} />
+            < hr style={{ margin: "1rem auto", backgroundColor: "#3399FF", width: "550px", height: "3px" }} />
             <Container style={{ padding: "1.5rem 0" }} maxWidth="md">
                 <Typography component="h5" align="left" variant="h5" color="textPrimary" style={{ paddingBottom: "10px" }}>
                     Joined Groups
@@ -108,7 +108,7 @@ export class UserDashboard extends Component {
                 {/* End hero unit */}
                 <Grid container spacing={4}>
                     {cards.map((card) => (
-                        <Grid item key={card} xs={6} sm={4} md={3}>
+                        <Grid item key={card} xs={6} sm={4} md={4}>
                             <Card style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                                 <CardMedia
                                     style={{ paddingTop: '56.25%' }}
@@ -130,7 +130,7 @@ export class UserDashboard extends Component {
                     ))}
                 </Grid>
             </Container>
-            < hr style={{ margin: "1rem auto", backgroundColor: "#3399FF", width: "70%", height: "3px" }} />
+            < hr style={{ margin: "1rem auto", backgroundColor: "#3399FF", width: "550px", height: "3px" }} />
             <Container style={{ padding: "1.5rem 0" }} maxWidth="md">
                 <Typography component="h5" align="left" variant="h5" color="textPrimary" style={{ paddingBottom: "10px" }}>
                     Saved Groups
@@ -138,7 +138,7 @@ export class UserDashboard extends Component {
                 {/* End hero unit */}
                 <Grid container spacing={4}>
                     {cards.map((card) => (
-                        <Grid item key={card} xs={6} sm={4} md={3}>
+                        <Grid item key={card} xs={6} sm={4} md={4}>
                             <Card style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                                 <CardMedia
                                     style={{ paddingTop: '56.25%' }}
