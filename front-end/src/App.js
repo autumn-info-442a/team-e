@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { NavBar } from './Components/NavBar';
-import Categories from "./Components/Categories";
+import { Categories } from "./Components/Categories";
 import LogIn from "./Components/LogIn";
 import { Container } from '@material-ui/core';
 import { Route, Switch, NavLink, Redirect } from 'react-router-dom'
