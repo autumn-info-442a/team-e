@@ -80,14 +80,14 @@ export class Groups extends Component {
             this.state.showGroupPage ?
             <GroupPage /> :
          ( <div>
-                <Container maxWidth="sm">
+                <Container maxWidth="md">
                     <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
-                        Groups Page (Category Name)
+                        Groups (Category Name)
                 </Typography>
                     < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "200px", height: "3px" }} />
                     <Row className="w-100"><Button size="medium" color="primary" >
-                        Back</Button><Search />
-                        <Button size="medium" color="primary" >
+                        Back</Button><div style={{margin: "auto", width: "60%"}}><Search /></div>
+                        <Button size="medium" color="primary">
                         Create Group</Button>
                         </Row>
                 </Container>

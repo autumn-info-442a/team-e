@@ -70,7 +70,7 @@ export class GroupPage extends Component {
             this.state.showBlog ?
                 <BlogPost /> :
                 (<div>
-                    <Container maxWidth="sm">
+                    <Container maxWidth="md">
                         <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
                             Group BLOGS
                 </Typography>

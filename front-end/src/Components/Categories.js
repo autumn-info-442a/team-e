@@ -58,7 +58,7 @@ export class Categories extends Component {
       this.state.showGroups ?
         <Groups /> :
      (<div>
-        <Container maxWidth="sm">
+        <Container maxWidth="md">
           <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
             Categories
             </Typography>

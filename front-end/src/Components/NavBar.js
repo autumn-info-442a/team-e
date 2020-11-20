@@ -23,7 +23,7 @@ export class NavBar extends Component {
       <Navbar.Brand>Explore</Navbar.Brand>
       <Nav className="ml-auto">
       <Nav.Link><NavLink to="/">Home</NavLink></Nav.Link>
-        {/* <NavLink href="">My Groups</NavLink> */}
+      <Nav.Link><NavLink to="/mystuff">My Groups</NavLink></Nav.Link>
         <Nav.Link><NavLink to="/login">Log In</NavLink></Nav.Link>
       </Nav>
     </Navbar>

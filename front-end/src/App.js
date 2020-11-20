@@ -6,7 +6,7 @@ import LogIn from "./Components/LogIn";
 import { Container } from '@material-ui/core';
 import { Route, Switch, NavLink, Redirect } from 'react-router-dom'
 import { Navbar, Nav } from 'react-bootstrap';
-
+import { UserDashboard } from "./Components/UserDashnoard";
 
 export default class App extends Component {
   render() {
@@ -18,8 +18,8 @@ export default class App extends Component {
             <Switch>
               <Route exact path='/' component={Categories} />
               <Route path='/login' component={LogIn} />
+              <Route path="/mystuff" component={UserDashboard} />
               {/*<Route path="/signin" component={Sign} />
-            <Route path="/mystuff" component={Dashboard} />
             <Route path="/logout" component={Signout} /> */}
               <Redirect to="/" />
             </Switch>
