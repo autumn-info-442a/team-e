@@ -2,6 +2,7 @@ package groupssrc
 
 import (
 	"database/sql"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql" //needed
 )
@@ -16,7 +17,7 @@ type SQLStore struct {
 //GetCategories returns all categories
 func (sqls *SQLStore) GetCategories() ([]*Category, error) {
 	cts := make([]*Category, 0)
-	insq := "select * from category"
+	insq := "select * from category order by category_name"
 
 	res, errQuery := sqls.DB.Query(insq)
 	if errQuery != nil {
@@ -88,26 +89,155 @@ func (sqls *SQLStore) GetSavedCategories(userid int) ([]*Category, error) {
 
 //CreateGroup creates a group
 func (sqls *SQLStore) CreateGroup(gp *Group) (*Group, error) {
-	return nil, nil
+	insq := "insert into `group`(user_id, category_id, group_name, group_description, created_at) values(?,?,?,?,?)"
+
+	res, errExec := sqls.DB.Exec(insq, gp.User.UserID, gp.Category.CategoryID, gp.GroupName, gp.GroupDescription, time.Now())
+	if errExec != nil {
+		return nil, errExec
+	}
+
+	gpid, errID := res.LastInsertId()
+	if errID != nil {
+		return nil, errID
+	}
+	gp.GroupID = int(gpid)
+
+	return gp, nil
 }
 
 //SearchGroups searches groups with the given query term, and returns groups with similar group names to the query.
 func (sqls *SQLStore) SearchGroups(query string) ([]*Group, error) {
-	return nil, nil
+	gps := make([]*Group, 0)
+	wcstring := string('%') + query + string('%')
+	insq := "select g.group_id, g.user_id, g.category_id, g.group_name, g.group_description, g.created_at, c.category_name, u.first_name, u.last_name, u.photo_url from `group` g join category c on g.category_id = c.category_id join user u on g.user_id = u.user_id where g.group_name LIKE ?"
+
+	res, errQuery := sqls.DB.Query(insq, wcstring)
+	if errQuery != nil {
+		return nil, errQuery
+	}
+	defer res.Close()
+
+	for res.Next() {
+		gp := &Group{}
+		user := &User{}
+		c := &Category{}
+		errScan := res.Scan(&gp.GroupID, &user.UserID, &c.CategoryID, &gp.GroupName, &gp.GroupDescription, &gp.CreatedAt, &c.CategoryName, &user.FirstName, &user.LastName, &user.PhotoURL)
+		if errScan != nil {
+			return nil, errScan
+		}
+		gps = append(gps, gp)
+	}
+
+	return gps, nil
 }
 
 //GetGroup gets a group by groupid and returns it
 func (sqls *SQLStore) GetGroup(gpid int) (*Group, error) {
-	return nil, nil
+	gp := &Group{}
+	user := &User{}
+	c := &Category{}
+
+	insq := "select g.group_id, g.user_id, g.category_id, g.group_name, g.group_description, g.created_at, c.category_name, u.first_name, u.last_name, u.photo_url from `group` g join category c on g.category_id = c.category_id join user u on g.user_id = u.user_id where group_id = ?"
+
+	errQuery := sqls.DB.QueryRow(insq, gpid).Scan(&gp.GroupID, &user.UserID, &c.CategoryID, &gp.GroupName, &gp.GroupDescription, &gp.CreatedAt, &c.CategoryName, &user.FirstName, &user.LastName, &user.PhotoURL)
+	if errQuery != nil {
+		if errQuery == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, errQuery
+	}
+	gp.User = user
+	gp.Category = c
+
+	insq = "select group_id from saved_group where group_id = ? and user_id = ?"
+	errQuery = sqls.DB.QueryRow(insq, gpid, gp.User.UserID).Scan(&gp.GroupID)
+	if errQuery != nil {
+		if errQuery == sql.ErrNoRows {
+			gp.IsSaved = false
+		} else {
+			return nil, errQuery
+		}
+	} else {
+		gp.IsSaved = true
+	}
+
+	var state bool
+	insq = "select state from membership where group_id = ? and user_id = ?"
+	errQuery = sqls.DB.QueryRow(insq, gpid, gp.User.UserID).Scan(&state)
+	if errQuery != nil {
+		if errQuery != sql.ErrNoRows {
+			return nil, errQuery
+		}
+	} else {
+		gp.IsJoined = state
+	}
+
+	return gp, nil
 }
 
 //DeleteGroup deletes a group by groupid
 func (sqls *SQLStore) DeleteGroup(gpid int) error {
+	//hopefully this is everything we gotta delete.
+
+	insq := "delete from blog_post where group_id = ?"
+
+	_, errExec := sqls.DB.Exec(insq, gpid)
+	if errExec != nil {
+		return errExec
+	}
+
+	insq = "delete from group_comment where group_id = ?"
+
+	_, errExec = sqls.DB.Exec(insq, gpid)
+	if errExec != nil {
+		return errExec
+	}
+
+	insq = "delete from membership where group_id = ?"
+
+	_, errExec = sqls.DB.Exec(insq, gpid)
+	if errExec != nil {
+		return errExec
+	}
+
+	insq = "delete from saved_group where group_id = ?"
+
+	_, errExec = sqls.DB.Exec(insq, gpid)
+	if errExec != nil {
+		return errExec
+	}
+
+	insq = "delete from `group` where group_id = ?"
+
+	_, errExec = sqls.DB.Exec(insq, gpid)
+	if errExec != nil {
+		return errExec
+	}
+
 	return nil
 }
 
 //SaveGroup saves a specific group to a specific user's saved groups
 func (sqls *SQLStore) SaveGroup(gpid int, userid int) error {
+	insq := "insert into saved_group(group_id, user_id) values(?,?)"
+
+	_, errExec := sqls.DB.Exec(insq, gpid, userid)
+	if errExec != nil {
+		return errExec
+	}
+
+	return nil
+}
+
+//UnsaveGroup unsaves a specific group to a specific user's saved groups
+func (sqls *SQLStore) UnsaveGroup(gpid int, userid int) error {
+	insq := "delete from saved_group where group_id = ? and user_id = ?"
+
+	_, errExec := sqls.DB.Exec(insq, gpid, userid)
+	if errExec != nil {
+		return errExec
+	}
+
 	return nil
 }
 

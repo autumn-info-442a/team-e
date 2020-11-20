@@ -103,7 +103,7 @@ func (ctx *GroupContext) SavedCategoriesHandler(w http.ResponseWriter, r *http.R
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("category unsaved"))
 	} else {
-		http.Error(w, "Method not allowed for", http.StatusMethodNotAllowed)
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
 
@@ -118,29 +118,173 @@ func (ctx *GroupContext) GroupSearchHandler(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-//GroupHandler is the group controller, handles requests for an existing group or to create a new group.
+//CreateGroupHandler is the create group controller, handles requests for creating a new group.
+func (ctx *GroupContext) CreateGroupHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+	//POST: Create new group
+	//inputs: group struct
+	//output: group struct, 201 status code
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) == 0 {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
+	}
+
+	user := &User{}
+	errDecode := json.Unmarshal([]byte(userHeader), &user)
+	if errDecode != nil {
+		http.Error(w, "Error getting user", http.StatusInternalServerError)
+		return
+	}
+
+	group := &Group{}
+	errDecode = json.NewDecoder(r.Body).Decode(&group)
+	if errDecode != nil {
+		http.Error(w, "Bad input", http.StatusBadRequest)
+		return
+	}
+
+	group.User = user
+	group, errDB := ctx.GStore.CreateGroup(group)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	encoded, errEncode := json.Marshal(group)
+	if errEncode != nil {
+		http.Error(w, "Error encoding user to JSON", http.StatusBadRequest)
+		return
+	}
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	w.Write(encoded)
+}
+
+//GroupHandler is the group controller, handles requests for existing groups.
 func (ctx *GroupContext) GroupHandler(w http.ResponseWriter, r *http.Request) {
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) == 0 {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
+	}
+
+	user := &User{}
+	errDecode := json.Unmarshal([]byte(userHeader), &user)
+	if errDecode != nil {
+		http.Error(w, "Error getting user", http.StatusInternalServerError)
+		return
+	}
+
+	pathid := path.Base(r.URL.Path)
+	split := strings.Split(pathid, "&")
+	pathid = split[0]
+	gid, errConv := strconv.Atoi(pathid)
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	group, errDB := ctx.GStore.GetGroup(gid)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	if group == nil {
+		http.Error(w, "Group does not exist", http.StatusBadRequest)
+		return
+	}
+	if group.User.UserID != user.UserID {
+		http.Error(w, "Access forbidden", http.StatusForbidden)
+		return
+	}
+
 	//GET: Load group information
 	//inputs: group id
 	//outputs: group struct, 200 status code
 	if r.Method == http.MethodGet {
+		encoded, errEncode := json.Marshal(group)
+		if errEncode != nil {
+			http.Error(w, "Error encoding user to JSON", http.StatusBadRequest)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("group"))
+		w.Write(encoded)
+		//DELETE: Delete existing group
+		//inputs: group id
+		//output: 200 status code
+	} else if r.Method == http.MethodDelete {
+		errDelete := ctx.GStore.DeleteGroup(gid)
+		if errDelete != nil {
+			http.Error(w, errDelete.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Group deleted successfully"))
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+//SavedGroupHandler is the SavedGroupController, handles request for a user's existing saved groups and to save a new group
+func (ctx *GroupContext) SavedGroupHandler(w http.ResponseWriter, r *http.Request) {
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) == 0 {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
 	}
 
-	//POST: Create new group
-	//inputs: group struct
-	//output: group struct, 201 status code
-	if r.Method == http.MethodPost {
+	user := &User{}
+	errDecode := json.Unmarshal([]byte(userHeader), &user)
+	if errDecode != nil {
+		http.Error(w, "Error getting user", http.StatusInternalServerError)
+		return
+	}
+
+	pathid := path.Base(r.URL.Path)
+	split := strings.Split(pathid, "&")
+	pathid = split[0]
+	gid, errConv := strconv.Atoi(pathid)
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	//GET: Get all saved groups
+	//inputs: user id
+	//outputs: group struct(s), 200 status code
+	if r.Method == http.MethodGet {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("group"))
+		//POST: Add a new group to saved groups
+		//inputs: group id
+		//outputs: 201 status code
+	} else if r.Method == http.MethodPost {
+		errSave := ctx.GStore.SaveGroup(gid, user.UserID)
+		if errSave != nil {
+			http.Error(w, "Error saving group", http.StatusInternalServerError)
+			return
+		}
+
 		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte("group"))
-	}
+		w.Write([]byte("group saved"))
+		//DELETE: Remove a group from saved groups
+		//inputs: group id
+		//outputs: 200 status code
+	} else if r.Method == http.MethodDelete {
+		errDelete := ctx.GStore.UnsaveGroup(gid, user.UserID)
+		if errDelete != nil {
+			http.Error(w, "Error unsaving group", http.StatusInternalServerError)
+			return
+		}
 
-	//DELETE: Delete existing group
-	//inputs: group id
-	//output: 200 status code
-	if r.Method == http.MethodDelete {
 		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("group unsaved"))
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
 
@@ -218,31 +362,6 @@ func (ctx *GroupContext) GroupMembershipHandler(w http.ResponseWriter, r *http.R
 	//inputs: group id, membership request id
 	//outputs: 200 status code
 	if r.Method == http.MethodPatch {
-		w.WriteHeader(http.StatusOK)
-	}
-}
-
-//SaveGroupHandler is the SavedGroupController, handles request for a user's existing saved groups and to save a new group
-func (ctx *GroupContext) SaveGroupHandler(w http.ResponseWriter, r *http.Request) {
-	//GET: Get all saved groups
-	//inputs: user id
-	//outputs: group struct(s), 200 status code
-	if r.Method == http.MethodGet {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("group"))
-	}
-
-	//POST: Add a new group to saved groups
-	//inputs: group id
-	//outputs: 201 status code
-	if r.Method == http.MethodPost {
-		w.WriteHeader(http.StatusCreated)
-	}
-
-	//DELETE: Remove a group from saved groups
-	//inputs: group id
-	//outputs: 200 status code
-	if r.Method == http.MethodDelete {
 		w.WriteHeader(http.StatusOK)
 	}
 }

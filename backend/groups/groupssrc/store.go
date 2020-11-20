@@ -14,6 +14,7 @@ type GroupsStore interface {
 	GetGroup(gpid int) (*Group, error)
 	DeleteGroup(gpid int) error
 	SaveGroup(gpid int, userid int) error
+	UnsaveGroup(gp int, userid int) error
 	GetSavedGroups(userid int) ([]*Group, error)
 
 	//GroupComment model methods

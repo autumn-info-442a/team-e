@@ -90,6 +90,10 @@ func main() {
 
 	groupsProxy := &httputil.ReverseProxy{Director: groupsDirector}
 	mux.Handle("/v1/categories", groupsProxy)
+	mux.Handle("/v1/categories/{categoryID}", groupsProxy)
+	mux.Handle("/v1/groups", groupsProxy)
+	mux.Handle("/v1/groups/{groupID}", groupsProxy)
+	mux.Handle("/v1/groups/save/{groupID}", groupsProxy)
 
 	mux.HandleFunc("/", gatewaysrc.HandleHome)
 	mux.HandleFunc("/login", gatewaysrc.HandleLogin)
@@ -118,13 +122,16 @@ func GetGoogleUserInfo(r *http.Request) (*gatewaysrc.GoogleUser, int) {
 	}
 
 	fmt.Println(resp.StatusCode)
-
-	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		return nil, resp.StatusCode
+	}
 
 	responseData, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, 777
 	}
+
+	defer resp.Body.Close()
 
 	guser := &gatewaysrc.GoogleUser{}
 	json.Unmarshal(responseData, &guser)
