@@ -40,11 +40,13 @@ type Group struct {
 	GroupName        string    `json:"groupName"`
 	GroupDescription string    `json:"groupDescription"`
 	CreatedAt        time.Time `json:"createdAt"`
+	IsSaved          bool      `json:"isSaved"`
+	IsJoined         bool      `json:"isJoined,omitempty"`
 }
 
 //GroupComment is the CommentModel, stores information about a comment. Represents comments on group pages
 type GroupComment struct {
-	GroupCommentID int           `json:"gropuCommentId"`
+	GroupCommentID int           `json:"groupCommentId"`
 	User           *User         `json:"user"`
 	Group          *Group        `json:"group"`
 	Reply          *GroupComment `json:"reply"`
@@ -77,8 +79,7 @@ type MembershipRequest struct {
 	User         *User     `json:"user"`
 	Group        *Group    `json:"group"`
 	UpdatedAt    time.Time `json:"updatedAt"`
-	State        string    `json:"state"`
-	Type         string    `json:"string"`
+	State        bool      `json:"state"`
 }
 
 //GroupContext contains the db context

@@ -20,6 +20,8 @@ create table if not exists saved_category (
     foreign key (category_id) REFERENCES category(category_id)
 );
 
+ALTER TABLE saved_category ADD UNIQUE `unique_index`(category_id, user_id);
+
 create table if not exists `group` (
     group_id int not null auto_increment primary key,
     user_id int not null,
@@ -56,28 +58,41 @@ create table if not exists blog_post (
 create table if not exists blog_comment (
     bc_id int not null auto_increment primary key,
     user_id int not null,
-    group_id int not null,
+    bp_id int not null,
     reply_id int,
     comment_content TEXT not null,
     created_at DATETIME,
     foreign key (user_id) REFERENCES user(user_id),
-    foreign key (group_id) REFERENCES `group`(group_id),
+    foreign key (bp_id) REFERENCES blog_post(bp_id),
     foreign key (reply_id) REFERENCES blog_comment(bc_id)
 );
+
+create table if not exists saved_group (
+    sg_id int not null auto_increment primary key,
+    user_id int not null,
+    group_id int not null,
+    foreign key (user_id) REFERENCES user(user_id),
+    foreign key (group_id) REFERENCES `group`(group_id)
+);
+
+ALTER TABLE saved_group ADD UNIQUE `unique_index`(user_id, group_id);
+
 
 create table if not exists membership (
     membership_id int not null auto_increment primary key,
     user_id int not null,
     group_id int not null,
     updated_at DATETIME,
-    state varchar(128), 
-    type varchar(128) not null,
+    state boolean not null, 
     foreign key (user_id) REFERENCES user(user_id),
     foreign key (group_id) REFERENCES `group`(group_id)
 );
+
+ALTER TABLE membership ADD UNIQUE `unique_index`(user_id, group_id);
+
 
 insert into user(google_id, email, first_name, last_name, photo_url)
 values('118379264076819254762', 'cahillaw@uw.edu', 'Andy', 'Cahill','https://lh5.googleusercontent.com/-kwF_3vBC36g/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucm_8vhE0mrs6Kzu80ATCl5zV4P8jA/s96-c/photo.jpg');
 
 insert into category(category_name)
-values('gaming');
+values('video games'),('outdoors'),('sports'),('board and card games'),('collecting');
