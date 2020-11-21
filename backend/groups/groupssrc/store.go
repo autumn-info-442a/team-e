@@ -10,7 +10,7 @@ type GroupsStore interface {
 
 	//Group model methods
 	CreateGroup(gp *Group) (*Group, error)
-	SearchGroups(query string) ([]*Group, error)
+	SearchGroups(query string, userid int, page int) ([]*Group, error)
 	GetGroup(gpid int) (*Group, error)
 	DeleteGroup(gpid int) error
 	SaveGroup(gpid int, userid int) error

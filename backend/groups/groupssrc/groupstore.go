@@ -106,12 +106,13 @@ func (sqls *SQLStore) CreateGroup(gp *Group) (*Group, error) {
 }
 
 //SearchGroups searches groups with the given query term, and returns groups with similar group names to the query.
-func (sqls *SQLStore) SearchGroups(query string) ([]*Group, error) {
+func (sqls *SQLStore) SearchGroups(query string, userid int, page int) ([]*Group, error) {
 	gps := make([]*Group, 0)
 	wcstring := string('%') + query + string('%')
-	insq := "select g.group_id, g.user_id, g.category_id, g.group_name, g.group_description, g.created_at, c.category_name, u.first_name, u.last_name, u.photo_url from `group` g join category c on g.category_id = c.category_id join user u on g.user_id = u.user_id where g.group_name LIKE ?"
+	offset := 9 * (page - 1)
+	insq := "select g.group_id, g.user_id, g.category_id, g.group_name, g.group_description, g.created_at, c.category_name, u.first_name, u.last_name, u.photo_url from `group` g join category c on g.category_id = c.category_id join user u on g.user_id = u.user_id where g.group_name LIKE ? order by g.group_name limit 9 offset ?"
 
-	res, errQuery := sqls.DB.Query(insq, wcstring)
+	res, errQuery := sqls.DB.Query(insq, wcstring, offset)
 	if errQuery != nil {
 		return nil, errQuery
 	}
@@ -125,6 +126,33 @@ func (sqls *SQLStore) SearchGroups(query string) ([]*Group, error) {
 		if errScan != nil {
 			return nil, errScan
 		}
+		gp.User = user
+		gp.Category = c
+
+		sgid := 0
+		insq = "select sg_id from saved_group where group_id = ? and user_id = ?"
+		errQuery = sqls.DB.QueryRow(insq, gp.GroupID, userid).Scan(&sgid)
+		if errQuery != nil {
+			if errQuery == sql.ErrNoRows {
+				gp.IsSaved = false
+			} else {
+				return nil, errQuery
+			}
+		} else {
+			gp.IsSaved = true
+		}
+
+		var state bool
+		insq = "select state from membership where group_id = ? and user_id = ?"
+		errQuery = sqls.DB.QueryRow(insq, gp.GroupID, userid).Scan(&state)
+		if errQuery != nil {
+			if errQuery != sql.ErrNoRows {
+				return nil, errQuery
+			}
+		} else {
+			gp.IsJoined = state
+		}
+
 		gps = append(gps, gp)
 	}
 

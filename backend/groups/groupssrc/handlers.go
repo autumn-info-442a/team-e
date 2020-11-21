@@ -112,10 +112,52 @@ func (ctx *GroupContext) GroupSearchHandler(w http.ResponseWriter, r *http.Reque
 	//GET: Load search results
 	//inputs: search query
 	//outputs: group struct(s), 200 status code
-	if r.Method == http.MethodGet {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("anything"))
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
+
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) == 0 {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
+	}
+
+	user := &User{}
+	errDecode := json.Unmarshal([]byte(userHeader), &user)
+	if errDecode != nil {
+		http.Error(w, "Error getting user", http.StatusInternalServerError)
+		return
+	}
+
+	query, _ := r.URL.Query()["query"]
+	if len(query) < 1 {
+		query = append(query, "")
+	}
+
+	page, _ := r.URL.Query()["page"]
+	if len(page) < 1 {
+		page = append(page, "1")
+	}
+	pagenum, errConv := strconv.Atoi(page[0])
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	groups, errDB := ctx.GStore.SearchGroups(query[0], user.UserID, pagenum)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	encoded, errEncode := json.Marshal(groups)
+	if errEncode != nil {
+		http.Error(w, "Error encoding user to JSON", http.StatusBadRequest)
+		return
+	}
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(encoded)
 }
 
 //CreateGroupHandler is the create group controller, handles requests for creating a new group.
@@ -253,16 +295,7 @@ func (ctx *GroupContext) SavedGroupHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	//GET: Get all saved groups
-	//inputs: user id
-	//outputs: group struct(s), 200 status code
-	if r.Method == http.MethodGet {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("group"))
-		//POST: Add a new group to saved groups
-		//inputs: group id
-		//outputs: 201 status code
-	} else if r.Method == http.MethodPost {
+	if r.Method == http.MethodPost {
 		errSave := ctx.GStore.SaveGroup(gid, user.UserID)
 		if errSave != nil {
 			http.Error(w, "Error saving group", http.StatusInternalServerError)
