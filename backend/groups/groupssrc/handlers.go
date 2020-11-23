@@ -229,7 +229,7 @@ func (ctx *GroupContext) GroupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	group, errDB := ctx.GStore.GetGroup(gid)
+	group, errDB := ctx.GStore.GetGroup(gid, user.UserID)
 	if errDB != nil {
 		http.Error(w, errDB.Error(), http.StatusInternalServerError)
 		return
@@ -321,56 +321,318 @@ func (ctx *GroupContext) SavedGroupHandler(w http.ResponseWriter, r *http.Reques
 	}
 }
 
-//CommentHandler is the comment controller, handles requests for an existing comment or to create a new comment
-func (ctx *GroupContext) CommentHandler(w http.ResponseWriter, r *http.Request) {
-	//GET: Load comment information
-	//inputs: comment id
-	//outputs: comment struct, 200 status code
-	if r.Method == http.MethodGet {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("group"))
+//CreateCommentHandler handles requests to create a new group comment
+func (ctx *GroupContext) CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 
 	//POST: Create a new comment
 	//inputs: comment struct
 	//output: comment struct, 201 status code
-	if r.Method == http.MethodPost {
-		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte("group"))
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) == 0 {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
 	}
 
-	//DELETE: Delete existing comment
+	user := &User{}
+	errDecode := json.Unmarshal([]byte(userHeader), &user)
+	if errDecode != nil {
+		http.Error(w, "Error getting user", http.StatusInternalServerError)
+		return
+	}
+
+	pathid := r.URL.Path
+	split := strings.Split(pathid, "/")
+	gid, errConv := strconv.Atoi(split[3])
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	gc := &GroupComment{}
+	errDecode = json.NewDecoder(r.Body).Decode(&gc)
+	if errDecode != nil {
+		http.Error(w, "Bad input", http.StatusBadRequest)
+		return
+	}
+	gc.GroupID = gid
+	gc.User = user
+
+	gc, errDB := ctx.GStore.CreateGroupComment(gc)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	encoded, errEncode := json.Marshal(gc)
+	if errEncode != nil {
+		http.Error(w, "Error encoding to JSON", http.StatusBadRequest)
+		return
+	}
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	w.Write(encoded)
+}
+
+//CommentHandler is the comment controller, handles requests for an existing comment
+func (ctx *GroupContext) CommentHandler(w http.ResponseWriter, r *http.Request) {
+	pathid := r.URL.Path
+	split := strings.Split(pathid, "/")
+	gid, errConv := strconv.Atoi(split[3])
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	pathid = path.Base(r.URL.Path)
+	split = strings.Split(pathid, "&")
+	pathid = split[0]
+	gcid, errConv := strconv.Atoi(pathid)
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	gc, errDB := ctx.GStore.GetGroupComment(gcid)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	if gc.GroupID != gid {
+		http.Error(w, "Comment is not for the specified group", http.StatusBadRequest)
+		return
+	}
+	if gc == nil {
+		http.Error(w, "Comment does not exist", http.StatusBadRequest)
+		return
+	}
+
+	//GET: Load comment information
 	//inputs: comment id
-	//output: 200 status code
-	if r.Method == http.MethodDelete {
+	//outputs: comment struct, 200 status code
+	if r.Method == http.MethodGet {
+		encoded, errEncode := json.Marshal(gc)
+		if errEncode != nil {
+			http.Error(w, "Error encoding to JSON", http.StatusBadRequest)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
+		w.Write(encoded)
+		//DELETE: Delete existing comment
+		//inputs: comment id
+		//output: 200 status code
+	} else if r.Method == http.MethodDelete {
+		userHeader := r.Header.Get("X-User")
+		if len(userHeader) == 0 {
+			http.Error(w, "Not authorized", http.StatusUnauthorized)
+			return
+		}
+
+		user := &User{}
+		errDecode := json.Unmarshal([]byte(userHeader), &user)
+		if errDecode != nil {
+			http.Error(w, "Error getting user", http.StatusInternalServerError)
+			return
+		}
+
+		if gc.User.UserID != user.UserID {
+			http.Error(w, "Access forbidden", http.StatusForbidden)
+			return
+		}
+
+		errDelete := ctx.GStore.DeleteGroupComment(gcid)
+		if errDelete != nil {
+			http.Error(w, errDelete.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Comment deleted successfully"))
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
 
-//BlogPostHandler is the blog controller, handles requests for an existing blog or to create a new blog
-func (ctx *GroupContext) BlogPostHandler(w http.ResponseWriter, r *http.Request) {
-	//GET: Load blog post information
-	//inputs: blog post id
-	//outputs: blog struct, 200 status code
-	if r.Method == http.MethodGet {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("group"))
+//CreateBlogPostHandler handles requests to create new blog posts
+func (ctx *GroupContext) CreateBlogPostHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 
 	//POST: Create a new blog post
 	//inputs: blog post struct
 	//output: blog post struct, 201 status code
-	if r.Method == http.MethodPost {
-		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte("group"))
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) == 0 {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
 	}
 
-	//DELETE: Deletes an existing blog post
-	//inputs: blog post id
-	//output: 200 status code
-	if r.Method == http.MethodDelete {
-		w.WriteHeader(http.StatusOK)
+	user := &User{}
+	errDecode := json.Unmarshal([]byte(userHeader), &user)
+	if errDecode != nil {
+		http.Error(w, "Error getting user", http.StatusInternalServerError)
+		return
 	}
+
+	pathid := r.URL.Path
+	split := strings.Split(pathid, "/")
+	gid, errConv := strconv.Atoi(split[3])
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	gp, errDB := ctx.GStore.GetGroup(gid, user.UserID)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if gp.IsJoined != true {
+		http.Error(w, "Access forbidden, not in group", http.StatusForbidden)
+		return
+	}
+
+	bp := &BlogPost{}
+	errDecode = json.NewDecoder(r.Body).Decode(&bp)
+	if errDecode != nil {
+		http.Error(w, "Bad input", http.StatusBadRequest)
+		return
+	}
+	bp.GroupID = gid
+	bp.User = user
+
+	bp, errDB = ctx.GStore.CreateBlogPost(bp)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	encoded, errEncode := json.Marshal(bp)
+	if errEncode != nil {
+		http.Error(w, "Error encoding to JSON", http.StatusBadRequest)
+		return
+	}
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	w.Write(encoded)
+}
+
+//BlogPostHandler is the blog controller, handles requests for an existing blog post
+func (ctx *GroupContext) BlogPostHandler(w http.ResponseWriter, r *http.Request) {
+	pathid := r.URL.Path
+	split := strings.Split(pathid, "/")
+	gid, errConv := strconv.Atoi(split[3])
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	pathid = path.Base(r.URL.Path)
+	split = strings.Split(pathid, "&")
+	pathid = split[0]
+	bpid, errConv := strconv.Atoi(pathid)
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	bp, errDB := ctx.GStore.GetBlogPost(bpid)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	if bp.GroupID != gid {
+		http.Error(w, "Blog post is not for the specified group", http.StatusBadRequest)
+		return
+	}
+	if bp == nil {
+		http.Error(w, "Blog post does not exist", http.StatusBadRequest)
+		return
+	}
+
+	//GET: Load blog post information
+	//inputs: blog post id
+	//outputs: blog struct, 200 status code
+	if r.Method == http.MethodGet {
+		encoded, errEncode := json.Marshal(bp)
+		if errEncode != nil {
+			http.Error(w, "Error encoding to JSON", http.StatusBadRequest)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write(encoded)
+		//DELETE: Deletes an existing blog post
+		//inputs: blog post id
+		//output: 200 status code
+	} else if r.Method == http.MethodDelete {
+		userHeader := r.Header.Get("X-User")
+		if len(userHeader) == 0 {
+			http.Error(w, "Not authorized", http.StatusUnauthorized)
+			return
+		}
+
+		user := &User{}
+		errDecode := json.Unmarshal([]byte(userHeader), &user)
+		if errDecode != nil {
+			http.Error(w, "Error getting user", http.StatusInternalServerError)
+			return
+		}
+
+		if bp.User.UserID != user.UserID {
+			http.Error(w, "Access forbidden", http.StatusForbidden)
+			return
+		}
+
+		errDelete := ctx.GStore.DeleteBlogPost(bpid)
+		if errDelete != nil {
+			http.Error(w, errDelete.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Comment deleted successfully"))
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+//CreateBlogCommentHandler handles requests to create new blog comments
+func (ctx *GroupContext) CreateBlogCommentHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) == 0 {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
+	}
+
+	user := &User{}
+	errDecode := json.Unmarshal([]byte(userHeader), &user)
+	if errDecode != nil {
+		http.Error(w, "Error getting user", http.StatusInternalServerError)
+		return
+	}
+
+	pathid := path.Base(r.URL.Path)
+	split := strings.Split(pathid, "&")
+	pathid = split[0]
+	pid, errConv := strconv.Atoi(pathid)
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+}
+
+//BlogCommentHandler handles requests the specificed blog comment
+func (ctx *GroupContext) BlogCommentHandler(w http.ResponseWriter, r *http.Request) {
+
 }
 
 //GroupMembershipHandler is the membership controller, handles requests to join a group and requests to confirm or reject someone from the group

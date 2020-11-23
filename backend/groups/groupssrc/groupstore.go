@@ -278,16 +278,66 @@ func (sqls *SQLStore) GetSavedGroups(userid int) ([]*Group, error) {
 
 //CreateGroupComment creates a group comment
 func (sqls *SQLStore) CreateGroupComment(gc *GroupComment) (*GroupComment, error) {
-	return nil, nil
+	if gc.ReplyID.Int64 == 0 {
+		insq := "insert into group_comment(user_id, group_id, comment_content, created_at, deleted) values(?,?,?,?,?)"
+
+		res, errExec := sqls.DB.Exec(insq, gc.User.UserID, gc.GroupID, gc.CommentContent, time.Now(), false)
+		if errExec != nil {
+			return nil, errExec
+		}
+
+		gcid, errID := res.LastInsertId()
+		if errID != nil {
+			return nil, errID
+		}
+		gc.GroupCommentID = int(gcid)
+
+		return gc, nil
+	}
+
+	insq := "insert into group_comment(user_id, group_id, reply_id, comment_content, created_at, deleted) values(?,?,?,?,?,?)"
+	res, errExec := sqls.DB.Exec(insq, gc.User.UserID, gc.GroupID, gc.ReplyID, gc.CommentContent, time.Now(), false)
+	if errExec != nil {
+		return nil, errExec
+	}
+
+	gcid, errID := res.LastInsertId()
+	if errID != nil {
+		return nil, errID
+	}
+	gc.GroupCommentID = int(gcid)
+
+	return gc, nil
 }
 
 //GetGroupComment gets a group comment by groupcomment id
 func (sqls *SQLStore) GetGroupComment(gcid int) (*GroupComment, error) {
-	return nil, nil
+	gc := &GroupComment{}
+	user := &User{}
+
+	insq := "select gc.gc_id, gc.user_id, u.first_name, u.last_name, u.photo_url, gc.group_id, gc.reply_id, gc.comment_content, gc.created_at, gc.deleted from group_comment gc join user u on gc.user_id = u.user_id where gc.gc_id = ?"
+
+	errQuery := sqls.DB.QueryRow(insq, gcid).Scan(&gc.GroupCommentID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &gc.GroupID, &gc.ReplyID, &gc.CommentContent, &gc.CreatedAt, &gc.Deleted)
+	if errQuery != nil {
+		if errQuery == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, errQuery
+	}
+	gc.User = user
+
+	return gc, nil
 }
 
 //DeleteGroupComment deletes a group comment
 func (sqls *SQLStore) DeleteGroupComment(gcid int) error {
+	insq := "update group_comment set deleted = true where gc_id = ?"
+
+	_, errExec := sqls.DB.Exec(insq, gcid)
+	if errExec != nil {
+		return errExec
+	}
+
 	return nil
 }
 
@@ -295,16 +345,50 @@ func (sqls *SQLStore) DeleteGroupComment(gcid int) error {
 
 //CreateBlogComment creates a blog comment
 func (sqls *SQLStore) CreateBlogComment(bc *BlogComment) (*BlogComment, error) {
-	return nil, nil
+	insq := "insert into blog_comment(user_id, bp_id, reply_id, comment_content, created_at, deleted) values(?,?,?,?,?,?)"
+
+	res, errExec := sqls.DB.Exec(insq, bc.User.UserID, bc.BlogPostID, bc.ReplyID, bc.CommentContent, time.Now(), false)
+	if errExec != nil {
+		return nil, errExec
+	}
+
+	bcid, errID := res.LastInsertId()
+	if errID != nil {
+		return nil, errID
+	}
+	bc.BlogCommentID = int(bcid)
+
+	return bc, nil
 }
 
 //GetBlogComment gets a blog comment
 func (sqls *SQLStore) GetBlogComment(bcid int) (*BlogComment, error) {
-	return nil, nil
+	bc := &BlogComment{}
+	user := &User{}
+
+	insq := "select bc.bc_id, bc.user_id, u.first_name, u.last_name, u.photo_url, bc.bp_id, bc.reply_id, bc.comment_content, bc.created_at, bc.deleted from blog_comment bc join user u on bc.user_id = u.user_id where bc.bc_id = ?"
+
+	errQuery := sqls.DB.QueryRow(insq, bcid).Scan(&bc.BlogCommentID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &bc.BlogPostID, &bc.ReplyID, &bc.CommentContent, &bc.CreatedAt, &bc.Deleted)
+	if errQuery != nil {
+		if errQuery == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, errQuery
+	}
+	bc.User = user
+
+	return bc, nil
 }
 
 //DeleteBlogComment deletes a specified blog comment
 func (sqls *SQLStore) DeleteBlogComment(bcid int) error {
+	insq := "update blog_comment set deleted = true where bc_id = ?"
+
+	_, errExec := sqls.DB.Exec(insq, bcid)
+	if errExec != nil {
+		return errExec
+	}
+
 	return nil
 }
 
@@ -312,16 +396,58 @@ func (sqls *SQLStore) DeleteBlogComment(bcid int) error {
 
 //CreateBlogPost creates a blog post
 func (sqls *SQLStore) CreateBlogPost(bp *BlogPost) (*BlogPost, error) {
-	return nil, nil
+	insq := "insert into blog_post(user_id, group_id, post_title, post_content, created_at) values(?,?,?,?,?)"
+
+	res, errExec := sqls.DB.Exec(insq, bp.User.UserID, bp.GroupID, bp.PostTitle, bp.PostContent, time.Now())
+	if errExec != nil {
+		return nil, errExec
+	}
+
+	bpid, errID := res.LastInsertId()
+	if errID != nil {
+		return nil, errID
+	}
+	bp.BlogPostID = int(bpid)
+
+	return bp, nil
 }
 
 //GetBlogPost gets a blog post
 func (sqls *SQLStore) GetBlogPost(bpid int) (*BlogPost, error) {
-	return nil, nil
+	bp := &BlogPost{}
+	user := &User{}
+
+	insq := "select bp.bp_id, bp.user_id, u.first_name, u.last_name, u.photo_url, bp.group_id, bp.post_title, bp.post_content, bp.created_at from blog_post bp join user u on bp.user_id = u.user_id where bp.bp_id = ?"
+
+	errQuery := sqls.DB.QueryRow(insq, bpid).Scan(&bp.BlogPostID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &bp.PostTitle, &bp.PostContent, &bp.CreatedAt)
+	if errQuery != nil {
+		if errQuery == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, errQuery
+	}
+	bp.User = user
+
+	return bp, nil
 }
 
 //DeleteBlogPost deletes a specified blog post
 func (sqls *SQLStore) DeleteBlogPost(bpid int) error {
+
+	insq := "delete from blog_comment where bp_id = ?"
+
+	_, errExec := sqls.DB.Exec(insq, bpid)
+	if errExec != nil {
+		return errExec
+	}
+
+	insq = "delete from blog_post where bp_id = ?"
+
+	_, errExec = sqls.DB.Exec(insq, bpid)
+	if errExec != nil {
+		return errExec
+	}
+
 	return nil
 }
 
@@ -329,7 +455,21 @@ func (sqls *SQLStore) DeleteBlogPost(bpid int) error {
 
 //CreateMembershipRequest creates a new membership request
 func (sqls *SQLStore) CreateMembershipRequest(gpid int, userid int) (*MembershipRequest, error) {
-	return nil, nil
+	mr := &MembershipRequest{}
+	insq := "insert into membership(user_id, group_id, updated_at, state) values(?,?,?,?)"
+
+	res, errExec := sqls.DB.Exec(insq, userid, gpid, time.Now(), false)
+	if errExec != nil {
+		return nil, errExec
+	}
+
+	mid, errID := res.LastInsertId()
+	if errID != nil {
+		return nil, errID
+	}
+	mr.MembershipID = int(mid)
+
+	return mr, nil
 }
 
 //GetMembershipRequests gets all membership requests for the given group
@@ -339,10 +479,24 @@ func (sqls *SQLStore) GetMembershipRequests(gpid int) ([]*MembershipRequest, err
 
 //AcceptMembershipRequest accepts a request for a user
 func (sqls *SQLStore) AcceptMembershipRequest(mr *MembershipRequest) error {
+	insq := "update membership set state = true, updated_at = ? where user_id = ? and group_id = ?"
+
+	_, errExec := sqls.DB.Exec(insq, time.Now(), mr.User.UserID, mr.GroupID)
+	if errExec != nil {
+		return errExec
+	}
+
 	return nil
 }
 
 //DeclineMembershipRequest declines a request for a user
 func (sqls *SQLStore) DeclineMembershipRequest(mr *MembershipRequest) error {
+
+	insq := "delete from membership wherewhere user_id = ? and group_id = ?"
+
+	_, errExec := sqls.DB.Exec(insq, mr.User.UserID, mr.GroupID)
+	if errExec != nil {
+		return errExec
+	}
 	return nil
 }

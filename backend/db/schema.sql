@@ -40,6 +40,7 @@ create table if not exists group_comment (
     reply_id int,
     comment_content TEXT not null,
     created_at DATETIME,
+    deleted boolean,
     foreign key (user_id) REFERENCES user(user_id),
     foreign key (group_id) REFERENCES `group`(group_id),
     foreign key (reply_id) REFERENCES group_comment(gc_id)
@@ -49,6 +50,7 @@ create table if not exists blog_post (
     bp_id int not null auto_increment primary key,
     user_id int not null,
     group_id int not null,
+    post_title varchar(128) not null,
     post_content TEXT not null,
     created_at DATETIME,
     foreign key (user_id) REFERENCES user(user_id),
@@ -62,6 +64,7 @@ create table if not exists blog_comment (
     reply_id int,
     comment_content TEXT not null,
     created_at DATETIME,
+    deleted boolean,
     foreign key (user_id) REFERENCES user(user_id),
     foreign key (bp_id) REFERENCES blog_post(bp_id),
     foreign key (reply_id) REFERENCES blog_comment(bc_id)

@@ -52,6 +52,12 @@ func main() {
 	mux.HandleFunc("/v1/groups/{groupID}", ctx.GroupHandler)
 	mux.HandleFunc("/v1/groups/save/{groupID}", ctx.SavedGroupHandler)
 	mux.HandleFunc("/v1/search", ctx.GroupSearchHandler)
+	mux.HandleFunc("/v1/groups/{groupID}/comments", ctx.CreateCommentHandler)
+	mux.HandleFunc("/v1/groups/{groupID}/comments/{commentID}", ctx.CommentHandler)
+	mux.HandleFunc("/v1/blog", ctx.CreateBlogPostHandler)
+	mux.HandleFunc("/v1/blog/{blogID}", ctx.BlogPostHandler)
+	mux.HandleFunc("/v1/blog/{blogID}/comments", ctx.CreateBlogCommentHandler)
+	mux.HandleFunc("/v1/blog/{blogID}/comments/{commentID}", ctx.BlogCommentHandler)
 
 	log.Printf("server is lsitening at %s", addr)
 	log.Fatal(http.ListenAndServe(addr, mux))
