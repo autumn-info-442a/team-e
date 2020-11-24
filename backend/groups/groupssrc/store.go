@@ -10,7 +10,7 @@ type GroupsStore interface {
 
 	//Group model methods
 	CreateGroup(gp *Group) (*Group, error)
-	SearchGroups(query string, userid int, page int) ([]*Group, error)
+	SearchGroups(query string, userid int, page int, catid int) ([]*Group, error)
 	GetGroup(gpid int, userid int) (*Group, error)
 	DeleteGroup(gpid int) error
 	SaveGroup(gpid int, userid int) error
@@ -21,6 +21,8 @@ type GroupsStore interface {
 	CreateGroupComment(gc *GroupComment) (*GroupComment, error)
 	GetGroupComment(gcid int) (*GroupComment, error)
 	DeleteGroupComment(gcid int) error
+	GetGroupCommentsByGroup(gid int, page int) ([]*GroupComment, error)
+	GetChildrenComments(gc *GroupComment) (*GroupComment, error)
 
 	//BlogComment model methods
 	CreateBlogComment(bc *BlogComment) (*BlogComment, error)

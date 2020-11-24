@@ -134,6 +134,16 @@ func (ctx *GroupContext) GroupSearchHandler(w http.ResponseWriter, r *http.Reque
 		query = append(query, "")
 	}
 
+	category, _ := r.URL.Query()["category"]
+	if len(category) < 1 {
+		category = append(category, "0")
+	}
+	catnum, errConv := strconv.Atoi(category[0])
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
 	page, _ := r.URL.Query()["page"]
 	if len(page) < 1 {
 		page = append(page, "1")
@@ -144,7 +154,7 @@ func (ctx *GroupContext) GroupSearchHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	groups, errDB := ctx.GStore.SearchGroups(query[0], user.UserID, pagenum)
+	groups, errDB := ctx.GStore.SearchGroups(query[0], user.UserID, pagenum, catnum)
 	if errDB != nil {
 		http.Error(w, errDB.Error(), http.StatusInternalServerError)
 		return
@@ -207,17 +217,17 @@ func (ctx *GroupContext) CreateGroupHandler(w http.ResponseWriter, r *http.Reque
 
 //GroupHandler is the group controller, handles requests for existing groups.
 func (ctx *GroupContext) GroupHandler(w http.ResponseWriter, r *http.Request) {
-	userHeader := r.Header.Get("X-User")
-	if len(userHeader) == 0 {
-		http.Error(w, "Not authorized", http.StatusUnauthorized)
-		return
-	}
-
 	user := &User{}
-	errDecode := json.Unmarshal([]byte(userHeader), &user)
-	if errDecode != nil {
-		http.Error(w, "Error getting user", http.StatusInternalServerError)
-		return
+	user.UserID = 0
+
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) != 0 {
+		user := &User{}
+		errDecode := json.Unmarshal([]byte(userHeader), &user)
+		if errDecode != nil {
+			http.Error(w, "Error getting user", http.StatusInternalServerError)
+			return
+		}
 	}
 
 	pathid := path.Base(r.URL.Path)
@@ -238,15 +248,18 @@ func (ctx *GroupContext) GroupHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Group does not exist", http.StatusBadRequest)
 		return
 	}
-	if group.User.UserID != user.UserID {
-		http.Error(w, "Access forbidden", http.StatusForbidden)
-		return
-	}
 
 	//GET: Load group information
 	//inputs: group id
 	//outputs: group struct, 200 status code
 	if r.Method == http.MethodGet {
+		comments, errDB := ctx.GStore.GetGroupCommentsByGroup(gid, 1)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+		group.Comments = comments
+
 		encoded, errEncode := json.Marshal(group)
 		if errEncode != nil {
 			http.Error(w, "Error encoding user to JSON", http.StatusBadRequest)
@@ -259,6 +272,11 @@ func (ctx *GroupContext) GroupHandler(w http.ResponseWriter, r *http.Request) {
 		//inputs: group id
 		//output: 200 status code
 	} else if r.Method == http.MethodDelete {
+		if group.User.UserID != user.UserID {
+			http.Error(w, "Access forbidden", http.StatusForbidden)
+			return
+		}
+
 		errDelete := ctx.GStore.DeleteGroup(gid)
 		if errDelete != nil {
 			http.Error(w, errDelete.Error(), http.StatusInternalServerError)
@@ -286,10 +304,9 @@ func (ctx *GroupContext) SavedGroupHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	pathid := path.Base(r.URL.Path)
-	split := strings.Split(pathid, "&")
-	pathid = split[0]
-	gid, errConv := strconv.Atoi(pathid)
+	pathid := r.URL.Path
+	split := strings.Split(pathid, "/")
+	gid, errConv := strconv.Atoi(split[3])
 	if errConv != nil {
 		http.Error(w, "Not an integer", http.StatusBadRequest)
 		return
@@ -321,28 +338,8 @@ func (ctx *GroupContext) SavedGroupHandler(w http.ResponseWriter, r *http.Reques
 	}
 }
 
-//CreateCommentHandler handles requests to create a new group comment
-func (ctx *GroupContext) CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-	}
-
-	//POST: Create a new comment
-	//inputs: comment struct
-	//output: comment struct, 201 status code
-	userHeader := r.Header.Get("X-User")
-	if len(userHeader) == 0 {
-		http.Error(w, "Not authorized", http.StatusUnauthorized)
-		return
-	}
-
-	user := &User{}
-	errDecode := json.Unmarshal([]byte(userHeader), &user)
-	if errDecode != nil {
-		http.Error(w, "Error getting user", http.StatusInternalServerError)
-		return
-	}
-
+//GenericCommentHandler handles requests to create a new group comment or gets comments from that group
+func (ctx *GroupContext) GenericCommentHandler(w http.ResponseWriter, r *http.Request) {
 	pathid := r.URL.Path
 	split := strings.Split(pathid, "/")
 	gid, errConv := strconv.Atoi(split[3])
@@ -351,29 +348,85 @@ func (ctx *GroupContext) CreateCommentHandler(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	gc := &GroupComment{}
-	errDecode = json.NewDecoder(r.Body).Decode(&gc)
-	if errDecode != nil {
-		http.Error(w, "Bad input", http.StatusBadRequest)
-		return
-	}
-	gc.GroupID = gid
-	gc.User = user
-
-	gc, errDB := ctx.GStore.CreateGroupComment(gc)
+	group, errDB := ctx.GStore.GetGroup(gid, 0)
 	if errDB != nil {
 		http.Error(w, errDB.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	encoded, errEncode := json.Marshal(gc)
-	if errEncode != nil {
-		http.Error(w, "Error encoding to JSON", http.StatusBadRequest)
+	if group == nil {
+		http.Error(w, "Group does not exist", http.StatusBadRequest)
 		return
 	}
-	w.Header().Add("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	w.Write(encoded)
+
+	//Gets group comments
+	if r.Method == http.MethodGet {
+		page, _ := r.URL.Query()["page"]
+		if len(page) < 1 {
+			page = append(page, "1")
+		}
+		pagenum, errConv := strconv.Atoi(page[0])
+		if errConv != nil {
+			http.Error(w, "Not an integer", http.StatusBadRequest)
+			return
+		}
+
+		comments, errDB := ctx.GStore.GetGroupCommentsByGroup(gid, pagenum)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		encoded, errEncode := json.Marshal(comments)
+		if errEncode != nil {
+			http.Error(w, "Error encoding user to JSON", http.StatusBadRequest)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write(encoded)
+	} else if r.Method == http.MethodPost {
+		//POST: Create a new comment
+		//inputs: comment struct
+		//output: comment struct, 201 status code
+		userHeader := r.Header.Get("X-User")
+		if len(userHeader) == 0 {
+			http.Error(w, "Not authorized", http.StatusUnauthorized)
+			return
+		}
+
+		user := &User{}
+		errDecode := json.Unmarshal([]byte(userHeader), &user)
+		if errDecode != nil {
+			http.Error(w, "Error getting user", http.StatusInternalServerError)
+			return
+		}
+
+		gc := &GroupComment{}
+		errDecode = json.NewDecoder(r.Body).Decode(&gc)
+		if errDecode != nil {
+			http.Error(w, "Bad input", http.StatusBadRequest)
+			return
+		}
+		gc.GroupID = gid
+		gc.User = user
+
+		gc, errDB := ctx.GStore.CreateGroupComment(gc)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		encoded, errEncode := json.Marshal(gc)
+		if errEncode != nil {
+			http.Error(w, "Error encoding to JSON", http.StatusBadRequest)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		w.Write(encoded)
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
 }
 
 //CommentHandler is the comment controller, handles requests for an existing comment
@@ -622,12 +675,12 @@ func (ctx *GroupContext) CreateBlogCommentHandler(w http.ResponseWriter, r *http
 	pathid := path.Base(r.URL.Path)
 	split := strings.Split(pathid, "&")
 	pathid = split[0]
-	pid, errConv := strconv.Atoi(pathid)
+	/*pid, errConv := strconv.Atoi(pathid)
 	if errConv != nil {
 		http.Error(w, "Not an integer", http.StatusBadRequest)
 		return
 	}
-
+	*/
 }
 
 //BlogCommentHandler handles requests the specificed blog comment

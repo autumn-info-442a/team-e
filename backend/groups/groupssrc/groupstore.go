@@ -106,16 +106,30 @@ func (sqls *SQLStore) CreateGroup(gp *Group) (*Group, error) {
 }
 
 //SearchGroups searches groups with the given query term, and returns groups with similar group names to the query.
-func (sqls *SQLStore) SearchGroups(query string, userid int, page int) ([]*Group, error) {
+func (sqls *SQLStore) SearchGroups(query string, userid int, page int, catid int) ([]*Group, error) {
 	gps := make([]*Group, 0)
 	wcstring := string('%') + query + string('%')
 	offset := 9 * (page - 1)
-	insq := "select g.group_id, g.user_id, g.category_id, g.group_name, g.group_description, g.created_at, c.category_name, u.first_name, u.last_name, u.photo_url from `group` g join category c on g.category_id = c.category_id join user u on g.user_id = u.user_id where g.group_name LIKE ? order by g.group_name limit 9 offset ?"
 
-	res, errQuery := sqls.DB.Query(insq, wcstring, offset)
-	if errQuery != nil {
-		return nil, errQuery
+	var res *sql.Rows
+	var errQuery error
+	var insq string
+	if catid != 0 {
+		insq = "select g.group_id, g.user_id, g.category_id, g.group_name, g.group_description, g.created_at, c.category_name, u.first_name, u.last_name, u.photo_url from `group` g join category c on g.category_id = c.category_id join user u on g.user_id = u.user_id where g.group_name LIKE ? and g.category_id = ? order by g.group_name limit 9 offset ?"
+
+		res, errQuery = sqls.DB.Query(insq, wcstring, catid, offset)
+		if errQuery != nil {
+			return nil, errQuery
+		}
+	} else {
+		insq = "select g.group_id, g.user_id, g.category_id, g.group_name, g.group_description, g.created_at, c.category_name, u.first_name, u.last_name, u.photo_url from `group` g join category c on g.category_id = c.category_id join user u on g.user_id = u.user_id where g.group_name LIKE ? order by g.group_name limit 9 offset ?"
+
+		res, errQuery = sqls.DB.Query(insq, wcstring, offset)
+		if errQuery != nil {
+			return nil, errQuery
+		}
 	}
+
 	defer res.Close()
 
 	for res.Next() {
@@ -160,7 +174,7 @@ func (sqls *SQLStore) SearchGroups(query string, userid int, page int) ([]*Group
 }
 
 //GetGroup gets a group by groupid and returns it
-func (sqls *SQLStore) GetGroup(gpid int) (*Group, error) {
+func (sqls *SQLStore) GetGroup(gpid int, userid int) (*Group, error) {
 	gp := &Group{}
 	user := &User{}
 	c := &Category{}
@@ -177,27 +191,30 @@ func (sqls *SQLStore) GetGroup(gpid int) (*Group, error) {
 	gp.User = user
 	gp.Category = c
 
-	insq = "select group_id from saved_group where group_id = ? and user_id = ?"
-	errQuery = sqls.DB.QueryRow(insq, gpid, gp.User.UserID).Scan(&gp.GroupID)
-	if errQuery != nil {
-		if errQuery == sql.ErrNoRows {
-			gp.IsSaved = false
+	if userid != 0 {
+		insq = "select group_id from saved_group where group_id = ? and user_id = ?"
+		errQuery = sqls.DB.QueryRow(insq, gpid, userid).Scan(&gp.GroupID)
+		if errQuery != nil {
+			if errQuery == sql.ErrNoRows {
+				gp.IsSaved = false
+			} else {
+				return nil, errQuery
+			}
 		} else {
-			return nil, errQuery
+			gp.IsSaved = true
 		}
-	} else {
-		gp.IsSaved = true
-	}
 
-	var state bool
-	insq = "select state from membership where group_id = ? and user_id = ?"
-	errQuery = sqls.DB.QueryRow(insq, gpid, gp.User.UserID).Scan(&state)
-	if errQuery != nil {
-		if errQuery != sql.ErrNoRows {
-			return nil, errQuery
+		var state bool
+		insq = "select state from membership where group_id = ? and user_id = ?"
+		errQuery = sqls.DB.QueryRow(insq, gpid, userid).Scan(&state)
+		if errQuery != nil {
+			if errQuery != sql.ErrNoRows {
+				return nil, errQuery
+			}
+		} else {
+			gp.IsJoined = state
 		}
-	} else {
-		gp.IsJoined = state
+
 	}
 
 	return gp, nil
@@ -329,6 +346,76 @@ func (sqls *SQLStore) GetGroupComment(gcid int) (*GroupComment, error) {
 	return gc, nil
 }
 
+//GetGroupCommentsByGroup gets comments for a specified group
+func (sqls *SQLStore) GetGroupCommentsByGroup(gid int, page int) ([]*GroupComment, error) {
+	gcs := make([]*GroupComment, 0)
+	offset := 3 * (page - 1)
+
+	insq := "select gc.gc_id, gc.user_id, u.first_name, u.last_name, u.photo_url, gc.group_id, gc.reply_id, gc.comment_content, gc.created_at, gc.deleted from group_comment gc join user u on gc.user_id = u.user_id where gc.group_id = ? and gc.reply_id IS NULL order by gc.gc_id DESC limit 3 offset ?"
+
+	res, errQuery := sqls.DB.Query(insq, gid, offset)
+	if errQuery != nil {
+		return nil, errQuery
+	}
+	defer res.Close()
+
+	for res.Next() {
+		gc := &GroupComment{}
+		user := &User{}
+		errScan := res.Scan(&gc.GroupCommentID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &gc.GroupID, &gc.ReplyID, &gc.CommentContent, &gc.CreatedAt, &gc.Deleted)
+		if errScan != nil {
+			return nil, errScan
+		}
+
+		gc, errRec := sqls.GetChildrenComments(gc)
+		if errRec != nil {
+			return nil, errRec
+		}
+
+		gcs = append(gcs, gc)
+	}
+
+	return gcs, nil
+}
+
+//GetChildrenComments is a recursive function that gets all child comments for a parent.
+func (sqls *SQLStore) GetChildrenComments(gc *GroupComment) (*GroupComment, error) {
+	children := make([]*GroupComment, 0)
+
+	insq := "select gc.gc_id, gc.user_id, u.first_name, u.last_name, u.photo_url, gc.group_id, gc.reply_id, gc.comment_content, gc.created_at, gc.deleted from group_comment gc join user u on gc.user_id = u.user_id where gc.reply_id = ? order by gc.gc_id DESC"
+
+	res, errQuery := sqls.DB.Query(insq, gc.GroupCommentID)
+	if errQuery != nil {
+		return nil, errQuery
+	}
+	defer res.Close()
+
+	count := 0
+	for res.Next() {
+		count++
+		child := &GroupComment{}
+		user := &User{}
+		errScan := res.Scan(&child.GroupCommentID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &child.GroupID, &child.ReplyID, &child.CommentContent, &child.CreatedAt, &child.Deleted)
+		if errScan != nil {
+			return nil, errScan
+		}
+		child.User = user
+
+		gc, errRec := sqls.GetChildrenComments(child)
+		if errRec != nil {
+			return nil, errRec
+		}
+
+		children = append(children, gc)
+	}
+
+	if count != 0 {
+		gc.Children = children
+	}
+
+	return gc, nil
+}
+
 //DeleteGroupComment deletes a group comment
 func (sqls *SQLStore) DeleteGroupComment(gcid int) error {
 	insq := "update group_comment set deleted = true where gc_id = ?"
@@ -345,6 +432,23 @@ func (sqls *SQLStore) DeleteGroupComment(gcid int) error {
 
 //CreateBlogComment creates a blog comment
 func (sqls *SQLStore) CreateBlogComment(bc *BlogComment) (*BlogComment, error) {
+	if bc.ReplyID.Int64 == 0 {
+		insq := "insert into blog_comment(user_id, bp_id, comment_content, created_at, deleted) values(?,?,?,?,?)"
+
+		res, errExec := sqls.DB.Exec(insq, bc.User.UserID, bc.BlogPostID, bc.CommentContent, time.Now(), false)
+		if errExec != nil {
+			return nil, errExec
+		}
+
+		bcid, errID := res.LastInsertId()
+		if errID != nil {
+			return nil, errID
+		}
+		bc.BlogCommentID = int(bcid)
+
+		return bc, nil
+	}
+
 	insq := "insert into blog_comment(user_id, bp_id, reply_id, comment_content, created_at, deleted) values(?,?,?,?,?,?)"
 
 	res, errExec := sqls.DB.Exec(insq, bc.User.UserID, bc.BlogPostID, bc.ReplyID, bc.CommentContent, time.Now(), false)

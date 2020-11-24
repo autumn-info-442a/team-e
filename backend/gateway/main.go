@@ -93,7 +93,7 @@ func main() {
 	mux.Handle("/v1/categories/{categoryID}", groupsProxy)
 	mux.Handle("/v1/groups", groupsProxy)
 	mux.Handle("/v1/groups/{groupID}", groupsProxy)
-	mux.Handle("/v1/groups/save/{groupID}", groupsProxy)
+	mux.Handle("/v1/groups/{groupID}/save", groupsProxy)
 	mux.Handle("/v1/search", groupsProxy)
 	mux.Handle("/v1/groups/{groupID}/comments", groupsProxy)
 	mux.Handle("/v1/groups/{groupID}/comments/{commentID}", groupsProxy)

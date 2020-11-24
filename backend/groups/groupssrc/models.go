@@ -37,25 +37,27 @@ type ReturnCategories struct {
 
 //Group is the GroupModel, stores information about a group
 type Group struct {
-	GroupID          int       `json:"groupId"`
-	User             *User     `json:"user"`
-	Category         *Category `json:"category"`
-	GroupName        string    `json:"groupName"`
-	GroupDescription string    `json:"groupDescription"`
-	CreatedAt        time.Time `json:"createdAt"`
-	IsSaved          bool      `json:"isSaved"`
-	IsJoined         bool      `json:"isJoined,omitempty"`
+	GroupID          int             `json:"groupId"`
+	User             *User           `json:"user"`
+	Category         *Category       `json:"category"`
+	GroupName        string          `json:"groupName"`
+	GroupDescription string          `json:"groupDescription"`
+	CreatedAt        time.Time       `json:"createdAt"`
+	IsSaved          bool            `json:"isSaved,omitempty"`
+	IsJoined         bool            `json:"isJoined,omitempty"`
+	Comments         []*GroupComment `json:"comments,omitempty"`
 }
 
 //GroupComment is the CommentModel, stores information about a comment. Represents comments on group pages
 type GroupComment struct {
-	GroupCommentID int           `json:"groupCommentId"`
-	User           *User         `json:"user"`
-	GroupID        int           `json:"groupId"`
-	ReplyID        sql.NullInt64 `json:"replyId"` //commentID of comment being replied to, if any
-	CommentContent string        `json:"commentContent"`
-	CreatedAt      time.Time     `json:"createdAt"`
-	Deleted        bool          `json:"deleted"`
+	GroupCommentID int             `json:"groupCommentId"`
+	User           *User           `json:"user"`
+	GroupID        int             `json:"groupId"`
+	ReplyID        sql.NullInt64   `json:"replyId"` //commentID of comment being replied to, if any
+	CommentContent string          `json:"commentContent"`
+	CreatedAt      time.Time       `json:"createdAt"`
+	Deleted        bool            `json:"deleted"`
+	Children       []*GroupComment `json:"children,omitempty"`
 }
 
 //BlogPost is the BlogModel, stores information about a blog post
