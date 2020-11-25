@@ -523,7 +523,7 @@ func (sqls *SQLStore) GetBlogPost(bpid int) (*BlogPost, error) {
 
 	insq := "select bp.bp_id, bp.user_id, u.first_name, u.last_name, u.photo_url, bp.group_id, bp.post_title, bp.post_content, bp.created_at from blog_post bp join user u on bp.user_id = u.user_id where bp.bp_id = ?"
 
-	errQuery := sqls.DB.QueryRow(insq, bpid).Scan(&bp.BlogPostID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &bp.PostTitle, &bp.PostContent, &bp.CreatedAt)
+	errQuery := sqls.DB.QueryRow(insq, bpid).Scan(&bp.BlogPostID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &bp.GroupID, &bp.PostTitle, &bp.PostContent, &bp.CreatedAt)
 	if errQuery != nil {
 		if errQuery == sql.ErrNoRows {
 			return nil, nil
@@ -533,6 +533,35 @@ func (sqls *SQLStore) GetBlogPost(bpid int) (*BlogPost, error) {
 	bp.User = user
 
 	return bp, nil
+}
+
+//GetBlogPostsByGroup gets blog posts for a group
+func (sqls *SQLStore) GetBlogPostsByGroup(gid int, page int) ([]*BlogPost, error) {
+	bps := make([]*BlogPost, 0)
+	offset := 3 * (page - 1)
+
+	insq := "select bp.bp_id, bp.user_id, u.first_name, u.last_name, u.photo_url, bp.group_id, bp.post_title, bp.post_content, bp.created_at from blog_post bp join user u on bp.user_id = u.user_id where bp.group_id = ? order by bp.bp_id DESC limit 3 offset ?"
+
+	res, errQuery := sqls.DB.Query(insq, gid, offset)
+	if errQuery != nil {
+		return nil, errQuery
+	}
+	defer res.Close()
+
+	for res.Next() {
+		bp := &BlogPost{}
+		user := &User{}
+		errScan := res.Scan(&bp.BlogPostID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &bp.GroupID, &bp.PostTitle, &bp.PostContent, &bp.CreatedAt)
+		if errScan != nil {
+			return nil, errScan
+		}
+
+		//GetComments method when done
+
+		bps = append(bps, bp)
+	}
+
+	return bps, nil
 }
 
 //DeleteBlogPost deletes a specified blog post

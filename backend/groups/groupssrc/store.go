@@ -32,6 +32,7 @@ type GroupsStore interface {
 	//BlogPost model methods
 	CreateBlogPost(bp *BlogPost) (*BlogPost, error)
 	GetBlogPost(bpid int) (*BlogPost, error)
+	GetBlogPostsByGroup(gid int, page int) ([]*BlogPost, error)
 	DeleteBlogPost(bpid int) error
 
 	//MembershipRequest model methods

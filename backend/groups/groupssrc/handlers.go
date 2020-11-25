@@ -2,6 +2,7 @@ package groupssrc
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"path"
 	"strconv"
@@ -218,16 +219,21 @@ func (ctx *GroupContext) CreateGroupHandler(w http.ResponseWriter, r *http.Reque
 //GroupHandler is the group controller, handles requests for existing groups.
 func (ctx *GroupContext) GroupHandler(w http.ResponseWriter, r *http.Request) {
 	user := &User{}
-	user.UserID = 0
 
 	userHeader := r.Header.Get("X-User")
-	if len(userHeader) != 0 {
-		user := &User{}
+	if len(userHeader) > 0 {
+		fmt.Println("if")
+
 		errDecode := json.Unmarshal([]byte(userHeader), &user)
 		if errDecode != nil {
 			http.Error(w, "Error getting user", http.StatusInternalServerError)
 			return
 		}
+		fmt.Println(user.UserID)
+		fmt.Println(user.FirstName)
+	} else {
+		fmt.Println("else")
+		user.UserID = 0
 	}
 
 	pathid := path.Base(r.URL.Path)
@@ -239,6 +245,7 @@ func (ctx *GroupContext) GroupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println(user.UserID)
 	group, errDB := ctx.GStore.GetGroup(gid, user.UserID)
 	if errDB != nil {
 		http.Error(w, errDB.Error(), http.StatusInternalServerError)
@@ -508,26 +515,18 @@ func (ctx *GroupContext) CommentHandler(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
-//CreateBlogPostHandler handles requests to create new blog posts
-func (ctx *GroupContext) CreateBlogPostHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-	}
-
-	//POST: Create a new blog post
-	//inputs: blog post struct
-	//output: blog post struct, 201 status code
-	userHeader := r.Header.Get("X-User")
-	if len(userHeader) == 0 {
-		http.Error(w, "Not authorized", http.StatusUnauthorized)
-		return
-	}
-
+//GenericBlogPostHandler handles requests to create new blog posts
+func (ctx *GroupContext) GenericBlogPostHandler(w http.ResponseWriter, r *http.Request) {
 	user := &User{}
-	errDecode := json.Unmarshal([]byte(userHeader), &user)
-	if errDecode != nil {
-		http.Error(w, "Error getting user", http.StatusInternalServerError)
-		return
+	user.UserID = 0
+
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) != 0 {
+		errDecode := json.Unmarshal([]byte(userHeader), &user)
+		if errDecode != nil {
+			http.Error(w, "Error getting user", http.StatusInternalServerError)
+			return
+		}
 	}
 
 	pathid := r.URL.Path
@@ -538,44 +537,93 @@ func (ctx *GroupContext) CreateBlogPostHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	gp, errDB := ctx.GStore.GetGroup(gid, user.UserID)
+	group, errDB := ctx.GStore.GetGroup(gid, user.UserID)
 	if errDB != nil {
 		http.Error(w, errDB.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	if gp.IsJoined != true {
-		http.Error(w, "Access forbidden, not in group", http.StatusForbidden)
+	if group == nil {
+		http.Error(w, "Group does not exist", http.StatusBadRequest)
 		return
 	}
 
-	bp := &BlogPost{}
-	errDecode = json.NewDecoder(r.Body).Decode(&bp)
-	if errDecode != nil {
-		http.Error(w, "Bad input", http.StatusBadRequest)
-		return
-	}
-	bp.GroupID = gid
-	bp.User = user
+	if r.Method == http.MethodGet {
+		page, _ := r.URL.Query()["page"]
+		if len(page) < 1 {
+			page = append(page, "1")
+		}
+		pagenum, errConv := strconv.Atoi(page[0])
+		if errConv != nil {
+			http.Error(w, "Not an integer", http.StatusBadRequest)
+			return
+		}
 
-	bp, errDB = ctx.GStore.CreateBlogPost(bp)
-	if errDB != nil {
-		http.Error(w, errDB.Error(), http.StatusInternalServerError)
-		return
+		blogs, errDB := ctx.GStore.GetBlogPostsByGroup(gid, pagenum)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		encoded, errEncode := json.Marshal(blogs)
+		if errEncode != nil {
+			http.Error(w, "Error encoding user to JSON", http.StatusBadRequest)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write(encoded)
+		//POST: Create a new blog post
+		//inputs: blog post struct
+		//output: blog post struct, 201 status code
+	} else if r.Method == http.MethodPost {
+		if !group.IsJoined {
+			http.Error(w, "Access forbidden, not in group", http.StatusForbidden)
+			return
+		}
+
+		bp := &BlogPost{}
+		errDecode := json.NewDecoder(r.Body).Decode(&bp)
+		if errDecode != nil {
+			http.Error(w, "Bad input", http.StatusBadRequest)
+			return
+		}
+		bp.GroupID = gid
+		bp.User = user
+
+		bp, errDB = ctx.GStore.CreateBlogPost(bp)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		encoded, errEncode := json.Marshal(bp)
+		if errEncode != nil {
+			http.Error(w, "Error encoding to JSON", http.StatusBadRequest)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		w.Write(encoded)
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 
-	encoded, errEncode := json.Marshal(bp)
-	if errEncode != nil {
-		http.Error(w, "Error encoding to JSON", http.StatusBadRequest)
-		return
-	}
-	w.Header().Add("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	w.Write(encoded)
 }
 
 //BlogPostHandler is the blog controller, handles requests for an existing blog post
 func (ctx *GroupContext) BlogPostHandler(w http.ResponseWriter, r *http.Request) {
+	user := &User{}
+	user.UserID = 0
+
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) != 0 {
+		errDecode := json.Unmarshal([]byte(userHeader), &user)
+		if errDecode != nil {
+			http.Error(w, "Error getting user", http.StatusInternalServerError)
+			return
+		}
+	}
+
 	pathid := r.URL.Path
 	split := strings.Split(pathid, "/")
 	gid, errConv := strconv.Atoi(split[3])
@@ -593,17 +641,27 @@ func (ctx *GroupContext) BlogPostHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	group, errDB := ctx.GStore.GetGroup(gid, user.UserID)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	if group == nil {
+		http.Error(w, "Group does not exist", http.StatusBadRequest)
+		return
+	}
+
 	bp, errDB := ctx.GStore.GetBlogPost(bpid)
 	if errDB != nil {
 		http.Error(w, errDB.Error(), http.StatusInternalServerError)
 		return
 	}
-	if bp.GroupID != gid {
-		http.Error(w, "Blog post is not for the specified group", http.StatusBadRequest)
-		return
-	}
 	if bp == nil {
 		http.Error(w, "Blog post does not exist", http.StatusBadRequest)
+		return
+	}
+	if bp.GroupID != gid {
+		http.Error(w, "Blog post is not for the specified group", http.StatusBadRequest)
 		return
 	}
 
@@ -623,21 +681,8 @@ func (ctx *GroupContext) BlogPostHandler(w http.ResponseWriter, r *http.Request)
 		//inputs: blog post id
 		//output: 200 status code
 	} else if r.Method == http.MethodDelete {
-		userHeader := r.Header.Get("X-User")
-		if len(userHeader) == 0 {
-			http.Error(w, "Not authorized", http.StatusUnauthorized)
-			return
-		}
-
-		user := &User{}
-		errDecode := json.Unmarshal([]byte(userHeader), &user)
-		if errDecode != nil {
-			http.Error(w, "Error getting user", http.StatusInternalServerError)
-			return
-		}
-
-		if bp.User.UserID != user.UserID {
-			http.Error(w, "Access forbidden", http.StatusForbidden)
+		if !group.IsJoined || user.UserID != group.User.UserID { //2nd is if user is group admin
+			http.Error(w, "Access forbidden, not in group", http.StatusForbidden)
 			return
 		}
 
