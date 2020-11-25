@@ -100,6 +100,9 @@ func main() {
 	mux.Handle("/v1/groups/{groupID}/blog", groupsProxy)
 	mux.Handle("/v1/groups/{groupID}/blog/{blogID}", groupsProxy)
 
+	mux.Handle("/v1/groups/{groupID}/requests", groupsProxy)
+	mux.Handle("/v1/groups/{groupID}/requests/{requestID}", groupsProxy)
+
 	mux.HandleFunc("/", gatewaysrc.HandleHome)
 	mux.HandleFunc("/login", gatewaysrc.HandleLogin)
 	mux.HandleFunc("/callback", gatewaysrc.HandleCallback)

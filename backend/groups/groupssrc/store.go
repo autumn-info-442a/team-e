@@ -37,7 +37,8 @@ type GroupsStore interface {
 
 	//MembershipRequest model methods
 	CreateMembershipRequest(gpid int, userid int) (*MembershipRequest, error)
+	GetMembershipRequest(mrid int) (*MembershipRequest, error)
 	GetMembershipRequests(gpid int) ([]*MembershipRequest, error)
-	AcceptMembershipRequest(mr *MembershipRequest) error
-	DeclineMembershipRequest(mr *MembershipRequest) error
+	AcceptMembershipRequest(mrid int) error
+	DeclineMembershipRequest(mrid int) error
 }

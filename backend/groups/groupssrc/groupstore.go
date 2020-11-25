@@ -601,20 +601,63 @@ func (sqls *SQLStore) CreateMembershipRequest(gpid int, userid int) (*Membership
 		return nil, errID
 	}
 	mr.MembershipID = int(mid)
+	user := &User{}
+	user.UserID = userid
+	mr.User = user
+	mr.GroupID = gpid
+
+	return mr, nil
+}
+
+//GetMembershipRequest gest a membership request for a given request
+func (sqls *SQLStore) GetMembershipRequest(mrid int) (*MembershipRequest, error) {
+	mr := &MembershipRequest{}
+	user := &User{}
+
+	insq := "select m.membership_id, m.user_id, u.first_name, u.last_name, u.photo_url, m.group_id, m.updated_at, m.state from membership m join user u on m.user_id = u.user_id where m.membership_id = ?"
+
+	errQuery := sqls.DB.QueryRow(insq, mrid).Scan(&mr.MembershipID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &mr.GroupID, &mr.UpdatedAt, &mr.State)
+	if errQuery != nil {
+		if errQuery == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, errQuery
+	}
+	mr.User = user
 
 	return mr, nil
 }
 
 //GetMembershipRequests gets all membership requests for the given group
 func (sqls *SQLStore) GetMembershipRequests(gpid int) ([]*MembershipRequest, error) {
-	return nil, nil
+	mrs := make([]*MembershipRequest, 0)
+	insq := "select m.membership_id, m.user_id, u.first_name, u.last_name, u.photo_url, m.group_id, m.updated_at, m.state from membership m join user u on m.user_id = u.user_id where m.group_id = ? and state = false"
+
+	res, errQuery := sqls.DB.Query(insq, gpid)
+	if errQuery != nil {
+		return nil, errQuery
+	}
+	defer res.Close()
+
+	for res.Next() {
+		mr := &MembershipRequest{}
+		user := &User{}
+		errScan := res.Scan(&mr.MembershipID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &mr.GroupID, &mr.UpdatedAt, &mr.State)
+		if errScan != nil {
+			return nil, errScan
+		}
+		mr.User = user
+		mrs = append(mrs, mr)
+	}
+
+	return mrs, nil
 }
 
 //AcceptMembershipRequest accepts a request for a user
-func (sqls *SQLStore) AcceptMembershipRequest(mr *MembershipRequest) error {
-	insq := "update membership set state = true, updated_at = ? where user_id = ? and group_id = ?"
+func (sqls *SQLStore) AcceptMembershipRequest(mrid int) error {
+	insq := "update membership set state = true, updated_at = ? where membership_id = ?"
 
-	_, errExec := sqls.DB.Exec(insq, time.Now(), mr.User.UserID, mr.GroupID)
+	_, errExec := sqls.DB.Exec(insq, time.Now(), mrid)
 	if errExec != nil {
 		return errExec
 	}
@@ -623,11 +666,11 @@ func (sqls *SQLStore) AcceptMembershipRequest(mr *MembershipRequest) error {
 }
 
 //DeclineMembershipRequest declines a request for a user
-func (sqls *SQLStore) DeclineMembershipRequest(mr *MembershipRequest) error {
+func (sqls *SQLStore) DeclineMembershipRequest(mrid int) error {
 
-	insq := "delete from membership wherewhere user_id = ? and group_id = ?"
+	insq := "delete from membership where membership_id = ?"
 
-	_, errExec := sqls.DB.Exec(insq, mr.User.UserID, mr.GroupID)
+	_, errExec := sqls.DB.Exec(insq, mrid)
 	if errExec != nil {
 		return errExec
 	}

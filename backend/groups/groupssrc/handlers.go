@@ -733,28 +733,182 @@ func (ctx *GroupContext) BlogCommentHandler(w http.ResponseWriter, r *http.Reque
 
 }
 
-//GroupMembershipHandler is the membership controller, handles requests to join a group and requests to confirm or reject someone from the group
-func (ctx *GroupContext) GroupMembershipHandler(w http.ResponseWriter, r *http.Request) {
+//GenericGroupMembershipHandler handles requests to specific membership requests
+func (ctx *GroupContext) GenericGroupMembershipHandler(w http.ResponseWriter, r *http.Request) {
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) == 0 {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
+	}
+
+	user := &User{}
+	errDecode := json.Unmarshal([]byte(userHeader), &user)
+	if errDecode != nil {
+		http.Error(w, "Error getting user", http.StatusInternalServerError)
+		return
+	}
+
+	pathid := r.URL.Path
+	split := strings.Split(pathid, "/")
+	gid, errConv := strconv.Atoi(split[3])
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
 	//GET: Get all current membership requests
 	//inputs: group id
 	//outputs: membership request struct(s), 200 status code
 	if r.Method == http.MethodGet {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("group"))
-	}
+		group, errDB := ctx.GStore.GetGroup(gid, user.UserID)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+		if group == nil {
+			http.Error(w, "Group does not exist", http.StatusBadRequest)
+			return
+		}
+		if group.User.UserID != user.UserID {
+			http.Error(w, "Not authorized", http.StatusUnauthorized)
+			return
+		}
 
-	//POST: Create a new request to join a group
-	//inputs: group id
-	//outputs: 201 status code
-	if r.Method == http.MethodPost {
+		mrs, errDB := ctx.GStore.GetMembershipRequests(gid)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		encoded, errEncode := json.Marshal(mrs)
+		if errEncode != nil {
+			http.Error(w, "Error encoding to JSON", http.StatusBadRequest)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write(encoded)
+		//POST: Create a new request for a group
+	} else if r.Method == http.MethodPost {
+		mr, errDB := ctx.GStore.CreateMembershipRequest(gid, user.UserID)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		encoded, errEncode := json.Marshal(mr)
+		if errEncode != nil {
+			http.Error(w, "Error encoding to JSON", http.StatusBadRequest)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte("group"))
+		w.Write(encoded)
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+//GroupMembershipHandler is the membership controller, handles requests to join a group and requests to confirm or reject someone from the group
+func (ctx *GroupContext) GroupMembershipHandler(w http.ResponseWriter, r *http.Request) {
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) == 0 {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
 	}
 
-	//PATCH: Update membership request from pending to confirmed or
-	//inputs: group id, membership request id
-	//outputs: 200 status code
-	if r.Method == http.MethodPatch {
+	user := &User{}
+	errDecode := json.Unmarshal([]byte(userHeader), &user)
+	if errDecode != nil {
+		http.Error(w, "Error getting user", http.StatusInternalServerError)
+		return
+	}
+
+	pathid := r.URL.Path
+	split := strings.Split(pathid, "/")
+	gid, errConv := strconv.Atoi(split[3])
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	group, errDB := ctx.GStore.GetGroup(gid, user.UserID)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	if group == nil {
+		http.Error(w, "Group does not exist", http.StatusBadRequest)
+		return
+	}
+
+	pathid = path.Base(r.URL.Path)
+	split = strings.Split(pathid, "&")
+	pathid = split[0]
+	mrid, errConv := strconv.Atoi(pathid)
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	mr, errDB := ctx.GStore.GetMembershipRequest(mrid)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	if mr == nil {
+		http.Error(w, "Request does not exist", http.StatusBadRequest)
+		return
+	}
+	if mr.GroupID != group.GroupID {
+		http.Error(w, "request is not in group", http.StatusBadRequest)
+		return
+	}
+
+	//GET: Get a membership request by id
+	//inputs: group id
+	//outputs: membership request struct(s), 200 status code
+	if r.Method == http.MethodGet {
+		encoded, errEncode := json.Marshal(mr)
+		if errEncode != nil {
+			http.Error(w, "Error encoding to JSON", http.StatusBadRequest)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
+		w.Write(encoded)
+		//PATCH: Update membership request from pending to confirmed or
+		//inputs: group id, membership request id
+		//outputs: 200 status code
+	} else if r.Method == http.MethodPatch {
+		if group.User.UserID != user.UserID {
+			http.Error(w, "Not authorized", http.StatusUnauthorized)
+			return
+		}
+
+		errDB := ctx.GStore.AcceptMembershipRequest(mrid)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("request accepted"))
+	} else if r.Method == http.MethodDelete {
+		if group.User.UserID != user.UserID {
+			http.Error(w, "Not authorized", http.StatusUnauthorized)
+			return
+		}
+
+		errDB := ctx.GStore.DeclineMembershipRequest(mrid)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("request declined"))
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
