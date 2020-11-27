@@ -89,5 +89,3 @@ A more detailed view of our sprint board can be found [here](https://info442team
 ### How will you verify that you've met your requirements?
 
 Please review our requirements list to read the verification details for each requirement. [Requirements List](https://github.com/autumn-info-442a/team-e/blob/main/HW3.md).
-
-Hey
