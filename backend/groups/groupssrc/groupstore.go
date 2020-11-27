@@ -288,7 +288,83 @@ func (sqls *SQLStore) UnsaveGroup(gpid int, userid int) error {
 
 //GetSavedGroups retuns all groups a given user has saved
 func (sqls *SQLStore) GetSavedGroups(userid int) ([]*Group, error) {
-	return nil, nil
+	gps := make([]*Group, 0)
+
+	insq := "select sg.group_id, u.user_id, u.first_name, u.last_name, u.photo_url, c.category_id, c.category_name, g.group_name, g.group_description, g.created_at from saved_group sg join `group` g on sg.group_id = g.group_id join category c on g.category_id = c.category_id join user u on g.user_id = u.user_id where sg.user_id = ?"
+
+	res, errQuery := sqls.DB.Query(insq, userid)
+	if errQuery != nil {
+		return nil, errQuery
+	}
+	defer res.Close()
+
+	for res.Next() {
+		gp := &Group{}
+		user := &User{}
+		c := &Category{}
+		errScan := res.Scan(&gp.GroupID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &c.CategoryID, &c.CategoryName, &gp.GroupName, &gp.GroupDescription, &gp.CreatedAt)
+		if errScan != nil {
+			return nil, errScan
+		}
+		gp.User = user
+		gps = append(gps, gp)
+	}
+
+	return gps, nil
+}
+
+//GetJoinedGroups gets all the groups you have joined
+func (sqls *SQLStore) GetJoinedGroups(userid int) ([]*Group, error) {
+	gps := make([]*Group, 0)
+
+	insq := "select m.group_id, u.user_id, u.first_name, u.last_name, u.photo_url, c.category_id, c.category_name, g.group_name, g.group_description, g.created_at from membership m join `group` g on m.group_id = g.group_id join category c on g.category_id = c.category_id join user u on g.user_id = u.user_id where m.user_id = ? and state = true"
+
+	res, errQuery := sqls.DB.Query(insq, userid)
+	if errQuery != nil {
+		return nil, errQuery
+	}
+	defer res.Close()
+
+	for res.Next() {
+		gp := &Group{}
+		user := &User{}
+		c := &Category{}
+		errScan := res.Scan(&gp.GroupID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &c.CategoryID, &c.CategoryName, &gp.GroupName, &gp.GroupDescription, &gp.CreatedAt)
+		if errScan != nil {
+			return nil, errScan
+		}
+		gp.User = user
+		gps = append(gps, gp)
+	}
+
+	return gps, nil
+}
+
+//GetAdminGroups gets all groups you created
+func (sqls *SQLStore) GetAdminGroups(userid int) ([]*Group, error) {
+	gps := make([]*Group, 0)
+
+	insq := "select g.group_id, g.user_id, u.first_name, u.last_name, u.photo_url, g.category_id, c.category_name, g.group_name, g.group_description, g.created_at from `group` g join category c on g.category_id = c.category_id join user u on g.user_id = u.user_id where g.user_id = ?"
+
+	res, errQuery := sqls.DB.Query(insq, userid)
+	if errQuery != nil {
+		return nil, errQuery
+	}
+	defer res.Close()
+
+	for res.Next() {
+		gp := &Group{}
+		user := &User{}
+		c := &Category{}
+		errScan := res.Scan(&gp.GroupID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &c.CategoryID, &c.CategoryName, &gp.GroupName, &gp.GroupDescription, &gp.CreatedAt)
+		if errScan != nil {
+			return nil, errScan
+		}
+		gp.User = user
+		gps = append(gps, gp)
+	}
+
+	return gps, nil
 }
 
 //GROUPCOMMENT DB METHODS

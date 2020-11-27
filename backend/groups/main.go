@@ -60,6 +60,9 @@ func main() {
 	mux.HandleFunc("/v1/groups/{groupID}/requests", ctx.GenericGroupMembershipHandler)
 	mux.HandleFunc("/v1/groups/{groupID}/requests/{requestID}", ctx.GroupMembershipHandler)
 
+	mux.HandleFunc("/v1/admin", ctx.AdminHandler)
+	mux.HandleFunc("/v1/test", ctx.AdminHandler)
+
 	log.Printf("server is lsitening at %s", addr)
 	log.Fatal(http.ListenAndServe(addr, mux))
 }

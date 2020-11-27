@@ -90,6 +90,13 @@ type MembershipRequest struct {
 	State        bool      `json:"state"` //false = pending, true = accepted, missing = declined/no request
 }
 
+//ReturnAdmin contains admin groups info (admin, joined, saved) to be returned
+type ReturnAdmin struct {
+	AdminGroups  []*Group `json:"adminGroups"`
+	JoinedGroups []*Group `json:"joinedGroups"`
+	SavedGroups  []*Group `json:"savedGroups"`
+}
+
 //GroupContext contains the db context
 type GroupContext struct {
 	GStore GroupsStore

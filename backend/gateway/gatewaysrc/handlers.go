@@ -13,7 +13,7 @@ import (
 
 var (
 	googleOauthConfig = &oauth2.Config{
-		RedirectURL:  "https://localhost/callback",
+		RedirectURL:  "https://groups.cahillaw.me/callback",
 		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
 		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile", "openid"},
@@ -80,6 +80,6 @@ func HandleCallback(w http.ResponseWriter, r *http.Request) {
 	resp, _ := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
 	fmt.Println(resp)
 
-	url := "https://localhost/redirect?access_token=" + token.AccessToken
+	url := "https://groups.cahillaw.me/redirect?access_token=" + token.AccessToken
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }

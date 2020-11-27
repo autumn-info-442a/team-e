@@ -117,17 +117,22 @@ func (ctx *GroupContext) GroupSearchHandler(w http.ResponseWriter, r *http.Reque
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 
-	userHeader := r.Header.Get("X-User")
-	if len(userHeader) == 0 {
-		http.Error(w, "Not authorized", http.StatusUnauthorized)
-		return
-	}
-
 	user := &User{}
-	errDecode := json.Unmarshal([]byte(userHeader), &user)
-	if errDecode != nil {
-		http.Error(w, "Error getting user", http.StatusInternalServerError)
-		return
+
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) > 0 {
+		fmt.Println("if")
+
+		errDecode := json.Unmarshal([]byte(userHeader), &user)
+		if errDecode != nil {
+			http.Error(w, "Error getting user", http.StatusInternalServerError)
+			return
+		}
+		fmt.Println(user.UserID)
+		fmt.Println(user.FirstName)
+	} else {
+		fmt.Println("else")
+		user.UserID = 0
 	}
 
 	query, _ := r.URL.Query()["query"]
@@ -911,4 +916,56 @@ func (ctx *GroupContext) GroupMembershipHandler(w http.ResponseWriter, r *http.R
 	} else {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
+}
+
+//AdminHandler handles requests to get admin groups info
+func (ctx *GroupContext) AdminHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) == 0 {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
+	}
+
+	user := &User{}
+	errDecode := json.Unmarshal([]byte(userHeader), &user)
+	if errDecode != nil {
+		http.Error(w, "Error getting user", http.StatusInternalServerError)
+		return
+	}
+
+	ra := &ReturnAdmin{}
+
+	ag, errDB := ctx.GStore.GetAdminGroups(user.UserID)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	ra.AdminGroups = ag
+
+	jg, errDB := ctx.GStore.GetJoinedGroups(user.UserID)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	ra.JoinedGroups = jg
+
+	sg, errDB := ctx.GStore.GetSavedGroups(user.UserID)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	ra.SavedGroups = sg
+
+	encoded, errEncode := json.Marshal(ra)
+	if errEncode != nil {
+		http.Error(w, "Error encoding user to JSON", http.StatusBadRequest)
+		return
+	}
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(encoded)
 }
