@@ -53,11 +53,12 @@ export class Categories extends Component {
 
   render() {
     let cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    if (this.state.showGroups) {
+          return (<Redirect to="/groups" />)
+  }
 
     return (
-      this.state.showGroups ?
-        <Groups /> :
-     (<div>
+<div>
         <Container maxWidth="md">
           <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
             Categories
@@ -95,7 +96,7 @@ export class Categories extends Component {
           </Grid>
         </Container>
       </div>
-    ));
+    );
 
   }
 }

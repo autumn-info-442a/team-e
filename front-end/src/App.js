@@ -7,6 +7,10 @@ import { Container } from '@material-ui/core';
 import { Route, Switch, NavLink, Redirect } from 'react-router-dom'
 import { Navbar, Nav } from 'react-bootstrap';
 import { UserDashboard } from "./Components/UserDashnoard";
+import { Groups } from './Components/Groups';
+import { GroupPage } from "./Components/GroupPage";
+import { BlogPost } from './Components/BlogPost';
+import { GroupDesc } from './Components/GroupDesc';
 
 export default class App extends Component {
   render() {
@@ -19,7 +23,11 @@ export default class App extends Component {
               <Route exact path='/' component={Categories} />
               <Route path='/login' component={LogIn} />
               <Route path="/mystuff" component={UserDashboard} />
-              {/*<Route path="/signin" component={Sign} />
+              <Route path="/groups" component={Groups} />
+              <Route path="/grouppage" component={GroupPage} />
+              <Route path="/blog" component={BlogPost} />
+              <Route path="/groupdesc" component={GroupDesc} />
+              {/*
             <Route path="/logout" component={Signout} /> */}
               <Redirect to="/" />
             </Switch>

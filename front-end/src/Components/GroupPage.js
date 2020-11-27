@@ -3,6 +3,7 @@ import { Typography, Grid, Container, Button, Card, CardActionArea, CardContent,
 import { Row } from 'react-bootstrap';
 import { ExpandMore } from '@material-ui/icons';
 import { BlogPost } from "./BlogPost";
+import { Redirect } from 'react-router-dom'
 // shows a singular selected group page with posts
 export class GroupPage extends Component {
 
@@ -65,11 +66,10 @@ export class GroupPage extends Component {
     // shows edit and accept options if user is admin
     render() {
         let cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-        return (
-            this.state.showBlog ?
-                <BlogPost /> :
-                (<div>
+        if (this.state.showBlog) {
+                return (<Redirect to="/blog" />)
+        }
+        return (<div>
                     <Container maxWidth="md">
                         <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
                             Group BLOGS
@@ -132,7 +132,7 @@ export class GroupPage extends Component {
                         </Grid>
                     </Container>
                 </div>
-                ));
+                );
 
     }
 }

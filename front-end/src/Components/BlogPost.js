@@ -20,7 +20,7 @@ export class BlogPost extends Component {
 
   render() {
     return (<div>
-        <Container maxWidth="sm">
+        <Container maxWidth="md">
           <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
             Blog Title 
             </Typography>

@@ -3,6 +3,8 @@ import { GroupPage } from "./GroupPage";
 import { Search } from './SearchBar';
 import { Typography, Grid, Container, Button, Card, CardActions, CardContent, CardMedia } from '@material-ui/core';
 import { Row } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom'
+
 // shows all groups within a selected category
 export class Groups extends Component {
 
@@ -75,11 +77,11 @@ export class Groups extends Component {
     // shows group info as a pop up
     render() {
         let cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-        return (
-            this.state.showGroupPage ?
-            <GroupPage /> :
-         ( <div>
+        if (this.state.showGroupPage) {
+            return (<Redirect to="/grouppage" />)
+    }
+    
+        return ( <div>
                 <Container maxWidth="md">
                     <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
                         Groups (Category Name)
@@ -120,7 +122,7 @@ export class Groups extends Component {
                     </Grid>
                 </Container>
             </div>
-        ));
+        );
 
     }
 
