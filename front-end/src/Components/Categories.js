@@ -44,6 +44,10 @@ export class Categories extends Component {
     this.onClick = this.onClick.bind(this);
   }
 
+  componentDidMount () {
+    this.getCategories()
+  }
+
   onClick() {
     this.setState({
       showGroups: true,
@@ -99,6 +103,30 @@ export class Categories extends Component {
     );
 
   }
+
+  getCategories = () => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/categories"
+      fetch(url, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': ''
+        }
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          response.json().then((data) => {
+            console.log(data)
+          })
+        } else {
+          console.log("failed :(")
+        }
+      })
+    }, 0)
+    
+  }
+
 }
 
 
