@@ -72,13 +72,14 @@ type BlogPost struct {
 
 //BlogComment is the CommentModel, stores information about a comment. Represents comments on blog posts
 type BlogComment struct {
-	BlogCommentID  int           `json:"gropuCommentId"`
-	User           *User         `json:"user"`
-	BlogPostID     int           `json:"blogPostId"`
-	ReplyID        sql.NullInt64 `json:"replyId"`
-	CommentContent string        `json:"commentContent"`
-	CreatedAt      time.Time     `json:"createdAt"`
-	Deleted        bool          `json:"deleted"`
+	BlogCommentID  int            `json:"blogCommentId"`
+	User           *User          `json:"user"`
+	BlogPostID     int            `json:"blogPostId"`
+	ReplyID        sql.NullInt64  `json:"replyId"`
+	CommentContent string         `json:"commentContent"`
+	CreatedAt      time.Time      `json:"createdAt"`
+	Deleted        bool           `json:"deleted"`
+	Children       []*BlogComment `json:"children,omitempty"`
 }
 
 //MembershipRequest is the MembershipRequestModel, stores information about the status of a membership requets, as well as saved groups

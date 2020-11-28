@@ -102,9 +102,9 @@ func main() {
 
 	mux.Handle("/v1/groups/{groupID}/requests", groupsProxy)
 	mux.Handle("/v1/groups/{groupID}/requests/{requestID}", groupsProxy)
-
+	mux.Handle("/v1/groups/{groupsID}/blog/{blogID}/comments", groupsProxy)
+	mux.Handle("/v1/groups/{groupsID}/blog/{blogID}/comments/{commentID}", groupsProxy)
 	mux.Handle("/v1/admin", groupsProxy)
-	mux.Handle("/v1/test", groupsProxy)
 
 	mux.HandleFunc("/", gatewaysrc.HandleHome)
 	mux.HandleFunc("/login", gatewaysrc.HandleLogin)

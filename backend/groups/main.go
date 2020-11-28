@@ -48,20 +48,21 @@ func main() {
 
 	mux.HandleFunc("/v1/categories", ctx.CategoriesHandler)
 	mux.HandleFunc("/v1/categories/{categoryID}", ctx.SavedCategoriesHandler)
+
 	mux.HandleFunc("/v1/groups", ctx.CreateGroupHandler)
 	mux.HandleFunc("/v1/groups/{groupID}", ctx.GroupHandler)
 	mux.HandleFunc("/v1/groups/{groupID}/save", ctx.SavedGroupHandler)
-	mux.HandleFunc("/v1/search", ctx.GroupSearchHandler)
+	mux.HandleFunc("/v1/groups/{groupID}/requests", ctx.GenericGroupMembershipHandler)
+	mux.HandleFunc("/v1/groups/{groupID}/requests/{requestID}", ctx.GroupMembershipHandler)
 	mux.HandleFunc("/v1/groups/{groupID}/comments", ctx.GenericCommentHandler)
 	mux.HandleFunc("/v1/groups/{groupID}/comments/{commentID}", ctx.CommentHandler)
 	mux.HandleFunc("/v1/groups/{groupID}/blog", ctx.GenericBlogPostHandler)
 	mux.HandleFunc("/v1/groups/{groupID}/blog/{blogID}", ctx.BlogPostHandler)
+	mux.HandleFunc("/v1/groups/{groupsID}/blog/{blogID}/comments", ctx.GenericBlogCommentHandler)
+	mux.HandleFunc("/v1/groups/{groupsID}/blog/{blogID}/comments/{commentID}", ctx.BlogCommentHandler)
 
-	mux.HandleFunc("/v1/groups/{groupID}/requests", ctx.GenericGroupMembershipHandler)
-	mux.HandleFunc("/v1/groups/{groupID}/requests/{requestID}", ctx.GroupMembershipHandler)
-
+	mux.HandleFunc("/v1/search", ctx.GroupSearchHandler)
 	mux.HandleFunc("/v1/admin", ctx.AdminHandler)
-	mux.HandleFunc("/v1/test", ctx.AdminHandler)
 
 	log.Printf("server is lsitening at %s", addr)
 	log.Fatal(http.ListenAndServe(addr, mux))

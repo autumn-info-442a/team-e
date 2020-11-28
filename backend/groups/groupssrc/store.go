@@ -30,6 +30,8 @@ type GroupsStore interface {
 	CreateBlogComment(bc *BlogComment) (*BlogComment, error)
 	GetBlogComment(bcid int) (*BlogComment, error)
 	DeleteBlogComment(bcid int) error
+	GetBlogCommentsByBlog(bid int, page int) ([]*BlogComment, error)
+	GetBlogChildrenComments(bc *BlogComment) (*BlogComment, error)
 
 	//BlogPost model methods
 	CreateBlogPost(bp *BlogPost) (*BlogPost, error)

@@ -2,7 +2,6 @@ package groupssrc
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"path"
 	"strconv"
@@ -121,17 +120,12 @@ func (ctx *GroupContext) GroupSearchHandler(w http.ResponseWriter, r *http.Reque
 
 	userHeader := r.Header.Get("X-User")
 	if len(userHeader) > 0 {
-		fmt.Println("if")
-
 		errDecode := json.Unmarshal([]byte(userHeader), &user)
 		if errDecode != nil {
 			http.Error(w, "Error getting user", http.StatusInternalServerError)
 			return
 		}
-		fmt.Println(user.UserID)
-		fmt.Println(user.FirstName)
 	} else {
-		fmt.Println("else")
 		user.UserID = 0
 	}
 
@@ -227,17 +221,12 @@ func (ctx *GroupContext) GroupHandler(w http.ResponseWriter, r *http.Request) {
 
 	userHeader := r.Header.Get("X-User")
 	if len(userHeader) > 0 {
-		fmt.Println("if")
-
 		errDecode := json.Unmarshal([]byte(userHeader), &user)
 		if errDecode != nil {
 			http.Error(w, "Error getting user", http.StatusInternalServerError)
 			return
 		}
-		fmt.Println(user.UserID)
-		fmt.Println(user.FirstName)
 	} else {
-		fmt.Println("else")
 		user.UserID = 0
 	}
 
@@ -250,7 +239,6 @@ func (ctx *GroupContext) GroupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(user.UserID)
 	group, errDB := ctx.GStore.GetGroup(gid, user.UserID)
 	if errDB != nil {
 		http.Error(w, errDB.Error(), http.StatusInternalServerError)
@@ -733,9 +721,230 @@ func (ctx *GroupContext) CreateBlogCommentHandler(w http.ResponseWriter, r *http
 	*/
 }
 
+//GenericBlogCommentHandler handles requests the specificed blog comment
+func (ctx *GroupContext) GenericBlogCommentHandler(w http.ResponseWriter, r *http.Request) {
+	user := &User{}
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) > 0 {
+		errDecode := json.Unmarshal([]byte(userHeader), &user)
+		if errDecode != nil {
+			http.Error(w, "Error getting user", http.StatusInternalServerError)
+			return
+		}
+	} else {
+		user.UserID = 0
+	}
+
+	pathid := r.URL.Path
+	split := strings.Split(pathid, "/")
+	gid, errConv := strconv.Atoi(split[3])
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+	bpid, errConv := strconv.Atoi(split[5])
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	group, errDB := ctx.GStore.GetGroup(gid, user.UserID)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	if group == nil {
+		http.Error(w, "Group does not exist", http.StatusBadRequest)
+		return
+	}
+
+	bp, errDB := ctx.GStore.GetBlogPost(bpid)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	if bp == nil {
+		http.Error(w, "Group does not exist", http.StatusBadRequest)
+		return
+	}
+	if bp.GroupID != group.GroupID {
+		http.Error(w, "Blog post is not in the specified group", http.StatusBadRequest)
+		return
+	}
+
+	//Gets group comments
+	if r.Method == http.MethodGet {
+		page, _ := r.URL.Query()["page"]
+		if len(page) < 1 {
+			page = append(page, "1")
+		}
+		pagenum, errConv := strconv.Atoi(page[0])
+		if errConv != nil {
+			http.Error(w, "Not an integer", http.StatusBadRequest)
+			return
+		}
+
+		comments, errDB := ctx.GStore.GetBlogCommentsByBlog(bpid, pagenum)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		encoded, errEncode := json.Marshal(comments)
+		if errEncode != nil {
+			http.Error(w, "Error encoding user to JSON", http.StatusBadRequest)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write(encoded)
+	} else if r.Method == http.MethodPost {
+		//POST: Create a new comment
+		//inputs: comment struct
+		//output: comment struct, 201 status code
+		if user.UserID < 1 {
+			http.Error(w, "Not authorized", http.StatusUnauthorized)
+			return
+		}
+
+		if !group.IsJoined {
+			http.Error(w, "Cannot comment unless in group", http.StatusUnauthorized)
+			return
+		}
+
+		bc := &BlogComment{}
+		errDecode := json.NewDecoder(r.Body).Decode(&bc)
+		if errDecode != nil {
+			http.Error(w, "Bad input", http.StatusBadRequest)
+			return
+		}
+		bc.BlogPostID = bpid
+		bc.User = user
+
+		bc, errDB := ctx.GStore.CreateBlogComment(bc)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		encoded, errEncode := json.Marshal(bc)
+		if errEncode != nil {
+			http.Error(w, "Error encoding to JSON", http.StatusBadRequest)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		w.Write(encoded)
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
 //BlogCommentHandler handles requests the specificed blog comment
 func (ctx *GroupContext) BlogCommentHandler(w http.ResponseWriter, r *http.Request) {
+	user := &User{}
+	userHeader := r.Header.Get("X-User")
+	if len(userHeader) > 0 {
+		errDecode := json.Unmarshal([]byte(userHeader), &user)
+		if errDecode != nil {
+			http.Error(w, "Error getting user", http.StatusInternalServerError)
+			return
+		}
+	} else {
+		user.UserID = 0
+	}
 
+	pathid := r.URL.Path
+	split := strings.Split(pathid, "/")
+	gid, errConv := strconv.Atoi(split[3])
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+	bpid, errConv := strconv.Atoi(split[5])
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+	pathid = path.Base(r.URL.Path)
+	split = strings.Split(pathid, "&")
+	pathid = split[0]
+	bcid, errConv := strconv.Atoi(pathid)
+	if errConv != nil {
+		http.Error(w, "Not an integer", http.StatusBadRequest)
+		return
+	}
+
+	group, errDB := ctx.GStore.GetGroup(gid, user.UserID)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	if group == nil {
+		http.Error(w, "Group does not exist", http.StatusBadRequest)
+		return
+	}
+
+	bp, errDB := ctx.GStore.GetBlogPost(bpid)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	if bp == nil {
+		http.Error(w, "Group does not exist", http.StatusBadRequest)
+		return
+	}
+	if bp.GroupID != group.GroupID {
+		http.Error(w, "Blog post is not in the specified group", http.StatusBadRequest)
+		return
+	}
+
+	bc, errDB := ctx.GStore.GetBlogComment(bcid)
+	if errDB != nil {
+		http.Error(w, errDB.Error(), http.StatusInternalServerError)
+		return
+	}
+	if bc.BlogPostID != bpid {
+		http.Error(w, "Blog comment is not for the specified blog", http.StatusBadRequest)
+		return
+	}
+	if bc == nil {
+		http.Error(w, "Comment does not exist", http.StatusBadRequest)
+		return
+	}
+
+	//GET: Load comment information
+	//inputs: comment id
+	//outputs: comment struct, 200 status code
+	if r.Method == http.MethodGet {
+		encoded, errEncode := json.Marshal(bc)
+		if errEncode != nil {
+			http.Error(w, "Error encoding to JSON", http.StatusBadRequest)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write(encoded)
+		//DELETE: Delete existing comment
+		//inputs: comment id
+		//output: 200 status code
+	} else if r.Method == http.MethodDelete {
+		//you created comment / you are group admin
+		if bc.User.UserID != user.UserID || bc.User.UserID != group.User.UserID {
+			http.Error(w, "Access forbidden", http.StatusForbidden)
+			return
+		}
+
+		errDelete := ctx.GStore.DeleteBlogComment(bcid)
+		if errDelete != nil {
+			http.Error(w, errDelete.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Comment deleted successfully"))
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
 }
 
 //GenericGroupMembershipHandler handles requests to specific membership requests

@@ -572,6 +572,76 @@ func (sqls *SQLStore) DeleteBlogComment(bcid int) error {
 	return nil
 }
 
+//GetBlogCommentsByBlog returns comments for a specific blog post
+func (sqls *SQLStore) GetBlogCommentsByBlog(bid int, page int) ([]*BlogComment, error) {
+	bcs := make([]*BlogComment, 0)
+	offset := 3 * (page - 1)
+
+	insq := "select bc.bc_id, bc.user_id, u.first_name, u.last_name, u.photo_url, bc.bp_id, bc.reply_id, bc.comment_content, bc.created_at, bc.deleted from blog_comment bc join user u on bc.user_id = u.user_id where bc.bp_id = ? and bc.reply_id IS NULL order by bc.bc_id DESC limit 3 offset ?"
+
+	res, errQuery := sqls.DB.Query(insq, bid, offset)
+	if errQuery != nil {
+		return nil, errQuery
+	}
+	defer res.Close()
+
+	for res.Next() {
+		bc := &BlogComment{}
+		user := &User{}
+		errScan := res.Scan(&bc.BlogCommentID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &bc.BlogPostID, &bc.ReplyID, &bc.CommentContent, &bc.CreatedAt, &bc.Deleted)
+		if errScan != nil {
+			return nil, errScan
+		}
+
+		bc, errRec := sqls.GetBlogChildrenComments(bc)
+		if errRec != nil {
+			return nil, errRec
+		}
+
+		bcs = append(bcs, bc)
+	}
+
+	return bcs, nil
+}
+
+//GetBlogChildrenComments is a recurive methods that gets the children blog comments
+func (sqls *SQLStore) GetBlogChildrenComments(bc *BlogComment) (*BlogComment, error) {
+	children := make([]*BlogComment, 0)
+
+	insq := "select bc.bc_id, bc.user_id, u.first_name, u.last_name, u.photo_url, bc.bp_id, bc.reply_id, bc.comment_content, bc.created_at, bc.deleted from blog_comment bc join user u on bc.user_id = u.user_id where bc.reply_id = ? order by bc.bc_id DESC"
+
+	res, errQuery := sqls.DB.Query(insq, bc.BlogCommentID)
+	if errQuery != nil {
+		return nil, errQuery
+	}
+	defer res.Close()
+
+	count := 0
+	for res.Next() {
+		count++
+		child := &BlogComment{}
+		user := &User{}
+		errScan := res.Scan(&child.BlogCommentID, &user.UserID, &user.FirstName, &user.LastName, &user.PhotoURL, &child.BlogPostID, &child.ReplyID, &child.CommentContent, &child.CreatedAt, &child.Deleted)
+		if errScan != nil {
+			return nil, errScan
+		}
+		child.User = user
+
+		bc, errRec := sqls.GetBlogChildrenComments(child)
+		if errRec != nil {
+			return nil, errRec
+		}
+
+		children = append(children, bc)
+	}
+
+	if count != 0 {
+		bc.Children = children
+	}
+
+	return bc, nil
+}
+
 //BLOGPOST DB METHODS
 
 //CreateBlogPost creates a blog post
