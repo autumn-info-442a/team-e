@@ -63,6 +63,9 @@ export default function SignInSide() {
             </Grid>
           </form>
         </div>
+        <div id = "centered">
+          <Button id = "loginbutton" variant= "dark" size= "sm" href="/authenticate">Login with Google</Button>{' '}
+        </div>
       </Grid>
     </Grid>
   );

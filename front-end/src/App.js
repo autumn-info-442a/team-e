@@ -11,6 +11,8 @@ import { Groups } from './Components/Groups';
 import { GroupPage } from "./Components/GroupPage";
 import { BlogPost } from './Components/BlogPost';
 import { GroupDesc } from './Components/GroupDesc';
+import Authenticate from './Components/Authenticate'
+import RedirectPage from './Components/Redirect'
 
 export default class App extends Component {
   render() {
@@ -27,9 +29,11 @@ export default class App extends Component {
               <Route path="/grouppage" component={GroupPage} />
               <Route path="/blog" component={BlogPost} />
               <Route path="/groupdesc" component={GroupDesc} />
+              <Route exact path = "/authenticate" component={Authenticate}/>
+              <Route path = "/redirect" component={RedirectPage} />
+
               {/*
             <Route path="/logout" component={Signout} /> */}
-              <Redirect to="/" />
             </Switch>
           </>
           </Container>
