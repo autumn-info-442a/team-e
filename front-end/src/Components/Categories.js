@@ -142,9 +142,505 @@ export class Categories extends Component {
         }
       })
     }, 0)
-    
   }
 
-}
+  saveCategory = (auth, categoryId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/categories/" + categoryId
+      fetch(url, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          console.log("success")
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
 
+  unsaveCategory = (auth, categoryId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/categories/" + categoryId
+      fetch(url, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          console.log("success")
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
+
+  createGroup = (auth, categoryId, groupName, groupDescription) => {
+    var body = 
+    {
+      "category":{
+         "categoryId": categoryId
+      },
+      "groupName": groupName,
+      "groupDescription": groupDescription
+   }
+  
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups"
+      fetch(url, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        },
+        body: body
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            console.log(data)
+          })
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
+
+  getGroup = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId
+      fetch(url, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            console.log(data)
+          })
+        } else {
+          console.log("failed :(")
+        }
+      })
+    }, 0)
+  }
+
+  saveGroup = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId
+      fetch(url, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          console.log("success")
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
+
+  unsaveGroup = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId
+      fetch(url, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          console.log("success")
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
+
+  searchGroups = (auth, categoryId, page, query) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/search?"
+      if (categoryId !== '') {
+        url = url + "category=" + categoryId
+      }
+
+      if (page !== '') {
+        if (url.charAt(url.length-1) === '?' || url.charAt(url.length-1) === '&') {
+          url = url + '&'
+        }
+        url = url + "page=" + page
+      }
+
+      if (query !== '') {
+        if (url.charAt(url.length-1) === '?' || url.charAt(url.length-1) === '&') {
+          url = url + '&'
+        }
+        url = url + "query=" + query
+      }
+
+      fetch(url, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            console.log(data)
+          })
+        } else {
+          console.log("failed :(")
+        }
+      })
+    }, 0)
+  }
+
+  createGroupComment = (auth, groupId, commentContent, replyId) => {
+    setTimeout(() => {
+      if (replyId > 0) {
+        var body = 
+          {
+            "replyId":{
+              "Int64": replyId,
+              "Valid": true
+            },
+            "commentContent": commentContent
+        }
+      } else {
+        var body = 
+        {
+          "commentContent": commentContent
+        }
+      }
+  
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/comments"
+      fetch(url, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        },
+        body: body
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            console.log(data)
+          })
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
+  
+  getGroupComments = (auth, groupId, page) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/comments?"
+      if (page !== '') {
+        url = url + "page=" + page
+      }
+  
+      fetch(url, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            console.log(data)
+          })
+        } else {
+          console.log("failed :(")
+        }
+      })
+    }, 0)
+  }
+  
+  deletedGroupComment = (auth, groupId, commentId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/comments/" + commentId 
+      fetch(url, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          console.log("success")
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
+  
+  createBlogPost = (auth, groupId, postTitle, postContent) => {
+    var body = 
+    {
+      "postTitle": postTitle,
+      "postContent": postContent
+   }
+  
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog"
+      fetch(url, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        },
+        body: body
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            console.log(data)
+          })
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
+  
+  deletedBlogPost = (auth, groupId, blogId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId
+      fetch(url, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          console.log("success")
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
+  
+  getMembersipRequests = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests"
+  
+      fetch(url, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            console.log(data)
+          })
+        } else {
+          console.log("failed :(")
+        }
+      })
+    }, 0)
+  }
+  
+  createMembershipRequest = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests"
+      fetch(url, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          console.log("success")
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
+  
+  acceptMembershipRequest = (auth, groupId, requestId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests/" + requestId
+      fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          console.log("success")
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
+  
+  deletedBlogPost = (auth, groupId, requestId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests/" + requestId
+      fetch(url, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          console.log("success")
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
+  
+  getAdminGroups = (auth) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/admin"
+  
+      fetch(url, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            console.log(data)
+          })
+        } else {
+          console.log("failed :(")
+        }
+      })
+    }, 0)
+  }
+  
+  createBlogComment = (auth, groupId, blogId, commentContent, replyId) => {
+    setTimeout(() => {
+      if (replyId > 0) {
+        var body = 
+          {
+            "replyId":{
+              "Int64": replyId,
+              "Valid": true
+            },
+            "commentContent": commentContent
+        }
+      } else {
+        var body = 
+        {
+          "commentContent": commentContent
+        }
+      }
+  
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId + "/comments"
+      fetch(url, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        },
+        body: body
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            console.log(data)
+          })
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
+  
+  getBlogComments = (auth, groupId, blogId, page) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId + "/comments"
+      if (page !== '') {
+        url = url + "page=" + page
+      }
+  
+      fetch(url, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            console.log(data)
+          })
+        } else {
+          console.log("failed :(")
+        }
+      })
+    }, 0)
+  }
+  
+  deletedBlogComment = (auth, groupId, blogId, commentId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId + "/comments/" + commentId 
+      fetch(url, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+      .then((response) => {
+        if (response.status <= 201) {
+          console.log("success")
+        } else {
+          console.log("failed :(", response.status)
+        }
+      })
+    }, 0)
+  }
+}
 
