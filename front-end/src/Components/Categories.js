@@ -13,19 +13,23 @@ export class Categories extends Component {
     super(props);
     this.state = {
       showGroups: false,
+      categoryId: 0
     };
-    this.onClick = this.onClick.bind(this);
+    this.goToGroupsPage = this.goToGroupsPage.bind(this);
   }
 
   componentDidMount() {
     console.log(this.getCookie("access_token"))
-    let auth = this.getCookie("access_token")
+    this.setState({
+      auth: this.getCookie("access_token")
+    })
     this.getCategories();
   }
 
-  onClick() {
+  goToGroupsPage(categoryId) {
     this.setState({
-      showGroups: true,
+      categoryId: categoryId,
+      showGroups: true
     });
     // let history = useHistory();
     // history.push("/groups")
@@ -38,7 +42,14 @@ export class Categories extends Component {
 
   render() {
     if (this.state.showGroups) {
-      return (<Redirect to="/groups" />)
+      console.log(this.state.categoryId)
+      return <Redirect to={{
+        pathname: '/groups',
+        state: {
+          auth: this.state.auth,
+          categoryId: this.state.categoryId
+        }
+      }} />
     }
     console.log(this.state.data);
     return (
@@ -67,7 +78,7 @@ export class Categories extends Component {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" color="primary" onClick={this.onClick}>
+                    <Button size="small" color="primary" onClick={() => this.goToGroupsPage(card.categoryId)}>
                       View
                     </Button>
                   </CardActions>

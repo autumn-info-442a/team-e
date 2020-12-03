@@ -67,7 +67,9 @@ export class Groups extends Component {
       }
 
       componentDidMount() {
-        this.getGroup();
+        console.log(this.props.location.state.categoryId)
+        console.log(this.props.location.state.auth)
+        this.searchGroups(this.props.location.state.auth, this.props.location.state.categoryId, 1, '');
       }
     
       onClick() {
@@ -80,7 +82,7 @@ export class Groups extends Component {
     // loads list of groups - navigates to a group page if clicked on
     // shows group info as a pop up
     render() {
-        let cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+     //   let cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         if (this.state.showGroupPage) {
             return (<Redirect to="/grouppage" />)
     }
@@ -100,7 +102,7 @@ export class Groups extends Component {
                 <Container style={{ padding: "3.5rem 0" }} maxWidth="md">
                     {/* End hero unit */}
                     <Grid container spacing={4}>
-                        {cards.map((card) => (
+                        {this.state.data != undefined && this.state.data.map((card) => (
                             <Grid item key={card} xs={12} sm={6} md={4}>
                                 <Card style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                                     <CardMedia
@@ -232,14 +234,14 @@ createGroup = (auth, categoryId, groupName, groupDescription) => {
       }
 
       if (page !== '') {
-        if (url.charAt(url.length - 1) === '?' || url.charAt(url.length - 1) === '&') {
+        if (url.charAt(url.length - 1) !== '?' || url.charAt(url.length - 1) !== '&') {
           url = url + '&'
         }
         url = url + "page=" + page
       }
 
       if (query !== '') {
-        if (url.charAt(url.length - 1) === '?' || url.charAt(url.length - 1) === '&') {
+        if (url.charAt(url.length - 1) !== '?' || url.charAt(url.length - 1) !== '&') {
           url = url + '&'
         }
         url = url + "query=" + query
@@ -256,6 +258,9 @@ createGroup = (auth, categoryId, groupName, groupDescription) => {
           if (response.status <= 201) {
             response.json().then((data) => {
               console.log(data)
+              this.setState({
+                data: data
+              })
             })
           } else {
             console.log("failed :(")
