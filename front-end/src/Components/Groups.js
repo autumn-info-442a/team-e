@@ -65,6 +65,10 @@ export class Groups extends Component {
         };
         this.onClick = this.onClick.bind(this);
       }
+
+      componentDidMount() {
+        this.getGroup();
+      }
     
       onClick() {
         this.setState({
@@ -126,4 +130,137 @@ export class Groups extends Component {
 
     }
 
+createGroup = (auth, categoryId, groupName, groupDescription) => {
+    var body =
+    {
+      "category": {
+        "categoryId": categoryId
+      },
+      "groupName": groupName,
+      "groupDescription": groupDescription
+    }
+
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups"
+      fetch(url, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        },
+        body: body
+      })
+        .then((response) => {
+          if (response.status <= 201) {
+            response.json().then((data) => {
+              console.log(data)
+            })
+          } else {
+            console.log("failed :(", response.status)
+          }
+        })
+    }, 0)
+  }
+
+  getGroup = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId
+      fetch(url, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+        .then((response) => {
+          if (response.status <= 201) {
+            response.json().then((data) => {
+              console.log(data)
+            })
+          } else {
+            console.log("failed :(")
+          }
+        })
+    }, 0)
+  }
+
+  saveGroup = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId
+      fetch(url, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+        .then((response) => {
+          if (response.status <= 201) {
+            console.log("success")
+          } else {
+            console.log("failed :(", response.status)
+          }
+        })
+    }, 0)
+  }
+
+  unsaveGroup = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId
+      fetch(url, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+        .then((response) => {
+          if (response.status <= 201) {
+            console.log("success")
+          } else {
+            console.log("failed :(", response.status)
+          }
+        })
+    }, 0)
+  }
+
+  searchGroups = (auth, categoryId, page, query) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/search?"
+      if (categoryId !== '') {
+        url = url + "category=" + categoryId
+      }
+
+      if (page !== '') {
+        if (url.charAt(url.length - 1) === '?' || url.charAt(url.length - 1) === '&') {
+          url = url + '&'
+        }
+        url = url + "page=" + page
+      }
+
+      if (query !== '') {
+        if (url.charAt(url.length - 1) === '?' || url.charAt(url.length - 1) === '&') {
+          url = url + '&'
+        }
+        url = url + "query=" + query
+      }
+
+      fetch(url, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+        .then((response) => {
+          if (response.status <= 201) {
+            response.json().then((data) => {
+              console.log(data)
+            })
+          } else {
+            console.log("failed :(")
+          }
+        })
+    }, 0)
+  }
 }
