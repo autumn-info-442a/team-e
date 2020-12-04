@@ -3,7 +3,7 @@ import { Groups } from './Groups';
 import './Survey';
 import { Search } from './SearchBar';
 import { Typography, Grid, Container, Button, Card, CardActions, CardContent, CardMedia } from '@material-ui/core';
-import { Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { useHistory } from 'react-router-dom';
 // try using withRouter later
 // history cant be called inside class!
@@ -43,7 +43,7 @@ export class Categories extends Component {
   render() {
     if (this.state.showGroups) {
       console.log(this.state.categoryId)
-      return <Redirect to={{
+      return <Link to={{
         pathname: '/groups',
         state: {
           auth: this.state.auth,
@@ -78,9 +78,13 @@ export class Categories extends Component {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" color="primary" onClick={() => this.goToGroupsPage(card.categoryId)}>
-                      View
-                    </Button>
+                    <Button ><Link to={{
+                        pathname: '/groups',
+                        state: {
+                          auth: this.state.auth,
+                          categoryId: card.categoryId
+                        }
+                      }}>View </Link></Button>
                   </CardActions>
                 </Card>
               </Grid>

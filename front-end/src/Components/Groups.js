@@ -3,7 +3,7 @@ import { GroupPage } from "./GroupPage";
 import { Search } from './SearchBar';
 import { Typography, Grid, Container, Button, Card, CardActions, CardContent, CardMedia } from '@material-ui/core';
 import { Row } from 'react-bootstrap';
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 
 // shows all groups within a selected category
 export class Groups extends Component {
@@ -84,7 +84,7 @@ export class Groups extends Component {
     render() {
      //   let cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         if (this.state.showGroupPage) {
-            return (<Redirect to="/grouppage" />)
+            return (<Redirect to="/group" />)
     }
     
         return ( <div>
@@ -112,15 +112,20 @@ export class Groups extends Component {
                                     />
                                     <CardContent style={{ flexGrow: 1 }}>
                                         <Typography gutterBottom variant="h5" component="h2">
-                                            Group Name</Typography>
+                                        {card.groupName}</Typography>
                                         <Typography>
-                                            Group Desc</Typography>
+                                        {card.groupDescription}</Typography>
                                     </CardContent>
                                     <CardActions>
                                         <Button size="small" color="primary">
                                             Save</Button>
-                                        <Button size="small" color="primary" onClick={this.onClick}>
-                                            Join</Button>
+                                            <Button ><Link to={{
+                                              pathname: '/group/' + card.groupId,
+                                              state: {
+                                                auth: this.props.location.state.auth,
+                                                groupId: card.groupId
+                                              }
+                                            }}>View </Link></Button>
                                     </CardActions>
                                 </Card>
                             </Grid>
