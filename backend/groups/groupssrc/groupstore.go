@@ -15,11 +15,12 @@ type SQLStore struct {
 //CATEGORY DB METHODS
 
 //GetCategories returns all categories
-func (sqls *SQLStore) GetCategories() ([]*Category, error) {
+func (sqls *SQLStore) GetCategories(query string) ([]*Category, error) {
 	cts := make([]*Category, 0)
-	insq := "select * from category order by category_name"
+	wcstring := string('%') + query + string('%')
+	insq := "select * from category where category_name LIKE ? order by category_name"
 
-	res, errQuery := sqls.DB.Query(insq)
+	res, errQuery := sqls.DB.Query(insq, wcstring)
 	if errQuery != nil {
 		return nil, errQuery
 	}

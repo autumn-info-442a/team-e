@@ -40,7 +40,12 @@ func (ctx *GroupContext) CategoriesHandler(w http.ResponseWriter, r *http.Reques
 			rCat.SavedCategories = scts
 		}
 
-		cts, errDB := ctx.GStore.GetCategories()
+		query, _ := r.URL.Query()["query"]
+		if len(query) < 1 {
+			query = append(query, "")
+		}
+
+		cts, errDB := ctx.GStore.GetCategories(query[0])
 		if errDB != nil {
 			http.Error(w, errDB.Error(), http.StatusInternalServerError)
 			return

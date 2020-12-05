@@ -5,6 +5,8 @@ import { Search } from './SearchBar';
 import { Typography, Grid, Container, Button, Card, CardActions, CardContent, CardMedia } from '@material-ui/core';
 import { Link, Redirect } from 'react-router-dom'
 import { useHistory } from 'react-router-dom';
+import SearchBar from "material-ui-search-bar";
+
 // try using withRouter later
 // history cant be called inside class!
 // 
@@ -13,17 +15,19 @@ export class Categories extends Component {
     super(props);
     this.state = {
       showGroups: false,
-      categoryId: 0
+      categoryId: 0,
+      query: ''
     };
     this.goToGroupsPage = this.goToGroupsPage.bind(this);
   }
 
   componentDidMount() {
-    console.log(this.getCookie("access_token"))
+    var auth = this.getCookie("access_token")
+    console.log(auth)
     this.setState({
-      auth: this.getCookie("access_token")
+      auth: auth
     })
-    this.getCategories();
+    this.getCategories(auth, '');
   }
 
   goToGroupsPage(categoryId) {
@@ -59,7 +63,11 @@ export class Categories extends Component {
             Categories
             </Typography>
           < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "200px", height: "3px" }} />
-          < Search />
+          <SearchBar
+            value={this.state.query}
+            onChange={(newValue) => this.setState({ query: newValue })}
+            onRequestSearch={() => this.getCategories(this.state.auth, this.state.query)}
+            />
         </Container>
         <Container style={{ padding: "3.5rem 0" }} maxWidth="md">
           {/* End hero unit */}
@@ -112,14 +120,17 @@ export class Categories extends Component {
     return ""
   }
 
-  getCategories = () => {
+  getCategories = (auth, query) => {
     setTimeout(() => {   
-      var url = "https://groups.cahillaw.me/v1/categories"
+      var url = "https://groups.cahillaw.me/v1/categories?"
+      if (query !== '') {
+        url = url + "query=" + query
+      }
       fetch(url, {
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': ''
+          'Authorization': auth
         }
       })
         .then((response) => {

@@ -3,7 +3,7 @@ package groupssrc
 //GroupsStore represents all the database methods, each model's methods are grouped. UserId will be part of all structs in some way, so it is not needed as an input paramter unless there is no other input struct or input struct id.
 type GroupsStore interface {
 	//Category model methods
-	GetCategories() ([]*Category, error)
+	GetCategories(query string) ([]*Category, error)
 	SaveCategory(catid int, userid int) error
 	UnsaveCategory(catid int, userid int) error
 	GetSavedCategories(userid int) ([]*Category, error)
