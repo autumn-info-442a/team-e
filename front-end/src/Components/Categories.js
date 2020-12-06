@@ -55,7 +55,6 @@ export class Categories extends Component {
         }
       }} />
     }
-    console.log(this.state.data);
     return (
       <div>
         <Container maxWidth="md">

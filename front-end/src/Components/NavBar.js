@@ -1,7 +1,7 @@
 import { React, Component } from 'react'
 import { Link } from '@material-ui/core'
 // import { Categories } from "./Categories";
-import { UserDashboard } from "./UserDashnoard";
+import { UserDashboard } from "./UserDashboard";
 import { Navbar, Nav, Button, Container } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { GetCookie } from '../GetCookie'
@@ -55,14 +55,14 @@ export class NavBar extends Component {
 
   render() {
     return (
-      <Navbar bg="light" className="color-nav" variant="light">
+      <Navbar className="color-nav" variant="light">
         <Container className = "navcontainer">
 
-        <Navbar.Brand>Explore</Navbar.Brand>
+        <Navbar.Brand href = '/'>Explore</Navbar.Brand>
         
         <Nav className="ml-auto">
         <Nav.Link><NavLink to="/">Home</NavLink></Nav.Link>
-        <Nav.Link><NavLink to="/mystuff">My Groups</NavLink></Nav.Link>
+        {this.state.loggedIn ? <Nav.Link><NavLink to="/dashboard">My Groups</NavLink></Nav.Link> : null}
           {this.state.loggedIn ?
             <Button id = "logout" variant= "link" onClick={() => this.logOut()}>Logout</Button> :
             <Nav.Link><NavLink to="/login">Log In</NavLink></Nav.Link>
