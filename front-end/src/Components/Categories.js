@@ -1,7 +1,6 @@
 import { React, Component } from 'react';
 import { Groups } from './Groups';
 import './Survey';
-import { Search } from './SearchBar';
 import { Typography, Grid, Container, Button, Card, CardActions, CardContent, CardMedia } from '@material-ui/core';
 import { Link, Redirect } from 'react-router-dom'
 import { useHistory } from 'react-router-dom';
