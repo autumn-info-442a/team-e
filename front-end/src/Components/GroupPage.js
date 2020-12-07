@@ -67,7 +67,7 @@ export class GroupPage extends Component {
     render() {
         let cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         if (this.state.showBlog) {
-                return (<Redirect to="/blog" />)
+                return (<BlogPost/>)
         }
         return (<div>
                     <Container maxWidth="md">
@@ -75,11 +75,6 @@ export class GroupPage extends Component {
                             Group BLOGS
                 </Typography>
                         < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "200px", height: "3px" }} />
-                        <Row className="w-100"><Button size="medium" color="primary" >
-                            Back</Button>
-                            <Button size="medium" color="primary" className="ml-auto">
-                                Create Group</Button>
-                        </Row>
                     </Container>
                     <Container style={{ padding: "3.5rem 0" }} maxWidth="md">
                         {/* End hero unit */}
@@ -101,9 +96,9 @@ export class GroupPage extends Component {
                                                         <Typography variant="subtitle1" paragraph>
                                                             {/* {post.description} */} post post post post ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lob
                                                                 </Typography>
-                                                        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+                                                        {/* <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
                                                             <Button variant="primary">
-                                                                Comments</Button></AccordionSummary>
+                                                                Comments</Button></AccordionSummary> */}
                                                         <Button variant="primary" onClick={this.onClick}>
                                                             Continue Reading...</Button>
                                                     </CardContent>

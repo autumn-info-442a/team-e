@@ -1,7 +1,6 @@
 import { React, Component } from 'react';
 import { Typography, Paper, Container, Button, Card, CardContent, CardMedia } from '@material-ui/core';
 
-
 export class BlogPost extends Component {
   constructor(props) {
     super(props);
@@ -42,5 +41,6 @@ export class BlogPost extends Component {
     );
   }
 }
+
 
 

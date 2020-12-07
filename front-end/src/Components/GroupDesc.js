@@ -5,6 +5,9 @@ import { ExpandMore } from '@material-ui/icons';
 import { BlogPost } from "./BlogPost";
 import { Redirect } from 'react-router-dom'
 import { GetCookie } from '../GetCookie'
+import { GroupPage } from './GroupPage';
+import NewComment from './NewComment';
+
 // shows details in the dashboard for individual groups
 export class GroupDesc extends Component {
 
@@ -18,8 +21,10 @@ export class GroupDesc extends Component {
 
     componentDidMount() {
         var auth = GetCookie("access_token")
+        console.log(auth);
         var groupId = this.props.location.pathname.split("/", 3)[2]
         this.getGroup(auth, groupId)
+        this.getGroupComments(auth, groupId, 1)
     }
 
     onClick() {
@@ -91,6 +96,9 @@ export class GroupDesc extends Component {
                             <Col> <Typography component="h5" variant="h5" align="left" color="textSecondary">
                                 Comments</Typography>
                                 {/* LOAD IN GROUP COMMENTS HERE */}
+                                <NewComment groupId={this.state.data.groupId}/>
+
+                                {/* COMMENTS */}
                                 </Col>
                             </Row>
                         </Tab>
@@ -123,6 +131,9 @@ export class GroupDesc extends Component {
                                 ))}
                             </Grid>
                         </Tab>
+                        <Tab eventKey="blog" title="Blog Posts">
+                            <GroupPage/>
+                            </Tab>
                     </Tabs>
                 </Paper>
             </Container>
@@ -133,4 +144,33 @@ export class GroupDesc extends Component {
 
         return (<div>Loading...</div>)
     }
+
+
+    getGroupComments = (auth, groupId, page) => {
+        setTimeout(() => {
+          var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/comments?"
+          if (page !== '') {
+            url = url + "page=" + page
+          }
+    
+          fetch(url, {
+            method: 'get',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': auth
+            }
+          })
+            .then((response) => {
+              if (response.status <= 201) {
+                response.json().then((data) => {
+                  console.log("GET COMMENTS", data)
+                })
+              } else {
+                console.log("failed :(")
+              }
+            })
+        }, 0)
+      }
+
+
 }

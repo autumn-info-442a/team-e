@@ -42,6 +42,7 @@ export class UserDashboard extends Component {
             this.setState({
               data: data,
             });
+            console.log(data);
           });
         } else {
           console.log("failed :(");

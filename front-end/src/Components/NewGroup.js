@@ -12,12 +12,14 @@ import {
     InputLabel,
     FormControl,
     Button,
-    TextareaAutosize
+    TextareaAutosize,
+    Dialog, DialogTitle,
+    DialogContent
   } from "@material-ui/core";
   import Alert from '@material-ui/lab/Alert';
   import { Redirect } from "react-router-dom";
 
-class NewGroup extends React.Component {
+export class NewGroup extends React.Component {
     constructor (props) {
       super(props)
       this.state = {
@@ -173,58 +175,69 @@ class NewGroup extends React.Component {
       if(this.state.auth.length > 1 && this.state.data) {
           return (
           <div>
-              <Container maxWidth="lg">
-                <Typography
-                    component="h2"
-                    align="center"
-                    variant="h2"
-                    color="textPrimary"
-                    gutterBottom
-                >
-                    Create Group
-                </Typography>
-                <hr
-                    style={{
-                    marginTop: "-1rem",
-                    backgroundColor: "#3399FF",
-                    width: "200px",
-                    height: "3px",
-                    }}
-                />
-                </Container>
-                <Container style={{ padding: "1.5rem 0" }} maxWidth="md">
-                    <Typography variant="h6" gutterBottom>
-                        Group details
-                    </Typography>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} md={6}>
-                        <TextField required label="Group name" fullWidth onChange={this.handleGroupNameChange} />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <FormControl style={{ width: "100%" }}>
-                                <InputLabel id="demo-simple-select-label">Category</InputLabel>
-                                <Select 
-                                    requred
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    onChange={this.handleChange}
-                                    >
-                                        {this.state.data.categories.map((card) => (
-                                        <MenuItem value={card.categoryId}>{card.categoryName}</MenuItem>))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                        <div style={{ marginBottom: "5px" }}>Group description</div>
-                        <TextareaAutosize style={{ width: "100%" }} label="Group description" rowsMin={5} fullWidth onChange={this.handleGroupDescChange} />
-                        </Grid>
-                        <Grid item xs={12}>
-                        <Button id = "create" variant= "dark" size= "sm" onClick={() => this.clickSubmitHandler()}>Create Group</Button>
-                        <hr></hr>
-                        <ErrorAlert></ErrorAlert>
-                        </Grid>
-                    </Grid>
-                </Container>
+            <Button size="medium" color="primary" onClick={() => this.setState({ showModal: true })}>
+            Create Group</Button>
+              <Dialog 
+              open={this.state.showModal}
+              onClose={() => this.setState({ showModal: false })}
+              aria-labelledby="Create Group"
+              aria-describedby="simple-modal-description"
+            > <DialogTitle id="form-dialog-title">Create Group</DialogTitle>
+            <DialogContent>
+               <Container maxWidth="lg">
+              <Typography
+                  component="h2"
+                  align="center"
+                  variant="h2"
+                  color="textPrimary"
+                  gutterBottom
+              >
+                  Create Group
+              </Typography>
+              <hr
+                  style={{
+                  marginTop: "-1rem",
+                  backgroundColor: "#3399FF",
+                  width: "200px",
+                  height: "3px",
+                  }}
+              />
+              </Container>
+              <Container style={{ padding: "1.5rem 0" }} maxWidth="md">
+                  <Typography variant="h6" gutterBottom>
+                      Group details
+                  </Typography>
+                  <Grid container spacing={3}>
+                      <Grid item xs={12} md={6}>
+                      <TextField required label="Group name" fullWidth onChange={this.handleGroupNameChange} />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                          <FormControl style={{ width: "100%" }}>
+                              <InputLabel id="demo-simple-select-label">Category</InputLabel>
+                              <Select 
+                                  requred
+                                  labelId="demo-simple-select-label"
+                                  id="demo-simple-select"
+                                  onChange={this.handleChange}
+                                  >
+                                      {this.state.data.categories.map((card) => (
+                                      <MenuItem value={card.categoryId}>{card.categoryName}</MenuItem>))}
+                              </Select>
+                          </FormControl>
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                      <div style={{ marginBottom: "5px" }}>Group description</div>
+                      <TextareaAutosize style={{ width: "100%" }} label="Group description" rowsMin={5} fullWidth onChange={this.handleGroupDescChange} />
+                      </Grid>
+                      <Grid item xs={12}>
+                      <Button id = "create" variant= "dark" size= "sm" onClick={() => this.clickSubmitHandler()}>Create Group</Button>
+                      <hr></hr>
+                      <ErrorAlert></ErrorAlert>
+                      </Grid>
+                  </Grid>
+              </Container>
+              </DialogContent>
+              </Dialog >              
           </div>
         )
       } 

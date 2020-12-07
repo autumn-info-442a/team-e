@@ -121,7 +121,7 @@ export class Categories extends Component {
 
   getCategories = (auth, query) => {
     setTimeout(() => {   
-      var url = "https://groups.cahillaw.me/v1/categories?"
+      var url = "https://groups.cahillaw.me/v1/categories"
       if (query !== '') {
         url = url + "query=" + query
       }
@@ -187,70 +187,9 @@ export class Categories extends Component {
   // }
 
 
-  createGroupComment = (auth, groupId, commentContent, replyId) => {
-    setTimeout(() => {
-      if (replyId > 0) {
-        var body =
-        {
-          "replyId": {
-            "Int64": replyId,
-            "Valid": true
-          },
-          "commentContent": commentContent
-        }
-      } else {
-        var body =
-        {
-          "commentContent": commentContent
-        }
-      }
+  
 
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/comments"
-      fetch(url, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': auth
-        },
-        body: body
-      })
-        .then((response) => {
-          if (response.status <= 201) {
-            response.json().then((data) => {
-              console.log(data)
-            })
-          } else {
-            console.log("failed :(", response.status)
-          }
-        })
-    }, 0)
-  }
-
-  getGroupComments = (auth, groupId, page) => {
-    setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/comments?"
-      if (page !== '') {
-        url = url + "page=" + page
-      }
-
-      fetch(url, {
-        method: 'get',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': auth
-        }
-      })
-        .then((response) => {
-          if (response.status <= 201) {
-            response.json().then((data) => {
-              console.log(data)
-            })
-          } else {
-            console.log("failed :(")
-          }
-        })
-    }, 0)
-  }
+  
 
   deletedGroupComment = (auth, groupId, commentId) => {
     setTimeout(() => {
