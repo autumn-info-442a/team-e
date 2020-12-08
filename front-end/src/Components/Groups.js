@@ -26,12 +26,9 @@ export class Groups extends Component {
 
   onSave(card) {
     console.log("CLICK CLICK", card);
-    // this.getGroup(this.state.auth, card.groupId)
-    // console.log("CLICK CLICK", card);
-    // card.isSaved == false 
-    // ? 
-    this.saveGroup(this.state.auth, card.groupId)
-    // : this.unsaveGroup(this.state.auth, card.groupId)
+    card.isSaved === true
+      ? this.unsaveGroup(this.state.auth, card.groupId)
+      : this.saveGroup(this.state.auth, card.groupId)
   }
 
   // returns the view for the groups page
@@ -41,18 +38,26 @@ export class Groups extends Component {
     return (<div>
       <Container maxWidth="md">
         <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
-          Groups (Category Name)
-                </Typography>
+          {this.props.location.state.categoryName}
+        </Typography>
         < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "200px", height: "3px" }} />
         <Row className="w-100"><Button size="medium" color="primary" >
-          Back</Button><div style={{ margin: "auto", width: "60%" }}>
+          <Link to={{
+            pathname: '/',
+            state: {
+              auth: this.state.auth,
+            }
+          }}>Back</Link></Button>
+
+
+          <div style={{ margin: "auto", width: "60%" }}>
             <SearchBar
               value={this.state.query}
               onChange={(newValue) => this.setState({ query: newValue })}
               onRequestSearch={() => this.searchGroups(this.state.auth, this.props.location.state.categoryId, 1, this.state.query)}
             />
           </div>
-          <NewGroup/>
+          <NewGroup />
         </Row>
       </Container>
       <Container style={{ padding: "3.5rem 0" }} maxWidth="md">
@@ -73,8 +78,8 @@ export class Groups extends Component {
                     {card.groupDescription}</Typography>
                 </CardContent>
                 <CardActions>
-                  <Button size="small" onClick={this.onSave(card)}>
-          {card.isSaved === true ? "Unsave" : "Save"}</Button>
+                  <Button size="small" onClick={() => this.onSave(card)}>
+                    {card.isSaved === true ? "Unsave" : "Save"}</Button>
                   <Button ><Link to={{
                     pathname: '/group/' + card.groupId,
                     state: {

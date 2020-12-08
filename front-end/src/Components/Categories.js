@@ -67,7 +67,8 @@ export class Categories extends Component {
                     <Button ><Link to={{
                         pathname: '/groups',
                         state: {
-                          categoryId: card.categoryId
+                          categoryId: card.categoryId,
+                          categoryName: card.categoryName
                         }
                       }}>View </Link></Button>
                   </CardActions>
@@ -189,34 +190,6 @@ export class Categories extends Component {
     }, 0)
   }
 
-  createBlogPost = (auth, groupId, postTitle, postContent) => {
-    var body =
-    {
-      "postTitle": postTitle,
-      "postContent": postContent
-    }
-
-    setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog"
-      fetch(url, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': auth
-        },
-        body: body
-      })
-        .then((response) => {
-          if (response.status <= 201) {
-            response.json().then((data) => {
-              console.log(data)
-            })
-          } else {
-            console.log("failed :(", response.status)
-          }
-        })
-    }, 0)
-  }
 
   deletedBlogPost = (auth, groupId, blogId) => {
     setTimeout(() => {
