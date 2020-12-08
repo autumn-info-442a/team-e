@@ -51,6 +51,11 @@ export class NavBar extends Component {
     this.setState({
       loggedIn: false
     })
+
+    //change once hosted
+    if (window.location.href != 'http://localhost:3000/') {
+       window.location.href = '/'
+    }    
 }
 
   render() {
@@ -65,7 +70,7 @@ export class NavBar extends Component {
         {this.state.loggedIn ? <Nav.Link><NavLink to="/dashboard">My Groups</NavLink></Nav.Link> : null}
           {this.state.loggedIn ?
             <Button id = "logout" variant= "link" onClick={() => this.logOut()}>Logout</Button> :
-            <Nav.Link><NavLink to="/login">Log In</NavLink></Nav.Link>
+            <Nav.Link><NavLink to="/authenticate">Log In</NavLink></Nav.Link>
           }
         </Nav>
         </Container>

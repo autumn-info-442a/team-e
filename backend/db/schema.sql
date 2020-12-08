@@ -98,4 +98,4 @@ insert into user(google_id, email, first_name, last_name, photo_url)
 values('118379264076819254762', 'cahillaw@uw.edu', 'Andy', 'Cahill','https://lh5.googleusercontent.com/-kwF_3vBC36g/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucm_8vhE0mrs6Kzu80ATCl5zV4P8jA/s96-c/photo.jpg');
 
 insert into category(category_name)
-values('video games'),('outdoors'),('sports'),('board and card games'),('collecting');
+values('DIY'),('Movies & TV'),('Nature'),('Camping'),('Card & Board Games'),('Music'),('Cooking'),('Investing'),('Volunteering'),('Yoga & Mindfulness'),('Writing'),('Reading'),('Museums'),('Sports'),('Exercise'),('Hiking'),('Podcasts'),('Cycling'),('Technology'),('Programming'),('Photography & Video'),('Writing'),('Drawing & Painting'),('Animals & Pets'),('Cars'),('Fashion'),('Shopping'),('Collecting'),('Traveling'),('Home Furnishing'),('Bird Watching'),('Crafts'),('Bodybuilding'),('Tutoring'),('Poetry'),('Internships'),('Debate'),('Gaming'),('Content Creation'),('Academics'),('Food'),('Design'),('Social'),('Engineering'),('Architecture');

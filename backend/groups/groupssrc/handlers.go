@@ -265,6 +265,12 @@ func (ctx *GroupContext) GroupHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		group.Comments = comments
 
+		if group.User.UserID == user.UserID {
+			group.IsAdmin = true
+		} else {
+			group.IsAdmin = false
+		}
+
 		encoded, errEncode := json.Marshal(group)
 		if errEncode != nil {
 			http.Error(w, "Error encoding user to JSON", http.StatusBadRequest)

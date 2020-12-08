@@ -45,6 +45,7 @@ type Group struct {
 	CreatedAt        time.Time       `json:"createdAt"`
 	IsSaved          bool            `json:"isSaved,omitempty"`
 	IsJoined         bool            `json:"isJoined,omitempty"`
+	IsAdmin          bool            `json:"isAdmin,omitempty"`
 	Comments         []*GroupComment `json:"comments,omitempty"`
 }
 

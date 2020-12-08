@@ -13,24 +13,15 @@ export class Groups extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showGroupPage: false,
     };
-    this.onClick = this.onClick.bind(this);
   }
 
   componentDidMount() {
     var auth = GetCookie("access_token");
-    console.log(this.props.location.state.auth)
     this.searchGroups(auth, this.props.location.state.categoryId, 1, '');
     this.setState({
       auth: auth
     })
-  }
-
-  onClick() {
-    this.setState({
-      showGroupPage: true,
-    });
   }
 
   onSave(card) {
@@ -47,11 +38,6 @@ export class Groups extends Component {
   // loads list of groups - navigates to a group page if clicked on
   // shows group info as a pop up
   render() {
-    if (this.state.showGroupPage) {
-      return (<Redirect to="/group" />)
-    }
-
-
     return (<div>
       <Container maxWidth="md">
         <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>

@@ -17,7 +17,6 @@ export class Categories extends Component {
       categoryId: 0,
       query: ''
     };
-    this.goToGroupsPage = this.goToGroupsPage.bind(this);
   }
 
   componentDidMount() {
@@ -29,31 +28,12 @@ export class Categories extends Component {
     this.getCategories(auth, '');
   }
 
-  goToGroupsPage(categoryId) {
-    this.setState({
-      categoryId: categoryId,
-      showGroups: true
-    });
-    // let history = useHistory();
-    // history.push("/groups")
-  }
-
   // onSaveClick(categoryID) {
   //   this.saveCategory(auth, categoryID)
   // }
 
 
   render() {
-    if (this.state.showGroups) {
-      console.log(this.state.categoryId)
-      return <Link to={{
-        pathname: '/groups',
-        state: {
-          auth: this.state.auth,
-          categoryId: this.state.categoryId
-        }
-      }} />
-    }
     return (
       <div>
         <Container maxWidth="md">
@@ -87,7 +67,6 @@ export class Categories extends Component {
                     <Button ><Link to={{
                         pathname: '/groups',
                         state: {
-                          auth: this.state.auth,
                           categoryId: card.categoryId
                         }
                       }}>View </Link></Button>
@@ -120,7 +99,7 @@ export class Categories extends Component {
 
   getCategories = (auth, query) => {
     setTimeout(() => {   
-      var url = "https://groups.cahillaw.me/v1/categories"
+      var url = "https://groups.cahillaw.me/v1/categories?"
       if (query !== '') {
         url = url + "query=" + query
       }
