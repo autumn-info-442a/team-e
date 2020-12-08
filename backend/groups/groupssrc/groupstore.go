@@ -443,6 +443,7 @@ func (sqls *SQLStore) GetGroupCommentsByGroup(gid int, page int) ([]*GroupCommen
 		if errScan != nil {
 			return nil, errScan
 		}
+		gc.User = user
 
 		gc, errRec := sqls.GetChildrenComments(gc)
 		if errRec != nil {
@@ -593,6 +594,7 @@ func (sqls *SQLStore) GetBlogCommentsByBlog(bid int, page int) ([]*BlogComment, 
 		if errScan != nil {
 			return nil, errScan
 		}
+		bc.User = user
 
 		bc, errRec := sqls.GetBlogChildrenComments(bc)
 		if errRec != nil {

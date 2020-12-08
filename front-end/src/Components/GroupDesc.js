@@ -29,7 +29,8 @@ export class GroupDesc extends Component {
     super(props);
     this.state = {
       value: "home",
-      newComment: ''
+      newComment: '',
+      data: ''
     };
     this.onClick = this.onClick.bind(this);
   }
@@ -96,7 +97,7 @@ export class GroupDesc extends Component {
       }
     }
 
-    if (this.state.data) {
+    if (this.state.data != '') {
       let cards = [1, 2, 3, 4];
       return (
         <div>
@@ -194,8 +195,13 @@ export class GroupDesc extends Component {
                     </Col>
                   </Row>
                 </Tab>
-                {/* MEMBER REQUESTS */}
-                <Tab eventKey="profile" title="Member Requests">
+                <Tab eventKey="blog" title="Blog Posts">
+                  <NewBlog
+                   groupId={this.state.groupId}
+                   data = {this.state.data}/>
+                  <GroupPage/>
+                </Tab>
+                {this.state.data.isAdmin ? <Tab eventKey="profile" title="Member Requests">
                 <div style={{padding: "8px", minHeight:"500px"}}>
                   <Grid container spacing={4}>
                     {cards.map((card) => (
@@ -242,11 +248,7 @@ export class GroupDesc extends Component {
                     ))}
                   </Grid>
                   </div>
-                </Tab>
-                <Tab eventKey="blog" title="Blog Posts">
-                  <NewBlog groupId={this.state.groupId}/>
-                  <GroupPage/>
-                </Tab>
+                </Tab> : null}
               </Tabs>
             </Paper>
           </Container>
@@ -254,7 +256,7 @@ export class GroupDesc extends Component {
       );
     }
 
-    return <div>Loading...</div>;
+    return null;
   }
 
 

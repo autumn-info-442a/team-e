@@ -80,6 +80,8 @@ func HandleCallback(w http.ResponseWriter, r *http.Request) {
 	resp, _ := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
 	fmt.Println(resp)
 
-	url := "http://localhost:3000/redirect?access_token=" + token.AccessToken
+	frontBase := os.Getenv("FRONT_BASE")
+
+	url := frontBase + "/redirect?access_token=" + token.AccessToken
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
