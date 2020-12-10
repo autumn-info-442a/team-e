@@ -47,14 +47,12 @@ export class NewBlog extends React.Component {
   }
 
   handlePostTitleChange = (event) => {
-    console.log(event.target.value);
     this.setState({
       postTitle: event.target.value,
     });
   };
 
   handlePostContentChange = (event) => {
-    console.log(event.target.value);
     this.setState({
       postContent: event.target.value,
     });
@@ -78,14 +76,13 @@ export class NewBlog extends React.Component {
         errorMessage: "Post must be under 2000 characters.",
       });
     } else {
-      /*
       this.createBlogPost(
         this.state.auth,
         this.props.groupId,
         this.state.postTitle,
         this.state.postContent
       );
-      */
+      console.log(this.props.groupId)
      console.log(this.props.data.isJoined)
      console.log(this.props.data.isAdmin)
     }
@@ -120,7 +117,7 @@ export class NewBlog extends React.Component {
         <div>
           {this.props.data.isJoined || this.props.data.isAdmin ? (
             <div>
-              <Button style = {{float: "right"}}
+              <Button style = {{float: "right "}}
                 size="medium"
                 color="primary"
                 onClick={() => this.setState({ showModal: true })}
@@ -194,7 +191,7 @@ export class NewBlog extends React.Component {
     } else {
       return null
     }
-    
+    //s
   };
 
   createBlogPost = (auth, groupId, postTitle, postContent) => {
@@ -211,7 +208,7 @@ export class NewBlog extends React.Component {
           "Content-Type": "application/json",
           Authorization: auth,
         },
-        body: body,
+        body: JSON.stringify(body),
       }).then((response) => {
         if (response.status <= 201) {
           response.json().then((data) => {

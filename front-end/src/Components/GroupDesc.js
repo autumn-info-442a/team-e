@@ -199,7 +199,10 @@ export class GroupDesc extends Component {
                   <NewBlog
                    groupId={this.state.groupId}
                    data = {this.state.data}/>
-                  <GroupPage/>
+                  <GroupPage 
+                   groupId={this.state.groupId}
+                   data = {this.state.data}
+                  />
                 </Tab>
                 {this.state.data.isAdmin ? <Tab eventKey="profile" title="Member Requests">
                 <div style={{padding: "8px", minHeight:"500px"}}>

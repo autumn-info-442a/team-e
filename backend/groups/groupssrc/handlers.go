@@ -580,7 +580,7 @@ func (ctx *GroupContext) GenericBlogPostHandler(w http.ResponseWriter, r *http.R
 		//inputs: blog post struct
 		//output: blog post struct, 201 status code
 	} else if r.Method == http.MethodPost {
-		if !group.IsJoined {
+		if !group.IsJoined && group.User.UserID != user.UserID {
 			http.Error(w, "Access forbidden, not in group", http.StatusForbidden)
 			return
 		}

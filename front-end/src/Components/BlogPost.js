@@ -16,29 +16,41 @@ export class BlogPost extends Component {
     });
   }
 
+  componentDidMount() {
+    console.log(this.props.location.state)
+    this.setState({
+      blogPost: this.props.location.state.blogPost,
+      groupData: this.props.location.state.data
+    })
+  }
+
+
 
   render() {
-    return (<div>
-        <Container maxWidth="md">
-          <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
-            Blog Title 
+    if (this.state.blogPost && this.state.groupData) {    
+      return (<div>
+          <Container maxWidth="md">
+            <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
+              {this.state.blogPost.postTitle}
+              </Typography>
+            < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "200px", height: "3px" }} />
+            <Typography variant="subtitle1" align="center" color="textSecondary">
+            {/* {post.date} */}{this.state.blogPost.createdAt}</Typography>
+            <Paper variant="elevation" style={{padding: "5px"}}>
+            <div style={{width:"100%", marginBottom: "10px"}} ><img style={{ maxHeight: "400px", marginLeft: "auto", marginRight: "auto", display: "block"}} src="https://source.unsplash.com/random" /></div>
+            <Typography  component="h5" variant="h5" align="center"  color="textPrimary">
+              By User :)
+              </Typography>
+            <Typography variant="subtitle1" color="textPrimary">
+      {/* {post.date} */}{this.state.blogPost.postContent}
             </Typography>
-          < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "200px", height: "3px" }} />
-          <Typography variant="subtitle1" align="center" color="textSecondary">
-           {/* {post.date} */}date/12/23</Typography>
-           <Paper variant="elevation" style={{padding: "5px"}}>
-           <div style={{width:"100%", marginBottom: "10px"}} ><img style={{ maxHeight: "400px", marginLeft: "auto", marginRight: "auto", display: "block"}} src="https://source.unsplash.com/random" /></div>
-           <Typography  component="h5" variant="h5" align="center"  color="textPrimary">
-            Blog Sub-title 
-            </Typography>
-           <Typography variant="subtitle1" color="textPrimary">
-           {/* {post.date} */}blog blog post post post post ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobpost post post post ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lob
-           post post post post ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lob
-           </Typography>
-           </Paper>
-        </Container>
-      </div>
-    );
+            </Paper>
+          </Container>
+        </div>
+      );
+    }
+
+    return null;
   }
 }
 
