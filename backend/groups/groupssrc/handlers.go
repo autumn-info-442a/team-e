@@ -818,7 +818,7 @@ func (ctx *GroupContext) GenericBlogCommentHandler(w http.ResponseWriter, r *htt
 			return
 		}
 
-		if !group.IsJoined {
+		if !group.IsJoined && group.User.UserID != user.UserID {
 			http.Error(w, "Cannot comment unless in group", http.StatusUnauthorized)
 			return
 		}
