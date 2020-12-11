@@ -120,7 +120,7 @@ Reason for REVISED:
 
 24. **IMPOSSIBLE** The system should log the user in if the email and password match an existing account redirecting them to the home(explore) page after a successful authentication.
 
-- Verification Steps: 1. User accesses the application 2. In the navbar, the user should be able to click Log In to be routed to the log in page. 3. On the Log In page, the user should be able to type characters into both the email and password text box. 4. If an account exists and the credintials are correct, the user should be routed back to the home page.
+- Verification Steps: 1. User accesses the application 2. In the navbar, the user should be able to click Log In to be routed to the log in page. 3. On the Log In page, the user should be able to type characters into both the email and password text box. 4. If an account exists and the credentials are correct, the user should be routed back to the home page.
 
 - Reasoning for IMPOSSIBLE:
 
@@ -258,7 +258,7 @@ Reason for REVISED:
 
 52. **TO DO** The system should only display the three most recent comments unless “load more comments” is pressed.
 
-- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User should be able to view the three most recent comments on the blog pst 7. If the user presses the load more comments button, the user should be able to see all the comments on the blog post.
+- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User should be able to view the three most recent comments on the blog post 7. If the user presses the load more comments button, the user should be able to see all the comments on the blog post.
 
 53. **REVISED** Users should be able to save the group so they can return to the page at a later date (through the my groups page) by clicking on the save button. Once saved, you can click it again to unsave.
 
