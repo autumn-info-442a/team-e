@@ -52,8 +52,6 @@ it will redirect to the create new group page, otherwise it will redirect the us
 
 11. **IMPOSSIBLE** The system might display saved groups at the top of the results.
 
-* The groups that the user has saved might be displayed at the top of the group results, allowing the user to view their saved groups at the top of the page.
-
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. Users should be able to see saved groups at the top of the list of groups.
 
 - Reasoning for IMPOSSIBLE:
@@ -64,7 +62,7 @@ it will redirect to the create new group page, otherwise it will redirect the us
 
 * If the user types into the search bar, the system should update their search result as they type.
 
-- Verification Steps: 1.
+- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks into the search bar 4. User enters letters into the search bar 5. Search results should update as the user types their search query.
 
 13. **COMPLETE** The system must query the term inputted against groups if on the group page, displaying the matching or partially matching results to the user for each new character inputted.
 
@@ -149,8 +147,6 @@ Reason for REVISED:
 - Reasoning for IMPOSSIBLE:
 
 28. **IMPOSSIBLE** The system must be able to calculate the progression percentage as users complete survey items and display in a progression bar on each survey page.
-
-* As the user completes the survey, the progression bar at the top of each survey page should update with their progression out of 100%.
 
 - Verification Steps: 1. User accesses the application 2. In the navbar, the user should be able to click Log In to be routed to the log in page. 3. If the user doesn't have an account, the user should be able to click the sign up button to create an account 4. The user will then be routed to the new account survey 5. On the survey, there should be a progress bar at the top of the screen that shows the user's progress as they complete the survey.
 
@@ -318,8 +314,6 @@ Reason for REVISED:
 
 63. **TO DO** The system must allow the user to submit their post by hitting the create post. 
 
-* If the user is satisfied with their new post content, they can submit the post by hitting the submit button.
-
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User clicks on create new post 7. User fills out the new post details 8. User can submit post by hitting the create post button.
 
 64. **TO DO** The system must display an error if the title or description are empty, not allowing the user to post until satisfied.
@@ -397,7 +391,5 @@ Reason for REVISED:
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User should be able to view the groups that they have created 5. User should be able to hit the delete button on a group tile to delete the group 6. A confirmation message will popup to confirm the user's decision.
 
 79. **TO DO** The system must remove the pending request from the Admin user’s view after a decision has been made.
-
-* If the administrator makes a decision regarding a pending request, the pending request tile will be removed from the view of the administrator.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User should be able to view pending group requests under the Admin Groups section 5. The user should be able to click on the pending request to make an admission decision 6. Once a decision has been made, the pending request should be removed from the pending requests section.
