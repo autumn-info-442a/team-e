@@ -60,8 +60,6 @@ it will redirect to the create new group page, otherwise it will redirect the us
 
 12. **TO DO** Users must be able to type into the search bar while the system updates search results as the user types.
 
-* If the user types into the search bar, the system should update their search result as they type.
-
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks into the search bar 4. User enters letters into the search bar 5. Search results should update as the user types their search query.
 
 13. **COMPLETE** The system must query the term inputted against groups if on the group page, displaying the matching or partially matching results to the user for each new character inputted.
