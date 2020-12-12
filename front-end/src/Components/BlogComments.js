@@ -1,5 +1,4 @@
 import React from "react";
-import { GetCookie } from "../GetCookie";
 import { Container, Typography, CardContent } from "@material-ui/core";
 
 export class BlogComments extends React.Component {
@@ -79,6 +78,32 @@ export class BlogComments extends React.Component {
         })
     }, 0)
   }
+
+  deleteBlogComment = (auth, groupId, blogId, commentId) => {
+    setTimeout(() => {
+      var url =
+        "https://groups.cahillaw.me/v1/groups/" +
+        groupId +
+        "/blog/" +
+        blogId +
+        "/comments/" +
+        commentId;
+      fetch(url, {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth,
+        },
+      }).then((response) => {
+        if (response.status <= 201) {
+          console.log("success");
+        } else {
+          console.log("failed :(", response.status);
+        }
+      });
+    }, 0);
+  };
+
 }
 
 export default BlogComments;

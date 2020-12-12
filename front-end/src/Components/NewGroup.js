@@ -1,11 +1,8 @@
 import React from 'react'
-import { GetCookie } from '../GetCookie'
 import {
     Typography,
     Container,
-    Checkbox,
     TextField,
-    FormControlLabel,
     Grid,
     Select,
     MenuItem,
@@ -17,7 +14,6 @@ import {
     DialogContent
   } from "@material-ui/core";
   import Alert from '@material-ui/lab/Alert';
-  import { Redirect } from "react-router-dom";
 
 export class NewGroup extends React.Component {
     constructor (props) {
@@ -28,16 +24,19 @@ export class NewGroup extends React.Component {
           errorMessage: '',
           groupName: '',
           groupDesc: '',
-          categoryId: 0
+          categoryId: this.props.categoryId,
+          showModal: false
       }
     }
 
     componentDidMount () {
-        var auth = GetCookie("access_token")
-        this.getCategories(auth, '')
+//        var auth = GetCookie("access_token")
+        this.getCategories(this.props.auth, '')
+        /*
         this.setState({
             auth: auth
         })
+        */
     }
 
     createGroup = (auth, categoryId, groupName, groupDescription) => {
@@ -125,7 +124,6 @@ export class NewGroup extends React.Component {
       };
 
       clickSubmitHandler() {
-        var errMes = '' 
         if(this.state.groupName.length < 1) {
             this.setState({
                 showError: true,
@@ -141,14 +139,13 @@ export class NewGroup extends React.Component {
                 showError: true,
                 errorMessage: 'You must select a category'
             })
-            errMes = 'You must select a category'
         } else if (this.state.groupDesc.length > 240) {
             this.setState({
                 showError: true,
                 errorMessage: 'Group description must be under 240 characters'
             })
         } else {
-            this.createGroup(this.state.auth, this.state.categoryId, this.state.groupName, this.state.groupDesc)
+            this.createGroup(this.props.auth, this.state.categoryId, this.state.groupName, this.state.groupDesc)
         }
       }
       
@@ -163,7 +160,7 @@ export class NewGroup extends React.Component {
         const ErrorAlert = () => {
             if(this.state.showError === true) {
               return (
-                <Alert severity="error" onClose={() => this.removeAlert()} dismissible>
+                <Alert severity="error" style={{marginTop: "-22px",  marginBottom: "-5px", float: "right" }} onClose={() => this.removeAlert()} dismissible="true">
                   {this.state.errorMessage}
                 </Alert>
               )
@@ -172,7 +169,7 @@ export class NewGroup extends React.Component {
             }
           }
 
-      if(this.state.auth.length > 1 && this.state.data) {
+      if(this.props.auth.length > 1 && this.state.data) {
           return (
           <div>
             <Button size="medium" color="primary" onClick={() => this.setState({ showModal: true })}>
@@ -182,7 +179,7 @@ export class NewGroup extends React.Component {
               onClose={() => this.setState({ showModal: false })}
               aria-labelledby="Create Group"
               aria-describedby="simple-modal-description"
-            > <DialogTitle id="form-dialog-title">Create Group</DialogTitle>
+            >
             <DialogContent>
                <Container maxWidth="lg">
               <Typography
@@ -203,10 +200,7 @@ export class NewGroup extends React.Component {
                   }}
               />
               </Container>
-              <Container style={{ padding: "1.5rem 0" }} maxWidth="md">
-                  <Typography variant="h6" gutterBottom>
-                      Group details
-                  </Typography>
+              <Container style={{ padding: "1.5rem 0", marginTop: "-35px" }} maxWidth="md">
                   <Grid container spacing={3}>
                       <Grid item xs={12} md={6}>
                       <TextField required label="Group name" fullWidth onChange={this.handleGroupNameChange} />
@@ -215,9 +209,9 @@ export class NewGroup extends React.Component {
                           <FormControl style={{ width: "100%" }}>
                               <InputLabel id="demo-simple-select-label">Category</InputLabel>
                               <Select 
-                                  requred
                                   labelId="demo-simple-select-label"
-                                  id="demo-simple-select"
+                                  id=""
+                                  defaultValue={this.props.categoryId}
                                   onChange={this.handleChange}
                                   >
                                       {this.state.data.categories.map((card) => (
@@ -230,8 +224,7 @@ export class NewGroup extends React.Component {
                       <TextareaAutosize style={{ width: "100%" }} label="Group description" rowsMin={5} fullWidth onChange={this.handleGroupDescChange} />
                       </Grid>
                       <Grid item xs={12}>
-                      <Button id = "create" variant= "dark" size= "sm" onClick={() => this.clickSubmitHandler()}>Create Group</Button>
-                      <hr></hr>
+                      <Button style={{ marginTop: "-18px"}}id = "create" variant= "dark" size= "sm" onClick={() => this.clickSubmitHandler()}>Create Group</Button>
                       <ErrorAlert></ErrorAlert>
                       </Grid>
                   </Grid>
@@ -241,18 +234,8 @@ export class NewGroup extends React.Component {
           </div>
         )
       } 
-      
-      if (this.state.auth === '') {
-        return <Redirect to={{
-            pathname: '/'
-          }} />
-      }
 
-      return (
-        <div>
-          <h1 id="title">Loading...</h1>
-        </div>
-      )
+      return null;
     }
 
 }

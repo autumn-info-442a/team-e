@@ -45,7 +45,6 @@ export class NewComment extends React.Component {
 
 
   clickSubmitHandler() {
-    var errMes = ''
     if (this.state.commentContent.length < 1) {
       this.setState({
         showError: true,

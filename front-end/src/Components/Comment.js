@@ -78,6 +78,29 @@ export class Comment extends React.Component {
       });
     }, 0);
   };
+
+  deletedGroupComment = (auth, groupId, commentId) => {
+    setTimeout(() => {
+      var url =
+        "https://groups.cahillaw.me/v1/groups/" +
+        groupId +
+        "/comments/" +
+        commentId;
+      fetch(url, {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth,
+        },
+      }).then((response) => {
+        if (response.status <= 201) {
+          console.log("success");
+        } else {
+          console.log("failed :(", response.status);
+        }
+      });
+    }, 0);
+  };
 }
 
 export default Comment;

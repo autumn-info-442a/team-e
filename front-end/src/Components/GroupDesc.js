@@ -327,4 +327,89 @@ export class GroupDesc extends Component {
     }, 0);
   };
 
+  getMembersipRequests = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests";
+
+      fetch(url, {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth,
+        },
+      }).then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            console.log(data);
+          });
+        } else {
+          console.log("failed :(");
+        }
+      });
+    }, 0);
+  };
+
+  createMembershipRequest = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests";
+      fetch(url, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth,
+        },
+      }).then((response) => {
+        if (response.status <= 201) {
+          console.log("success");
+        } else {
+          console.log("failed :(", response.status);
+        }
+      });
+    }, 0);
+  };
+
+  acceptMembershipRequest = (auth, groupId, requestId) => {
+    setTimeout(() => {
+      var url =
+        "https://groups.cahillaw.me/v1/groups/" +
+        groupId +
+        "/requests/" +
+        requestId;
+      fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth,
+        },
+      }).then((response) => {
+        if (response.status <= 201) {
+          console.log("success");
+        } else {
+          console.log("failed :(", response.status);
+        }
+      });
+    }, 0);
+  };
+
+  deleteBlogPost = (auth, groupId, blogId) => {
+    setTimeout(() => {
+      var url =
+        "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId;
+      fetch(url, {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth,
+        },
+      }).then((response) => {
+        if (response.status <= 201) {
+          console.log("success");
+        } else {
+          console.log("failed :(", response.status);
+        }
+      });
+    }, 0);
+  };
+
+
 }

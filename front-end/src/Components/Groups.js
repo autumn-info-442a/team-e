@@ -1,9 +1,8 @@
 import { React, Component } from 'react'
-import { GroupPage } from "./GroupPage";
 import SearchBar from "material-ui-search-bar";
 import { Typography, Grid, Container, Button, Card, CardActions, CardContent, CardMedia } from '@material-ui/core';
 import { Row } from 'react-bootstrap';
-import { Redirect, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { GetCookie } from "../GetCookie";
 import NewGroup from './NewGroup';
 
@@ -13,16 +12,26 @@ export class Groups extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      auth: '',
+      pagesShown: 1,
+      query: '',
+      moreDataToLoad: true
     };
   }
 
   componentDidMount() {
     var auth = GetCookie("access_token");
-    this.searchGroups(auth, this.props.location.state.categoryId, 1, '');
     this.setState({
       auth: auth
     })
+    this.searchGroups(auth, this.props.location.state.categoryId, 1, '');
+    window.addEventListener('scroll', this.loadMore);
   }
+
+  componentWillUnmount(){
+    window.removeEventListener('scroll', this.loadMore);
+  }
+
 
   onSave(card) {
     console.log("CLICK CLICK", card);
@@ -35,7 +44,10 @@ export class Groups extends Component {
   // loads list of groups - navigates to a group page if clicked on
   // shows group info as a pop up
   render() {
-    return (<div>
+    if(this.state.data) {
+
+    
+    return (<div> 
       <Container maxWidth="md">
         <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
           {this.props.location.state.categoryName}
@@ -57,14 +69,13 @@ export class Groups extends Component {
               onRequestSearch={() => this.searchGroups(this.state.auth, this.props.location.state.categoryId, 1, this.state.query)}
             />
           </div>
-          <NewGroup />
+          <NewGroup auth={this.state.auth} categoryId={this.props.location.state.categoryId}/>
         </Row>
       </Container>
       <Container style={{ padding: "3.5rem 0" }} maxWidth="md">
-        {/* End hero unit */}
         <Grid container spacing={4}>
           {this.state.data != undefined && this.state.data.map((card) => (
-            <Grid item key={card} xs={12} sm={6} md={4}>
+            <Grid item key={card.groupId} xs={12} sm={6} md={4}>
               <Card style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <CardMedia
                   style={{ paddingTop: '56.25%' }}
@@ -95,7 +106,15 @@ export class Groups extends Component {
       </Container>
     </div>
     );
+    }
 
+    return null;
+  }
+
+  loadMore = () => {
+    if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement.scrollHeight && this.state.moreDataToLoad) {
+      this.searchGroups(this.state.auth, this.props.location.state.categoryId, this.state.pagesShown + 1, this.state.query)
+    }
   }
 
   createGroup = (auth, categoryId, groupName, groupDescription) => {
@@ -224,9 +243,24 @@ export class Groups extends Component {
           if (response.status <= 201) {
             response.json().then((data) => {
               console.log("SEARCH", data)
-              this.setState({
-                data: data
-              })
+              if (!this.state.data) {
+                this.setState({
+                  data: data
+                })
+              } else {
+                var newData = this.state.data.concat(data)
+                if (data < 1) {
+                  this.setState({
+                    moreDataToLoad: false
+                  })
+                } else {
+                  this.setState({
+                    data: newData,
+                    pagesShown: this.state.pagesShown + 1 
+                  })
+                }
+              }
+
             })
           } else {
             console.log("failed :(")
