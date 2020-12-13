@@ -3,7 +3,7 @@ import SearchBar from "material-ui-search-bar";
 import { Typography, Grid, Container, Button, Card, CardActions, CardContent, CardMedia } from '@material-ui/core';
 import { Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
-import { GetCookie } from "../GetCookie";
+import { GetCookie } from "../UtilityFunctions";
 import NewGroup from './NewGroup';
 
 // shows all groups within a selected category

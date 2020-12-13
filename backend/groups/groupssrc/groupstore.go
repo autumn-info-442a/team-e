@@ -704,7 +704,7 @@ func (sqls *SQLStore) GetBlogPostsByGroup(gid int, page int) ([]*BlogPost, error
 		if errScan != nil {
 			return nil, errScan
 		}
-
+		bp.User = user
 		//GetComments method when done
 
 		bps = append(bps, bp)

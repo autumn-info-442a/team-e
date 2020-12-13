@@ -1,24 +1,16 @@
 import { React, Component } from 'react';
-import { Typography, Paper, Container, Button, Card, CardContent, CardMedia, TextareaAutosize } from '@material-ui/core';
+import { Typography, Paper, Container, Button, TextareaAutosize } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { Row, Col } from "react-bootstrap";
-import { GetCookie } from "../GetCookie";
+import { GetCookie, toJSDate, timeSince } from "../UtilityFunctions";
 import BlogComments from "./BlogComments";
 
 export class BlogPost extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showComments: false,
       newComment: ''
     };
-    this.onClick = this.onClick.bind(this);
-  }
-
-  onClick() {
-    this.setState({
-        showComments: true,
-    });
   }
 
   componentDidMount() {
@@ -74,19 +66,19 @@ export class BlogPost extends Component {
               {this.state.blogPost.postTitle}
               </Typography>
             < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "200px", height: "3px" }} />
-            <Typography variant="subtitle1" align="center" color="textSecondary">
-            {/* {post.date} */}{this.state.blogPost.createdAt}</Typography>
             <Paper variant="elevation" style={{padding: "5px"}}>
             <div style={{width:"100%", marginBottom: "10px"}} ><img style={{ maxHeight: "400px", marginLeft: "auto", marginRight: "auto", display: "block"}} src="https://source.unsplash.com/random" /></div>
-            <Typography  component="h5" variant="h5" align="center"  color="textPrimary">
-              By User :)
+            <Typography  variant="subtitle1" align="center">
+            Created by {this.state.blogPost.user.firstName} {this.state.blogPost.user.lastName} <time class="timeago" dateTime={toJSDate(this.state.blogPost.createdAt)} title={toJSDate(this.state.blogPost.createdAt)}>{timeSince(toJSDate(this.state.blogPost.createdAt))}</time> ago
               </Typography>
             <Typography variant="subtitle1" color="textPrimary">
-      {/* {post.date} */}{this.state.blogPost.postContent}
+              {this.state.blogPost.postContent}
             </Typography>
           <Row>
             <Col>
               <br></br>
+              {this.state.auth !== ''? 
+              <div>
               <Typography variant="subtitle1" color="textPrimary">
                 Leave a comment
                 </Typography>
@@ -98,6 +90,7 @@ export class BlogPost extends Component {
                   marginTop: "-10px",
                 }}
               />
+              </div> : null }
               <Typography
                 component="h6"
                 variant="h6"
@@ -113,21 +106,15 @@ export class BlogPost extends Component {
                   marginBottom: "2px"
                 }}
               />
-              {/* LOAD IN GROUP COMMENTS HERE 
-                
-                <NewComment groupId={this.state.data.groupId} /> */}
             </Col>
           </Row>
           <Row>
             <Col>
               <BlogComments auth={this.state.auth} blogPost={this.state.blogPost} groupData={this.state.groupData} />
-    
             </Col>
           </Row>
           </Paper>
-
           </Container>
-
         </div>
       );
     }

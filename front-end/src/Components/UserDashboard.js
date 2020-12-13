@@ -10,7 +10,7 @@ import {
   CardMedia,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { GetCookie } from "../GetCookie";
+import { GetCookie } from "../UtilityFunctions";
 
 // loads info through userInfo function from User.js passed in as props
 // userInfo returns an object with the user's joined and saved groups, posts and

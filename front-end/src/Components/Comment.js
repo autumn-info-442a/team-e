@@ -1,5 +1,5 @@
 import React from "react";
-import { GetCookie } from "../GetCookie";
+import { toJSDate, timeSince } from "../UtilityFunctions";
 import { Container, Typography, CardContent } from "@material-ui/core";
 export class Comment extends React.Component {
   constructor(props) {
@@ -30,7 +30,7 @@ export class Comment extends React.Component {
                   {card.commentContent}
                 </Typography>
                 <div style = {{float: "left", fontSize: "13px", fontWeight: "500"}}>{card.user.firstName} {card.user.lastName} </div>
-                <div style = {{float: "left", marginLeft: "8px", fontSize: "13px"}}>{Date(card.createdAt).substring(0, 16)}</div>
+                <div style = {{float: "left", marginLeft: "8px", fontSize: "13px"}}>posted <time class="timeago" dateTime={toJSDate(card.createdAt)} title={toJSDate(card.createdAt)}>{timeSince(toJSDate(card.createdAt))}</time> ago</div>
                 <br></br>
               </CardContent>
             ))}

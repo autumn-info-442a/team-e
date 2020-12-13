@@ -1,5 +1,5 @@
 import React from "react";
-import { GetCookie } from "../GetCookie";
+import { GetCookie } from "../UtilityFunctions";
 import {
   Typography,
   Container,

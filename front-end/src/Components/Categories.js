@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import SearchBar from "material-ui-search-bar";
-import { GetCookie } from "../GetCookie";
+import { GetCookie } from "../UtilityFunctions";
 
 export class Categories extends Component {
   constructor(props) {

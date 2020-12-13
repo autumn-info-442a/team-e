@@ -4,7 +4,7 @@ import { Link } from '@material-ui/core'
 import { UserDashboard } from "./UserDashboard";
 import { Navbar, Nav, Button, Container } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
-import { GetCookie } from '../GetCookie'
+import { GetCookie } from '../UtilityFunctions'
 import '../css/NavBar.css'
 
 export class NavBar extends Component {
