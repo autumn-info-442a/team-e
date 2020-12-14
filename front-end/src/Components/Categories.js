@@ -37,6 +37,10 @@ export class Categories extends Component {
     window.removeEventListener('scroll', this.loadMore);
 }
 
+getColor() {
+  return '#'+Math.floor(Math.random()*16777215).toString(16);
+}
+
   render() {
     return (
       <div>
@@ -68,6 +72,9 @@ export class Categories extends Component {
         </Container>
         <Container style={{ padding: "3.5rem 0" }} maxWidth="md">
           <Grid container spacing={4}>
+            {this.state.data !== undefined && this.state.data.categories.length < 1 
+            ? <Typography gutterBottom variant="h5" component="h4">No categories matching the search term were found.</Typography> 
+            : null}
             {this.state.data !== undefined &&
               this.state.data.categories.slice(0, this.state.numMaxResults).map((card) => (
                 
@@ -80,9 +87,9 @@ export class Categories extends Component {
                     }}
                   >
                     <CardMedia
-                      style={{ paddingTop: "56.25%" }}
-                      image="https://source.unsplash.com/random"
-                      title="Image title"
+                      style={{ paddingTop: "40.25%", backgroundColor: this.getColor(), opacity: 0.5}}
+                      // image="https://source.unsplash.com/random"
+                      title="Category image"
                     />
                     <CardContent style={{ flexGrow: 1 }}>
                       <Typography gutterBottom variant="h5" component="h2">
@@ -140,6 +147,7 @@ export class Categories extends Component {
       }).then((response) => {
         if (response.status === 200) {
           response.json().then((data) => {
+            console.log(data);
             this.setState({
               data: data,
               numMaxResults: 9

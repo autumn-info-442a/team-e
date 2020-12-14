@@ -16,7 +16,6 @@ import { Row, Col, Tab, Tabs } from "react-bootstrap";
 import { GetCookie, toJSDate, timeSince } from "../UtilityFunctions";
 import { BlogCards } from "./BlogCards";
 import Comment from "./Comment"
-import { NewBlog } from "./NewBlog";
 
 // shows details in the dashboard for individual groups
 export class Group extends Component {
@@ -27,7 +26,8 @@ export class Group extends Component {
       newComment: '',
       data: '',
       requests: '',
-      commentData: ''
+      commentData: '',
+      showSuccess: false
     };
     this.onClick = this.onClick.bind(this);
   }
@@ -82,7 +82,21 @@ export class Group extends Component {
       })
     } else {
       this.createGroupComment(this.state.auth, this.state.data.groupId, this.state.newComment, 0)
+      this.setState({
+        showSuccess: true
+      })
     }
+  }
+
+  removeAlert() {
+    this.setState({
+      showError: false,
+      errorMessage: "",
+    });
+  }
+
+    removeSuccessAlert() {
+    this.setState({ showSuccess: false });
   }
 
 
@@ -102,13 +116,32 @@ export class Group extends Component {
       }
     }
 
+     const SuccessAlert = () => {
+      if (this.state.showSuccess === true) {
+        return (
+          <Alert
+            severity="success"
+            onClose={() => this.removeSuccessAlert()}
+            dismissible
+          >
+            Comment posted!
+          </Alert>
+        );
+      } else {
+        return null;
+      }
+    };
+
     /*|| this.state.data.isAdmin*/
     const RequestElement = () => {
       if(this.state.data.joinedStatus === "Joined") {
         return (
-          <Typography style={{float: "left"}}variant="subtitle1" color="textPrimary">
-          Joined
-        </Typography>
+          <Button size="medium" color="primary"> 
+          Leave Group</Button>
+          // onClick={() => this.deleteJoinedGroup(this.state.auth, this.state.data.groupId)
+        //   <Typography style={{float: "left"}}variant="subtitle1" color="textPrimary">
+        //   Joined
+        // </Typography>
         )
       } else if (this.state.data.joinedStatus === "Pending") {
         return (
@@ -116,7 +149,13 @@ export class Group extends Component {
           Request Pending
         </Typography>
         )
-      } else {
+      } else if (this.state.data.isAdmin === true) {
+        return (
+          <Typography variant="subtitle1" color="textPrimary">
+          Admin
+        </Typography>
+        )
+      }  else {
         return (
           <Button size="medium" color="primary" onClick={() => this.createMembershipRequest(this.state.auth, this.state.data.groupId)}> 
           Request to Join</Button>
@@ -180,7 +219,7 @@ export class Group extends Component {
                        {this.state.data.groupDescription === "" ? "No group description." : this.state.data.groupDescription}
                       </Typography>
                       <Typography variant="subtitle1" color="textPrimary">
-                        Created by {this.state.data.user.firstName} {this.state.data.user.lastName} <time class="timeago" dateTime={toJSDate(this.state.data.createdAt)} title={toJSDate(this.state.data.createdAt)}>{timeSince(toJSDate(this.state.data.createdAt))}</time> ago in {this.state.data.category.categoryName}
+                        Created by {this.state.data.isAdmin ? "you" : (this.state.data.user.firstName + " " + this.state.data.user.lastName)} <time class="timeago" dateTime={toJSDate(this.state.data.createdAt)} title={toJSDate(this.state.data.createdAt)}>{timeSince(toJSDate(this.state.data.createdAt))}</time> ago in {this.state.data.category.categoryName}
                       </Typography>
                     </Col>
                   </Row>
@@ -195,6 +234,7 @@ export class Group extends Component {
                       <TextareaAutosize style={{ width: "100%" }} label="top level comment" rowsMin={3} onChange={this.handleNewTLCommentChange} />
                       <Button style={{ marginBottom: "15px" }} size="medium" color="primary" onClick={() => this.clickSubmitHandler()}>Create Comment</Button>
                       <ErrorAlert></ErrorAlert>
+                      <SuccessAlert></SuccessAlert>
                       <hr
                         style={{
                           marginTop: "-10px",
@@ -220,14 +260,11 @@ export class Group extends Component {
                   </Row>
                   <Row>
                     <Col>
-                      {this.state.commentData !== '' ? <Comment auth={this.state.auth} groupId={this.state.groupId} commentData={this.state.commentData} /> : null}
+                      {this.state.commentData !== '' ? <Comment isAdmin={this.state.data.isAdmin} auth={this.state.auth} groupId={this.state.groupId} commentData={this.state.commentData} /> : null}
                     </Col>
                   </Row>
                 </Tab>
                 <Tab eventKey="blog" title="Blog Posts">
-                  <NewBlog
-                   groupId={this.state.groupId}
-                   data = {this.state.data}/>
                   <BlogCards
                    groupId={this.state.groupId}
                    data = {this.state.data}

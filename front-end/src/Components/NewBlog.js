@@ -29,6 +29,8 @@ export class NewBlog extends React.Component {
       errorMessage: "",
       postTitle: "",
       postContent: "",
+      redirect: false,
+      blogPost: ''
     };
   }
 
@@ -39,11 +41,11 @@ export class NewBlog extends React.Component {
     });
     // var groupId = this.props.groupId;
     // console.log("CHECK", groupId);
-  /*  setTimeout(() =>{
-      console.log(this.props.data.isAdmin)
-
-    }, 2000)
-    */
+    /*  setTimeout(() =>{
+        console.log(this.props.data.isAdmin)
+  
+      }, 2000)
+      */
   }
 
   handlePostTitleChange = (event) => {
@@ -83,8 +85,14 @@ export class NewBlog extends React.Component {
         this.state.postContent
       );
       console.log(this.props.groupId)
-     console.log(this.props.data.isJoined)
-     console.log(this.props.data.isAdmin)
+      console.log(this.props.data.isJoined)
+      console.log(this.props.data.isAdmin)
+      this.setState({
+        showModal: false,
+        showSuccess: true,
+      });
+    
+      console.log("check");
     }
   }
 
@@ -112,18 +120,30 @@ export class NewBlog extends React.Component {
       }
     };
 
-    if (this.props.data != '') { 
+    if (this.props.data != '') {
       return (
         <div>
+          {this.state.redirect ?
+      <Redirect to={{
+        pathname: '/blog/' + this.state.blogPost.blogPostId,
+        state: {
+          groupId: this.props.groupId,
+          data: this.props.data,
+          blogPost: this.state.blogPost,
+        }
+      }} />
+            : <div></div>
+          }
           {this.props.data.isJoined || this.props.data.isAdmin ? (
             <div>
-              <Button style = {{float: "right "}}
+              <Button style={{ left:"45%"}}
                 size="medium"
                 color="primary"
                 onClick={() => this.setState({ showModal: true })}
               >
                 Create New Post
               </Button>
+              {/* <SuccessAlert></SuccessAlert> */}
               <Dialog
                 open={this.state.showModal}
                 onClose={() => this.setState({ showModal: false })}
@@ -213,6 +233,10 @@ export class NewBlog extends React.Component {
         if (response.status <= 201) {
           response.json().then((data) => {
             console.log(data);
+            this.setState({
+              blogPost: data,
+              redirect: true
+            })
           });
         } else {
           console.log("failed :(", response.status);

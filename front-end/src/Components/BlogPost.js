@@ -110,7 +110,7 @@ export class BlogPost extends Component {
           </Row>
           <Row>
             <Col>
-              <BlogComments auth={this.state.auth} blogPost={this.state.blogPost} groupData={this.state.groupData} />
+              <BlogComments isAdmin={this.state.groupData.isAdmin} auth={this.state.auth} blogPost={this.state.blogPost} groupData={this.state.groupData} />
             </Col>
           </Row>
           </Paper>

@@ -11,6 +11,8 @@ import {
 } from "@material-ui/core";
 import { Link } from 'react-router-dom'
 import { GetCookie, toJSDate, timeSince } from "../UtilityFunctions";
+import { NewBlog } from "./NewBlog";
+
 
 // shows all blog posts as cards
 export class BlogCards extends Component {
@@ -61,6 +63,10 @@ export class BlogCards extends Component {
       return (
         <div>
           <Container style={{ padding: "1rem 0" }} maxWidth="md">
+          <NewBlog
+                   groupId={this.props.groupId}
+                   data = {this.props.data}
+                  />
             {this.state.blogs.length > 0 ? 
             <Grid container spacing={4}>
               {this.state.blogs.map((blogPost) => (
