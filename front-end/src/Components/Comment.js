@@ -9,16 +9,12 @@ export class Comment extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.getGroupComments(this.props.auth, this.props.groupId, 1);
-  }
-
   render() {
     return (
       <div>
-        {this.state.data ? (
+        {this.props.commentData ? (
           <div>
-            {this.state.data.map((card) => (
+            {this.props.commentData.map((card) => (
               <CardContent
                 style={{ padding: "5px", borderBottom: "0.5px solid #ebebeb" }}
               >
@@ -49,35 +45,6 @@ export class Comment extends React.Component {
       </div>
     );
   }
-
-  getGroupComments = (auth, groupId, page) => {
-    setTimeout(() => {
-      var url =
-        "https://groups.cahillaw.me/v1/groups/" + groupId + "/comments?";
-      if (page !== "") {
-        url = url + "page=" + page;
-      }
-
-      fetch(url, {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: auth,
-        },
-      }).then((response) => {
-        if (response.status <= 201) {
-          response.json().then((data) => {
-            console.log("GET COMMENTS", data);
-            this.setState({
-              data: data,
-            });
-          });
-        } else {
-          console.log("failed :(");
-        }
-      });
-    }, 0);
-  };
 
   deletedGroupComment = (auth, groupId, commentId) => {
     setTimeout(() => {

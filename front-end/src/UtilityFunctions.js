@@ -17,6 +17,13 @@ export function GetCookie(cname) {
 
 //https://stackoverflow.com/questions/8847109/formatting-the-date-time-with-javascript
 export function toJSDate (dateTime) {
+  if(dateTime === '0001-01-01T00:00:00Z') {
+    var m = new Date() 
+    m.setHours(m.getHours() + 8);
+    m.setSeconds(m.getSeconds() - 1);
+    return m;
+  }
+
   dateTime = dateTime.replace('Z', ' ').replace('T', ' ')
 
   dateTime = dateTime.split(" ");//dateTime[0] = date, dateTime[1] = time

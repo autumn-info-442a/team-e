@@ -26,7 +26,8 @@ export class Group extends Component {
       value: "home",
       newComment: '',
       data: '',
-      requests: ''
+      requests: '',
+      commentData: ''
     };
     this.onClick = this.onClick.bind(this);
   }
@@ -36,6 +37,7 @@ export class Group extends Component {
     console.log(auth);
     var groupId = this.props.location.pathname.split("/", 3)[2];
     this.getGroup(auth, groupId);
+    this.getGroupComments(auth, groupId, 1)
     this.setState({
       auth: auth,
       groupId: groupId
@@ -218,7 +220,7 @@ export class Group extends Component {
                   </Row>
                   <Row>
                     <Col>
-                      <Comment auth={this.state.auth} groupId={this.state.groupId} />
+                      {this.state.commentData !== '' ? <Comment auth={this.state.auth} groupId={this.state.groupId} commentData={this.state.commentData} /> : null}
                     </Col>
                   </Row>
                 </Tab>
@@ -321,6 +323,11 @@ export class Group extends Component {
           if (response.status <= 201) {
             response.json().then((data) => {
               console.log(data)
+              var commentData = this.state.commentData
+              commentData.unshift(data)
+              this.setState({
+                commentData: commentData
+              })
             })
           } else {
             console.log("failed :(", response.status)
@@ -524,6 +531,41 @@ export class Group extends Component {
         })
     }, 0)
   }
+
+  getGroupComments = (auth, groupId, page) => {
+    setTimeout(() => {
+      var url =
+        "https://groups.cahillaw.me/v1/groups/" + groupId + "/comments?";
+      if (page !== "") {
+        url = url + "page=" + page;
+      }
+
+      fetch(url, {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth,
+        },
+      }).then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            console.log("GET COMMENTS", data);
+            /*console.log(this.props.ncData)
+            
+            if (this.props.ncData !== '') {
+              data.unshift(this.props.ncData)
+            }
+        */
+            this.setState({
+              commentData: data,
+            });
+          });
+        } else {
+          console.log("failed :(");
+        }
+      });
+    }, 0);
+  };
 
   removeFromRequests = (membershipID) => {
     var requests = this.state.requests
