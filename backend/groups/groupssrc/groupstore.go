@@ -164,8 +164,13 @@ func (sqls *SQLStore) SearchGroups(query string, userid int, page int, catid int
 			if errQuery != sql.ErrNoRows {
 				return nil, errQuery
 			}
+			gp.JoinedState = "NA"
 		} else {
-			gp.IsJoined = state
+			if state {
+				gp.JoinedState = "Joined"
+			} else {
+				gp.JoinedState = "Pending"
+			}
 		}
 
 		gps = append(gps, gp)
@@ -212,8 +217,13 @@ func (sqls *SQLStore) GetGroup(gpid int, userid int) (*Group, error) {
 			if errQuery != sql.ErrNoRows {
 				return nil, errQuery
 			}
+			gp.JoinedState = "NA"
 		} else {
-			gp.IsJoined = state
+			if state {
+				gp.JoinedState = "Joined"
+			} else {
+				gp.JoinedState = "Pending"
+			}
 		}
 
 	}

@@ -25,7 +25,8 @@ export class Group extends Component {
     this.state = {
       value: "home",
       newComment: '',
-      data: ''
+      data: '',
+      requests: ''
     };
     this.onClick = this.onClick.bind(this);
   }
@@ -58,6 +59,13 @@ export class Group extends Component {
       newComment: event.target.value
     })
   };
+
+  onSave(group) {
+    console.log("CLICK CLICK", group);
+    group.isSaved === true
+      ? this.unsaveGroup(this.state.auth, group.groupId)
+      : this.saveGroup(this.state.auth, group.groupId)
+  }
 
   clickSubmitHandler() {
     if (this.state.newComment.length < 1) {
@@ -92,8 +100,29 @@ export class Group extends Component {
       }
     }
 
+    /*|| this.state.data.isAdmin*/
+    const RequestElement = () => {
+      if(this.state.data.joinedStatus === "Joined") {
+        return (
+          <Typography style={{float: "left"}}variant="subtitle1" color="textPrimary">
+          Joined
+        </Typography>
+        )
+      } else if (this.state.data.joinedStatus === "Pending") {
+        return (
+          <Typography variant="subtitle1" color="textPrimary">
+          Request Pending
+        </Typography>
+        )
+      } else {
+        return (
+          <Button size="medium" color="primary" onClick={() => this.createMembershipRequest(this.state.auth, this.state.data.groupId)}> 
+          Request to Join</Button>
+        )
+      }  
+    }
+
     if (this.state.data !== '') {
-      let cards = [1, 2, 3, 4];
       return (
         <div>
           <Container maxWidth="md">
@@ -137,6 +166,9 @@ export class Group extends Component {
                       </div>
                     </Col>
                     <Col className="mt-5 p-3">
+                    {this.state.auth !== '' ?  <RequestElement></RequestElement> : null}
+                    {this.state.auth !== '' ? <Button size="medium" color="primary" onClick={() => this.onSave(this.state.data)}>
+                      {this.state.data.isSaved === true ? "Unsave" : "Save"}</Button> : null}
                       <Typography
                         component="h6"
                         variant="h6"
@@ -187,7 +219,6 @@ export class Group extends Component {
                   <Row>
                     <Col>
                       <Comment auth={this.state.auth} groupId={this.state.groupId} />
-            
                     </Col>
                   </Row>
                 </Tab>
@@ -201,10 +232,10 @@ export class Group extends Component {
                   />
                 </Tab>
                 {this.state.data.isAdmin ? <Tab eventKey="profile" title="Member Requests">
-                <div style={{padding: "8px", minHeight:"500px"}}>
+                <div style={{padding: "8px"}}>
                   <Grid container spacing={4}>
-                    {cards.map((card) => (
-                      <Grid item key={card} xs={4} sm={3} md={3}>
+                    {this.state.requests !== '' && this.state.requests.length > 0 ? this.state.requests.map((request) => (
+                      <Grid item key={request} xs={4} sm={3} md={3}>
                         <Card
                           style={{
                             height: "100%",
@@ -223,28 +254,28 @@ export class Group extends Component {
                               variant="h5"
                               component="h2"
                             >
-                              Name
+                              {request.user.firstName} {request.user.lastName}
                             </Typography>
                           </CardContent>
                           <CardActions>
                             <Button
                               size="small"
                               color="primary"
-                              onClick={this.onClick}
+                              onClick={() => this.acceptMembershipRequest(this.state.auth, this.state.data.groupId, request.membershipID)}
                             >
                               Accept
                             </Button>
                             <Button
                               size="small"
                               color="primary"
-                              onClick={this.onClick}
+                              onClick={() => this.declineMembershipRequest(this.state.auth, this.state.data.groupId, request.membershipID)}
                             >
                               Reject
                             </Button>
                           </CardActions>
                         </Card>
                       </Grid>
-                    ))}
+                    )) : <bold style={{marginLeft: "10px", marginTop: "20px", marginBottom: "10px"}}>No membership requests to display</bold>}
                   </Grid>
                   </div>
                 </Tab> : null}
@@ -312,6 +343,10 @@ export class Group extends Component {
         if (response.status <= 201) {
           response.json().then((data) => {
             console.log(data);
+            console.log(data.isJoined)
+            if(data.isAdmin) {
+              this.getMembersipRequests(auth, groupId)
+            }
             this.setState({
               data: data
             });
@@ -337,6 +372,9 @@ export class Group extends Component {
         if (response.status <= 201) {
           response.json().then((data) => {
             console.log(data);
+            this.setState({
+              requests: data
+            })
           });
         } else {
           console.log("failed :(");
@@ -356,6 +394,11 @@ export class Group extends Component {
         },
       }).then((response) => {
         if (response.status <= 201) {
+          var data = this.state.data
+          data.joinedStatus = "Pending"
+          this.setState({
+            data: data
+          })
           console.log("success");
         } else {
           console.log("failed :(", response.status);
@@ -380,6 +423,31 @@ export class Group extends Component {
       }).then((response) => {
         if (response.status <= 201) {
           console.log("success");
+          this.removeFromRequests(requestId)
+        } else {
+          console.log("failed :(", response.status);
+        }
+      });
+    }, 0);
+  };
+
+  declineMembershipRequest = (auth, groupId, requestId) => {
+    setTimeout(() => {
+      var url =
+        "https://groups.cahillaw.me/v1/groups/" +
+        groupId +
+        "/requests/" +
+        requestId;
+      fetch(url, {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth,
+        },
+      }).then((response) => {
+        if (response.status <= 201) {
+          console.log("success");
+          this.removeFromRequests(requestId) 
         } else {
           console.log("failed :(", response.status);
         }
@@ -407,5 +475,67 @@ export class Group extends Component {
     }, 0);
   };
 
+  saveGroup = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/save"
+      fetch(url, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+        .then((response) => {
+          if (response.status <= 201) {
+            console.log("success")
+            var data = this.state.data
+            data.isSaved = true
+            this.setState({
+              data: data
+            })
+          } else {
+            console.log("failed :(", response.status)
+          }
+        })
+    }, 0)
+  }
 
+  unsaveGroup = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/save"
+      fetch(url, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+        .then((response) => {
+          if (response.status <= 201) {
+            console.log("success")
+            var data = this.state.data
+            data.isSaved = false
+            this.setState({
+              data: data
+            })
+          } else {
+            console.log("failed :(", response.status)
+          }
+        })
+    }, 0)
+  }
+
+  removeFromRequests = (membershipID) => {
+    var requests = this.state.requests
+    for(var i = 0; i<requests.length; i++) {
+      if (requests[i].membershipID === membershipID) {
+        requests.splice(i, 1)
+        break
+      }
+    }
+
+    this.setState({
+      requests: requests
+    })
+  }
 }

@@ -580,7 +580,7 @@ func (ctx *GroupContext) GenericBlogPostHandler(w http.ResponseWriter, r *http.R
 		//inputs: blog post struct
 		//output: blog post struct, 201 status code
 	} else if r.Method == http.MethodPost {
-		if !group.IsJoined && group.User.UserID != user.UserID {
+		if group.JoinedState != "Joined" && group.User.UserID != user.UserID {
 			http.Error(w, "Access forbidden, not in group", http.StatusForbidden)
 			return
 		}
@@ -685,7 +685,7 @@ func (ctx *GroupContext) BlogPostHandler(w http.ResponseWriter, r *http.Request)
 		//inputs: blog post id
 		//output: 200 status code
 	} else if r.Method == http.MethodDelete {
-		if !group.IsJoined || user.UserID != group.User.UserID { //2nd is if user is group admin
+		if group.JoinedState != "Joined" || user.UserID != group.User.UserID { //2nd is if user is group admin
 			http.Error(w, "Access forbidden, not in group", http.StatusForbidden)
 			return
 		}
@@ -818,7 +818,7 @@ func (ctx *GroupContext) GenericBlogCommentHandler(w http.ResponseWriter, r *htt
 			return
 		}
 
-		if !group.IsJoined && group.User.UserID != user.UserID {
+		if group.JoinedState != "Joined" && group.User.UserID != user.UserID {
 			http.Error(w, "Cannot comment unless in group", http.StatusUnauthorized)
 			return
 		}
