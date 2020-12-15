@@ -3,27 +3,20 @@ import { toJSDate, timeSince } from "../UtilityFunctions";
 import {
   Typography,
   Container,
-  TextField,
-  Grid,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
   Button,
-  TextareaAutosize,
-  Dialog, DialogTitle,
+  Dialog, 
   DialogContent, CardContent
 } from "@material-ui/core";
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import IconButton from '@material-ui/core/IconButton';
-import { Row, Col, Tab, Tabs } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 
 export class Comment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: "",
-      showModal: false,
+      showModal: false
     };
   }
 
@@ -60,7 +53,7 @@ export class Comment extends React.Component {
               </Container>
               </DialogContent>
               </Dialog > }
-        {this.props.commentData ? (
+        {this.props.commentData && this.props.commentData.length > 0 ? (
           <div>
             {this.props.commentData.map((card) => (
               
@@ -99,7 +92,7 @@ export class Comment extends React.Component {
             }}
             maxWidth="md"
           >
-            <h4 id="title">No comments yet...</h4>
+            <bold>No comments yet...</bold>
           </Container>
         )}
       </div>

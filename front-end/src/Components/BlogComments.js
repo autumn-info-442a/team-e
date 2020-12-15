@@ -1,9 +1,9 @@
 import React from "react";
-import { Container, Typography, CardContent, Button } from "@material-ui/core";
+import { Container, Typography, CardContent} from "@material-ui/core";
 import { toJSDate, timeSince } from "../UtilityFunctions";
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import IconButton from '@material-ui/core/IconButton';
-import { Row, Col, Tab, Tabs } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 
 export class BlogComments extends React.Component {
   constructor(props) {

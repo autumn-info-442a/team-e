@@ -1029,6 +1029,15 @@ func (ctx *GroupContext) GenericGroupMembershipHandler(w http.ResponseWriter, r 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		w.Write(encoded)
+	} else if r.Method == http.MethodDelete {
+		errDB := ctx.GStore.LeaveGroup(gid, user.UserID)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("request recinded"))
 	} else {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}

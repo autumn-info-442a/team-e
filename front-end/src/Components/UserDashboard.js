@@ -41,6 +41,7 @@ export class UserDashboard extends Component {
           response.json().then((data) => {
             this.setState({
               data: data,
+              auth: auth
             });
             console.log(data);
           });
@@ -194,9 +195,11 @@ export class UserDashboard extends Component {
                             },
                           }}
                         >
-                          View{" "}
+                          View
                         </Link>
                       </Button>
+                      <Button size="medium" color="primary" onClick={() => this.leaveGroup(this.state.auth, card.groupId)}> 
+                      Leave Group</Button>
                     </CardActions>
                   </Card>
                 </Grid>
@@ -325,5 +328,40 @@ export class UserDashboard extends Component {
         <div>Loading...</div>
       </div>
     );
+  }
+
+  leaveGroup = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests"
+      fetch(url, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+        .then((response) => {
+          if (response.status <= 201) {
+            console.log("success")
+            this.removeFromJoinedGroups(groupId)
+          } else {
+            console.log("failed :(", response.status)
+          }
+        })
+    }, 0)
+  }
+
+  removeFromJoinedGroups = (groupId) => {
+    var data = this.state.data
+    for(var i = 0; i<data.joinedGroups.length; i++) {
+      if (data.joinedGroups[i].groupId === groupId) {
+        data.joinedGroups.splice(i, 1)
+        break
+      }
+    }
+
+    this.setState({
+      data: data
+    })
   }
 }

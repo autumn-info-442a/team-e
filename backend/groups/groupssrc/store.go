@@ -45,4 +45,5 @@ type GroupsStore interface {
 	GetMembershipRequests(gpid int) ([]*MembershipRequest, error)
 	AcceptMembershipRequest(mrid int) error
 	DeclineMembershipRequest(mrid int) error
+	LeaveGroup(gid int, userid int) error
 }

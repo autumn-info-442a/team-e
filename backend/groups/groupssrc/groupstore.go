@@ -835,3 +835,15 @@ func (sqls *SQLStore) DeclineMembershipRequest(mrid int) error {
 	}
 	return nil
 }
+
+//LeaveGroup allows a user to leave a group
+func (sqls *SQLStore) LeaveGroup(gid int, userid int) error {
+
+	insq := "delete from membership where group_id = ? and user_id = ?"
+
+	_, errExec := sqls.DB.Exec(insq, gid, userid)
+	if errExec != nil {
+		return errExec
+	}
+	return nil
+}

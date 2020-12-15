@@ -27,7 +27,9 @@ export class Group extends Component {
       data: '',
       requests: '',
       commentData: '',
-      showSuccess: false
+      showSuccess: false,
+      moreResults: true,
+      page: 1
     };
     this.onClick = this.onClick.bind(this);
   }
@@ -136,12 +138,8 @@ export class Group extends Component {
     const RequestElement = () => {
       if(this.state.data.joinedStatus === "Joined") {
         return (
-          <Button size="medium" color="primary"> 
+          <Button size="medium" color="primary" onClick={() => this.leaveGroup(this.state.auth, this.state.data.groupId)}> 
           Leave Group</Button>
-          // onClick={() => this.deleteJoinedGroup(this.state.auth, this.state.data.groupId)
-        //   <Typography style={{float: "left"}}variant="subtitle1" color="textPrimary">
-        //   Joined
-        // </Typography>
         )
       } else if (this.state.data.joinedStatus === "Pending") {
         return (
@@ -184,7 +182,7 @@ export class Group extends Component {
                 height: "3px",
               }}
             />
-            <Paper variant="elevation" style={{ padding: "5px" }}>
+            <Paper variant="elevation" style={{ padding: "5px", marginBottom:"20px"}}>
               <Tabs
                 id="controlled-tab-example"
                 activeKey={this.state.value}
@@ -260,7 +258,9 @@ export class Group extends Component {
                   </Row>
                   <Row>
                     <Col>
-                      {this.state.commentData !== '' ? <Comment isAdmin={this.state.data.isAdmin} auth={this.state.auth} groupId={this.state.groupId} commentData={this.state.commentData} /> : null}
+                      {this.state.commentData !== '' ? <Comment isAdmin={this.state.data.isAdmin} auth={this.state.auth} groupId={this.state.groupId} commentData={this.state.commentData} moreResults={this.state.moreResults} /> : null}
+                      {this.state.moreResults && this.state.commentData.length > 2 ? <Button size="large" color="primary" onClick={() => this.getGroupComments(this.state.auth, this.state.groupId, this.state.page + 1)}>
+                        Show more comments</Button> : null}
                     </Col>
                   </Row>
                 </Tab>
@@ -587,15 +587,26 @@ export class Group extends Component {
         if (response.status <= 201) {
           response.json().then((data) => {
             console.log("GET COMMENTS", data);
-            /*console.log(this.props.ncData)
-            
-            if (this.props.ncData !== '') {
-              data.unshift(this.props.ncData)
+            if(page === 1) {
+              this.setState({
+                commentData: data,
+              });
+            } else {
+              var newData = this.state.commentData.concat(data)
+              console.log(newData.length)
+              if(newData.length % 3 !== 0 || data.length === 0) {
+                this.setState({
+                  moreResults: false,
+                  commentData: newData,
+                  page: this.state.page + 1
+                })
+              } else {
+                this.setState({
+                  commentData: newData,
+                  page: this.state.page + 1
+                })
+              }
             }
-        */
-            this.setState({
-              commentData: data,
-            });
           });
         } else {
           console.log("failed :(");
@@ -603,6 +614,31 @@ export class Group extends Component {
       });
     }, 0);
   };
+
+  leaveGroup = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests"
+      fetch(url, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+        .then((response) => {
+          if (response.status <= 201) {
+            console.log("success")
+            var data = this.state.data
+            data.joinedStatus = "NA"
+            this.setState({
+              data: data
+            })
+          } else {
+            console.log("failed :(", response.status)
+          }
+        })
+    }, 0)
+  }
 
   removeFromRequests = (membershipID) => {
     var requests = this.state.requests

@@ -61,21 +61,20 @@ export class NewBlog extends React.Component {
   };
 
   clickSubmitHandler() {
-    var errMes = "";
     if (this.state.postTitle.length < 1) {
       this.setState({
         showError: true,
         errorMessage: "Empty post title.",
       });
-    } else if (this.state.postTitle.length > 150) {
+    } else if (this.state.postTitle.length > 50) {
       this.setState({
         showError: true,
-        errorMessage: "Post title must be under 150 characters.",
+        errorMessage: "Post title must be under 50 characters.",
       });
-    } else if (this.state.postContent.length > 2000) {
+    } else if (this.state.postContent.length > 1000) {
       this.setState({
         showError: true,
-        errorMessage: "Post must be under 2000 characters.",
+        errorMessage: "Post must be under 1000 characters.",
       });
     } else {
       this.createBlogPost(
@@ -134,7 +133,7 @@ export class NewBlog extends React.Component {
       }} />
             : <div></div>
           }
-          {this.props.data.isJoined || this.props.data.isAdmin ? (
+          {this.props.data.joinedStatus === "Joined" || this.props.data.isAdmin ? (
             <div>
               <Button style={{ left:"45%"}}
                 size="medium"
