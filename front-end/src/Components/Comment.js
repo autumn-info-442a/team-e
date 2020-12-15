@@ -1,12 +1,6 @@
 import React from "react";
 import { toJSDate, timeSince } from "../UtilityFunctions";
-import {
-  Typography,
-  Container,
-  Button,
-  Dialog, 
-  DialogContent, CardContent
-} from "@material-ui/core";
+import { Typography, Container, Button, Dialog, DialogContent, CardContent} from "@material-ui/core";
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import IconButton from '@material-ui/core/IconButton';
 import { Row, Col } from "react-bootstrap";
@@ -41,13 +35,13 @@ export class Comment extends React.Component {
         {<Dialog 
               open={this.state.showModal}
               onClose={() => this.setState({ showModal: false })}
-              aria-labelledby="Create Group"
+              aria-labelledby="Delete Comment"
               aria-describedby="simple-modal-description"
             >
             <DialogContent>
                <Container maxWidth="lg">
               <Typography component="h5" align="center" variant="h5" color="textPrimary" gutterBottom>
-              Are you sure you want to delete the comment?
+              Are you sure you want to delete this comment?
               </Typography>
               <Button style={{marginLeft: "auto"}} id="delete" variant= "dark" size= "sm" onClick={() => this.clickSubmitHandler()}>Confirm</Button>
               </Container>

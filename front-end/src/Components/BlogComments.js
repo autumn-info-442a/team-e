@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Typography, CardContent} from "@material-ui/core";
+import { Typography, Container, Button, Dialog, DialogContent, CardContent} from "@material-ui/core";
 import { toJSDate, timeSince } from "../UtilityFunctions";
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import IconButton from '@material-ui/core/IconButton';
@@ -10,6 +10,7 @@ export class BlogComments extends React.Component {
     super(props);
     this.state = {
       data: "",
+      showModal: false
     };
   }
 
@@ -18,13 +19,39 @@ export class BlogComments extends React.Component {
     this.getBlogComments(this.props.auth, this.props.groupData.groupId, this.props.blogPost.blogPostId, 1);
   }
 
-  handleDelete() {
+  handleDelete(blogCommentId) {
+    this.setState({
+      showModal: true,
+      blogCommentId: blogCommentId
+     })
+  }
 
+  clickSubmitHandler() {
+    this.deleteBlogComment(this.props.auth, this.props.groupId, this.props.blogPost.blogPostId, this.state.blogCommentId)
+    this.setState({
+      showModal: false,
+      blogCommentId: ''
+     })
   }
 
   render() {
     return (
       <div>
+              {<Dialog 
+              open={this.state.showModal}
+              onClose={() => this.setState({ showModal: false })}
+              aria-labelledby="Delete Comment"
+              aria-describedby="simple-modal-description"
+            >
+            <DialogContent>
+               <Container maxWidth="lg">
+              <Typography component="h5" align="center" variant="h5" color="textPrimary" gutterBottom>
+              Are you sure you want to delete this comment?
+              </Typography>
+              <Button style={{marginLeft: "auto"}} id="delete" variant= "dark" size= "sm" onClick={() => this.clickSubmitHandler()}>Confirm</Button>
+              </Container>
+              </DialogContent>
+              </Dialog > }
         {this.state.data ? (
           <div>
             {this.state.data.map((card) => (
@@ -47,7 +74,7 @@ export class BlogComments extends React.Component {
                   <Col xs={2}>
                 {/* if isAdmin or wrote the comment? Simplifief to if admin */}
                 {this.props.isAdmin
-                ? <IconButton onClick={() => this.handleDelete()} aria-label="delete" variant="contained" size="small" style={{padding:"0", marginRight:"0px", marginLeft:"60px"}}><RemoveCircleOutlineIcon style={{fontSize: "15px"}}/></IconButton>
+                ? <IconButton onClick={() => this.handleDelete(card.blogCommentId)} aria-label="delete" variant="contained" size="small" style={{padding:"0", marginRight:"0px", marginLeft:"60px"}}><RemoveCircleOutlineIcon style={{fontSize: "15px"}}/></IconButton>
                 : null}
                   </Col>
                 </Row>

@@ -30,7 +30,9 @@ export class NewBlog extends React.Component {
       postTitle: "",
       postContent: "",
       redirect: false,
-      blogPost: ''
+      blogPost: '',
+      buttonText: "Create Post",
+      buttonColor: "default"
     };
   }
 
@@ -61,6 +63,12 @@ export class NewBlog extends React.Component {
   };
 
   clickSubmitHandler() {
+    if (this.state.buttonText == "Create Post") {
+      this.setState({
+        buttonText: "Confirm",
+        buttonColor: "secondary"
+      })
+    } else {
     if (this.state.postTitle.length < 1) {
       this.setState({
         showError: true,
@@ -89,10 +97,10 @@ export class NewBlog extends React.Component {
       this.setState({
         showModal: false,
         showSuccess: true,
-      });
-    
-      console.log("check");
+      });   
+      console.log("check post is created");
     }
+  }
   }
 
   removeAlert() {
@@ -135,7 +143,7 @@ export class NewBlog extends React.Component {
           }
           {this.props.data.joinedStatus === "Joined" || this.props.data.isAdmin ? (
             <div>
-              <Button style={{ left:"45%"}}
+              <Button style={{ left:"45%" }}
                 size="medium"
                 color="primary"
                 onClick={() => this.setState({ showModal: true })}
@@ -145,7 +153,7 @@ export class NewBlog extends React.Component {
               {/* <SuccessAlert></SuccessAlert> */}
               <Dialog
                 open={this.state.showModal}
-                onClose={() => this.setState({ showModal: false })}
+                onClose={() => this.setState({ showModal: false,  buttonText: "Create Post",  buttonColor: "default" })}
                 aria-labelledby="Create Post"
                 aria-describedby="simple-modal-description"
               >
@@ -189,14 +197,17 @@ export class NewBlog extends React.Component {
                         fullWidth
                         onChange={this.handlePostContentChange}
                       />
+                      <div style={{ width: "100%", margin: "10px auto 0px auto" }}>
                       <Button
                         id="create"
-                        variant="dark"
+                        variant="outlined"
+                        color={this.state.buttonColor}
                         size="sm"
                         onClick={() => this.clickSubmitHandler()}
                       >
-                        Create Post
+                        {this.state.buttonText}
                       </Button>
+                      </div>
                       <hr></hr>
                       <ErrorAlert></ErrorAlert>
                     </Grid>

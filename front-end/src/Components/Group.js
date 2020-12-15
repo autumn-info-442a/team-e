@@ -149,7 +149,7 @@ export class Group extends Component {
         )
       } else if (this.state.data.isAdmin === true) {
         return (
-          <Typography variant="subtitle1" color="textPrimary">
+          <Typography alignRight variant="subtitle1" color="textPrimary">
           Admin
         </Typography>
         )
@@ -205,9 +205,15 @@ export class Group extends Component {
                       </div>
                     </Col>
                     <Col className="mt-5 p-3">
+                    <Row>
+                    <Col>
                     {this.state.auth !== '' ?  <RequestElement></RequestElement> : null}
+                    </Col>
+                    <Col >
                     {this.state.auth !== '' ? <Button size="medium" color="primary" onClick={() => this.onSave(this.state.data)}>
                       {this.state.data.isSaved === true ? "Unsave" : "Save"}</Button> : null}
+                      </Col>
+                    </Row>
                       <Typography
                         component="h6"
                         variant="h6"
@@ -268,6 +274,7 @@ export class Group extends Component {
                   <BlogCards
                    groupId={this.state.groupId}
                    data = {this.state.data}
+                   isAdmin = {this.state.data.isAdmin}
                   />
                 </Tab>
                 {this.state.data.isAdmin ? <Tab eventKey="profile" title="Member Requests">
@@ -492,26 +499,6 @@ export class Group extends Component {
         if (response.status <= 201) {
           console.log("success");
           this.removeFromRequests(requestId) 
-        } else {
-          console.log("failed :(", response.status);
-        }
-      });
-    }, 0);
-  };
-
-  deleteBlogPost = (auth, groupId, blogId) => {
-    setTimeout(() => {
-      var url =
-        "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId;
-      fetch(url, {
-        method: "delete",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: auth,
-        },
-      }).then((response) => {
-        if (response.status <= 201) {
-          console.log("success");
         } else {
           console.log("failed :(", response.status);
         }

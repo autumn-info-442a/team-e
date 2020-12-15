@@ -76,25 +76,17 @@ export class Groups extends Component {
         <Grid container spacing={4}>
           {this.state.data != undefined && this.state.data.map((card) => (
             <Grid item key={card.groupId} xs={12} sm={6} md={4}>
-              <Card style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                {/* <CardMedia
-                  style={{ paddingTop: '56.25%' }}
-                  image="https://source.unsplash.com/random"
-                  title="Image title"
-                /> */}
+              <Card style={{ height: '100%', display: 'flex', flexDirection: 'column',  padding:"20px" }}>
                 <CardContent style={{ flexGrow: 1 , padding:"20px"}}>
-                  <Typography gutterBottom variant="h5" component="h2"> 
+                  <Typography style={{marginBottom: "25px"}} gutterBottom variant="h4" component="h4"> 
                     {card.groupName}</Typography>
-                    < hr style={{ backgroundColor: "lightgray", maxWidth: "170px", height: "1px", margin:"0 0 2rem 0"}} />
-                    <div style={{backgroundColor:"rgb(204, 204, 255, 0.2)", padding:"1rem", height:"60%"}}>
-                  <Typography >
+                  <Typography style={{marginBottom: "10px"}}>
                     {card.groupDescription}</Typography>
-                    </div>
                 </CardContent>
                 <CardActions>
                   <Button size="small" onClick={() => this.onSave(card)}>
                     {card.isSaved === true ? "Unsave" : "Save"}</Button>
-                  <Button ><Link to={{
+                  <Button><Link to={{
                     pathname: '/group/' + card.groupId,
                     state: {
                       auth: this.state.auth,
