@@ -102,8 +102,9 @@ export class Groups extends Component {
                         groupId: card.groupId
                       }
                     }}>View </Link></Button>
+                    {this.state.auth !== '' ?
                     <Button size="small" onClick={() => this.onSave(card)}>
-                      {card.isSaved === true ? "Unsave" : "Save"}</Button>
+                      {card.isSaved === true ? "Unsave" : "Save"}</Button> : null }
                   </CardActions>
                 </Card>
               </Grid>
@@ -190,6 +191,7 @@ export class Groups extends Component {
         .then((response) => {
           if (response.status <= 201) {
             console.log("success")
+            this.updateSavedState(groupId)
           } else {
             console.log("failed :(", response.status)
           }
@@ -210,11 +212,26 @@ export class Groups extends Component {
         .then((response) => {
           if (response.status <= 201) {
             console.log("success")
+            this.updateSavedState(groupId)
           } else {
             console.log("failed :(", response.status)
           }
         })
     }, 0)
+  }
+
+  updateSavedState = (groupId) => {
+    var groups = this.state.data
+    for (var i = 0; i < groups.length; i++) {
+      if (groups[i].groupId === groupId) {
+        groups[i].isSaved = !groups[i].isSaved
+        break
+      }
+    }
+
+    this.setState({
+      data: groups
+    })
   }
 
   searchGroups = (auth, categoryId, page, query) => {

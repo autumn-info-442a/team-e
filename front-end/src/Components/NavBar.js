@@ -40,7 +40,7 @@ export class NavBar extends Component {
     })
 
     //change once hosted
-    if (window.location.href != 'http://localhost:3000/') {
+    if (window.location.href != 'https://romantic-ride-acb817.netlify.app/') {
        window.location.href = '/'
     }    
 }
@@ -57,7 +57,7 @@ export class NavBar extends Component {
         {this.state.loggedIn ? <Nav.Link><NavLink to="/dashboard">My Groups</NavLink></Nav.Link> : null}
           {this.state.loggedIn ?
             <Button id = "logout" variant= "link" onClick={() => this.logOut()}>Logout</Button> :
-            <Nav.Link><NavLink to="/authenticate">Log In</NavLink></Nav.Link>
+            <Nav.Link><NavLink to="/authenticate">Log In With UW Gmail</NavLink></Nav.Link>
           }
         </Nav>
         </Container>

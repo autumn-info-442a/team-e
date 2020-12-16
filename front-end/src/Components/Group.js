@@ -223,6 +223,9 @@ export class Group extends Component {
                         <Typography variant="subtitle1" color="textPrimary">
                           Created by {this.state.data.isAdmin ? "you" : (this.state.data.user.firstName + " " + this.state.data.user.lastName)} <time class="timeago" dateTime={toJSDate(this.state.data.createdAt)} title={toJSDate(this.state.data.createdAt)}>{timeSince(toJSDate(this.state.data.createdAt))}</time> ago in {this.state.data.category.categoryName}
                         </Typography>
+                        <Typography variant="subtitle1" color="textPrimary">
+                          Member Count: {this.state.data.numMembers + 1}
+                        </Typography>
                       </Container>
                     </Col>
                   </Row>
@@ -463,25 +466,29 @@ export class Group extends Component {
 
   createMembershipRequest = (auth, groupId) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests";
-      fetch(url, {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: auth,
-        },
-      }).then((response) => {
-        if (response.status <= 201) {
-          var data = this.state.data
-          data.joinedStatus = "Pending"
-          this.setState({
-            data: data
-          })
-          console.log("success");
-        } else {
-          console.log("failed :(", response.status);
-        }
-      });
+      if(this.state.data.numMembers < 9) {
+        var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests";
+        fetch(url, {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: auth,
+          },
+        }).then((response) => {
+          if (response.status <= 201) {
+            var data = this.state.data
+            data.joinedStatus = "Pending"
+            this.setState({
+              data: data
+            })
+            console.log("success");
+          } else {
+            console.log("failed :(", response.status);
+          }
+        });
+      } else {
+        alert("Group is full, each group can have 10 members maximum")
+      }
     }, 0);
   };
 

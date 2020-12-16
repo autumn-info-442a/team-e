@@ -46,6 +46,7 @@ type Group struct {
 	IsSaved          bool            `json:"isSaved,omitempty"`
 	JoinedState      string          `json:"joinedStatus,omitempty"`
 	IsAdmin          bool            `json:"isAdmin,omitempty"`
+	NumMembers       int             `json:"numMembers"`
 	Comments         []*GroupComment `json:"comments,omitempty"`
 }
 

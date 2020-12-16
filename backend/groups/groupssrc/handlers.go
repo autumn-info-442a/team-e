@@ -272,6 +272,13 @@ func (ctx *GroupContext) GroupHandler(w http.ResponseWriter, r *http.Request) {
 			group.IsAdmin = false
 		}
 
+		count, errDB := ctx.GStore.GetGroupMembershipCount(gid)
+		if errDB != nil {
+			http.Error(w, errDB.Error(), http.StatusInternalServerError)
+			return
+		}
+		group.NumMembers = count
+
 		encoded, errEncode := json.Marshal(group)
 		if errEncode != nil {
 			http.Error(w, "Error encoding user to JSON", http.StatusBadRequest)

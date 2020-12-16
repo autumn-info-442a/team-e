@@ -18,6 +18,7 @@ type GroupsStore interface {
 	GetSavedGroups(userid int) ([]*Group, error)
 	GetJoinedGroups(userid int) ([]*Group, error)
 	GetAdminGroups(userid int) ([]*Group, error)
+	GetGroupMembershipCount(gid int) (int, error)
 
 	//GroupComment model methods
 	CreateGroupComment(gc *GroupComment) (*GroupComment, error)

@@ -14,9 +14,7 @@ class Authenticate extends React.Component {
 
     render = () => {
       return (
-          <div>
-              Loading...
-          </div>
+        null
       )
     }
 

@@ -33,9 +33,7 @@ class RedirectPage extends React.Component {
       }
 
       return (
-        <div>
-          <h1 id="title">Loading...</h1>
-        </div>
+        null
       )
     }
 

@@ -378,6 +378,23 @@ func (sqls *SQLStore) GetAdminGroups(userid int) ([]*Group, error) {
 	return gps, nil
 }
 
+func (sqls *SQLStore) GetGroupMembershipCount(gid int) (int, error) {
+	insq := "select * from membership where group_id = ? and state = true"
+
+	res, errQuery := sqls.DB.Query(insq, gid)
+	if errQuery != nil {
+		return 0, errQuery
+	}
+	defer res.Close()
+
+	count := 0
+	for res.Next() {
+		count += 1
+	}
+
+	return count, nil
+}
+
 //GROUPCOMMENT DB METHODS
 
 //CreateGroupComment creates a group comment
