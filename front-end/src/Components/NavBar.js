@@ -6,7 +6,7 @@ import '../css/NavBar.css'
 import Logo from '../images/logo.png'
 
 export class NavBar extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -41,25 +41,25 @@ export class NavBar extends Component {
 
     //change once hosted
     if (window.location.href != 'https://romantic-ride-acb817.netlify.app/') {
-       window.location.href = '/'
-    }    
-}
+      window.location.href = '/'
+    }
+  }
 
   render() {
     return (
       <Navbar className="color-nav" variant="light">
-        <Container className = "navcontainer">
+        <Container className="navcontainer">
 
-        <Navbar.Brand href = '/'><img height="50" src={Logo}/></Navbar.Brand>
+          <Navbar.Brand href='/'><img height="50" src={Logo} /></Navbar.Brand>
 
-        <Nav className="ml-auto">
-        <Nav.Link><NavLink to="/">Home</NavLink></Nav.Link>
-        {this.state.loggedIn ? <Nav.Link><NavLink to="/dashboard">My Groups</NavLink></Nav.Link> : null}
-          {this.state.loggedIn ?
-            <Button id = "logout" variant= "link" onClick={() => this.logOut()}>Logout</Button> :
-            <Nav.Link><NavLink to="/authenticate">Log In With UW Gmail</NavLink></Nav.Link>
-          }
-        </Nav>
+          <Nav className="ml-auto">
+            <Nav.Link><NavLink to="/">Home</NavLink></Nav.Link>
+            {this.state.loggedIn ? <Nav.Link><NavLink to="/dashboard">My Groups</NavLink></Nav.Link> : null}
+            {this.state.loggedIn ?
+              <Button id="logout" variant="link" onClick={() => this.logOut()}>Logout</Button> :
+              <Nav.Link><NavLink to="/authenticate">Log In With UW Gmail</NavLink></Nav.Link>
+            }
+          </Nav>
         </Container>
       </Navbar>
     );

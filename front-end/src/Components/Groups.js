@@ -82,7 +82,7 @@ export class Groups extends Component {
         </Container>
         <Container style={{ padding: "3.5rem 0" }} maxWidth="md">
           <Grid container spacing={4}>
-          {this.state.data !== undefined && this.state.data.length < 1
+            {this.state.data !== undefined && this.state.data.length < 1
               ? <Typography gutterBottom variant="h5" component="h4">No groups matching the search query were found. Try creating one!</Typography>
               : null}
             {this.state.data != undefined && this.state.data.map((card) => (
@@ -92,7 +92,7 @@ export class Groups extends Component {
                     <Typography style={{ marginBottom: "25px" }} gutterBottom variant="h4" component="h4">
                       {card.groupName}</Typography>
                     <Typography style={{ marginBottom: "10px" }}>
-                      {card.groupDescription.length > 75 ? card.groupDescription.substring(0, 75) + "..." : card.groupDescription}</Typography>
+                      {card.groupDescription.length > 74 ? card.groupDescription.substring(0, 74) + "..." : card.groupDescription}</Typography>
                   </CardContent>
                   <CardActions>
                     <Button><Link to={{
@@ -103,8 +103,8 @@ export class Groups extends Component {
                       }
                     }}>View </Link></Button>
                     {this.state.auth !== '' ?
-                    <Button size="small" onClick={() => this.onSave(card)}>
-                      {card.isSaved === true ? "Unsave" : "Save"}</Button> : null }
+                      <Button size="small" onClick={() => this.onSave(card)}>
+                        {card.isSaved === true ? "Unsave" : "Save"}</Button> : null}
                   </CardActions>
                 </Card>
               </Grid>

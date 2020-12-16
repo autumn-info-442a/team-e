@@ -1,16 +1,5 @@
 import { React, Component } from "react";
-import {
-  Typography,
-  Paper,
-  Grid,
-  Container,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  TextareaAutosize
-} from "@material-ui/core";
+import { Typography, Paper, Grid, Container, Button, Card, CardActions, CardContent, Dialog, DialogContent, TextareaAutosize } from "@material-ui/core";
 import Alert from '@material-ui/lab/Alert';
 import { Row, Col, Tab, Tabs } from "react-bootstrap";
 import { GetCookie, toJSDate, timeSince } from "../UtilityFunctions";
@@ -35,7 +24,8 @@ export class Group extends Component {
       declineBtnText: "Decline",
       declineBtnColor: "default",
       acceptMembershipID: '',
-      declineMembershipID: ''
+      declineMembershipID: '',
+      showLeaveModal: false
     };
     this.onClick = this.onClick.bind(this);
   }
@@ -113,6 +103,21 @@ export class Group extends Component {
     this.setState({ showSuccess: false });
   }
 
+  clickLeaveHandler() {
+    this.leaveGroup(this.state.auth, this.state.leaveGroupId)
+    this.setState({
+      showLeaveModal: false,
+      leaveGroupId: ''
+    })
+  }
+
+  handleLeave(leaveGroupId) {
+    this.setState({
+      showLeaveModal: true,
+      leaveGroupId: leaveGroupId
+    })
+  }
+
 
   // loads the group info about the group
   // gets group name as prop from Groups
@@ -150,8 +155,8 @@ export class Group extends Component {
     const RequestElement = () => {
       if (this.state.data.joinedStatus === "Joined") {
         return (
-          <Button size="medium" color="primary" onClick={() => this.leaveGroup(this.state.auth, this.state.data.groupId)}>
-            Leave Group</Button>
+          <Button size="medium" color="default" onClick={() => this.handleLeave(this.state.data.groupId)}>
+            Leave </Button>
         )
       } else if (this.state.data.joinedStatus === "Pending") {
         return (
@@ -177,6 +182,21 @@ export class Group extends Component {
       return (
         <div>
           <Container maxWidth="md">
+            {<Dialog
+              open={this.state.showLeaveModal}
+              onClose={() => this.setState({ showLeaveModal: false })}
+              aria-labelledby="Leave Group"
+              aria-describedby="simple-modal-description"
+            >
+              <DialogContent>
+                <Container maxWidth="lg">
+                  <Typography component="h5" align="center" variant="h5" color="textPrimary" gutterBottom>
+                    Are you sure you want to leave this group?
+              </Typography>
+                  <Button style={{ marginLeft: "auto" }} id="delete" variant="dark" size="sm" onClick={() => this.clickLeaveHandler()}>Confirm</Button>
+                </Container>
+              </DialogContent>
+            </Dialog >}
             <Typography
               component="h2"
               variant="h2"
@@ -208,9 +228,9 @@ export class Group extends Component {
                     </Col>
                     <Col className="mt-3 p-3">
                       <Row className="mb-3 px-3">
-                        {this.state.auth !== '' ? <RequestElement></RequestElement> : null}
                         {this.state.auth !== '' ? <Button size="medium" color="primary" onClick={() => this.onSave(this.state.data)}>
                           {this.state.data.isSaved === true ? "Unsave" : "Save"}</Button> : null}
+                          {this.state.auth !== '' ? <RequestElement></RequestElement> : null}
                       </Row>
                       <Container style={{ padding: "0px 10px" }}>
                         <Typography
@@ -324,7 +344,7 @@ export class Group extends Component {
                             </CardActions>
                           </Card>
                         </Grid>
-                      )) : <bold style={{ marginLeft: "10px", marginTop: "20px", marginBottom: "10px" }}>No membership requests to display</bold>}
+                      )) : <bold style={{ padding: "50px", marginLeft: "10px", marginTop: "20px", marginBottom: "10px" }}>No membership requests to display</bold>}
                     </Grid>
                   </div>
                 </Tab> : null}

@@ -157,67 +157,27 @@ export class Categories extends Component {
   };
 
   getColor(categoryId) {
-    if (categoryId%10 == 0) {
+    if (categoryId % 10 == 0) {
       return "#EE9D94"
-    } else if (categoryId%10 == 1) {
-    return "#9DBBE3"
-  } else if (categoryId%10 == 2) {
-    return "#BFE3DF"
-  } else if (categoryId%10 == 3) {
-    return "#A09BCC"
-  } else if (categoryId%10 == 4) {
-    return "#FFF5CC"
-  } else if (categoryId%10 == 5) {
-    return "#90CCDE"
-  } else if (categoryId%10 == 6) {
-    return "teal"
-  } else if (categoryId%10 == 7) {
-    return "#D3F1D2"
-  } else if (categoryId%10 == 8) {
-    return "#F3C6D1"
-  } else {
-    return "#FFD9BD"
+    } else if (categoryId % 10 == 1) {
+      return "#9DBBE3"
+    } else if (categoryId % 10 == 2) {
+      return "#BFE3DF"
+    } else if (categoryId % 10 == 3) {
+      return "#A09BCC"
+    } else if (categoryId % 10 == 4) {
+      return "#FFF5CC"
+    } else if (categoryId % 10 == 5) {
+      return "#90CCDE"
+    } else if (categoryId % 10 == 6) {
+      return "teal"
+    } else if (categoryId % 10 == 7) {
+      return "#D3F1D2"
+    } else if (categoryId % 10 == 8) {
+      return "#F3C6D1"
+    } else {
+      return "#FFD9BD"
+    }
   }
-  }
-
-  // saveCategory = (auth, categoryId) => {
-  //   setTimeout(() => {
-  //     var url = "https://groups.cahillaw.me/v1/categories/" + categoryId
-  //     fetch(url, {
-  //       method: 'post',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Authorization': auth
-  //       }
-  //     })
-  //       .then((response) => {
-  //         if (response.status <= 201) {
-  //           console.log("success")
-  //         } else {
-  //           console.log("failed :(", response.status)
-  //         }
-  //       })
-  //   }, 0)
-  // }
-
-  // unsaveCategory = (auth, categoryId) => {
-  //   setTimeout(() => {
-  //     var url = "https://groups.cahillaw.me/v1/categories/" + categoryId
-  //     fetch(url, {
-  //       method: 'delete',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Authorization': auth
-  //       }
-  //     })
-  //       .then((response) => {
-  //         if (response.status <= 201) {
-  //           console.log("success")
-  //         } else {
-  //           console.log("failed :(", response.status)
-  //         }
-  //       })
-  //   }, 0)
-  // }
 
 }

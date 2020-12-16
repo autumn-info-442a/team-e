@@ -19,8 +19,8 @@ export class BlogPost extends Component {
 
   componentDidMount() {
     var auth = GetCookie("access_token");
-    if(this.props.location.state) {
-      this.getBlogComments(auth,this.props.location.state.data.groupId,this.props.location.state.blogPost.blogPostId, 1)
+    if (this.props.location.state) {
+      this.getBlogComments(auth, this.props.location.state.data.groupId, this.props.location.state.blogPost.blogPostId, 1)
       this.setState({
         auth: auth,
         blogPost: this.props.location.state.blogPost,
@@ -104,72 +104,74 @@ export class BlogPost extends Component {
       }
     };
 
-    if (this.state.blogPost && this.state.groupData) {    
+    if (this.state.blogPost && this.state.groupData) {
       return (<div>
-          <Container maxWidth="md">
-            <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
-              {this.state.blogPost.postTitle}
-              </Typography>
-            < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "300px", height: "3px" }} />
-            <Paper variant="elevation" style={{ padding: "5px", marginBottom:"20px"}}>
-            <div style={{width:"100%", marginBottom: "10px"}} >
-              <div style={{ minHeight: "350px", maxHeight: "450px", minWidth:"50%", borderRadius:"5px",
-              maxWidth:"600px", marginLeft: "auto", marginRight: "auto", display: "block", backgroundColor:"#A09BCC"}}
-               /></div>
-            <Typography style={{marginBottom:"25px"}} variant="subtitle1" align="center">
-            Created by {this.state.blogPost.user.firstName} {this.state.blogPost.user.lastName} <time class="timeago" dateTime={toJSDate(this.state.blogPost.createdAt)} title={toJSDate(this.state.blogPost.createdAt)}>{timeSince(toJSDate(this.state.blogPost.createdAt))}</time> ago
+        <Container maxWidth="md">
+          <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
+            {this.state.blogPost.postTitle}
+          </Typography>
+          < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "300px", height: "3px" }} />
+          <Paper variant="elevation" style={{ padding: "5px", marginBottom: "20px" }}>
+            <div style={{ width: "100%", marginBottom: "10px" }} >
+              <div style={{
+                minHeight: "350px", maxHeight: "450px", minWidth: "50%", borderRadius: "5px",
+                maxWidth: "600px", marginLeft: "auto", marginRight: "auto", display: "block", backgroundColor: "#A09BCC"
+              }}
+              /></div>
+            <Typography style={{ marginBottom: "25px" }} variant="subtitle1" align="center">
+              Created by {this.state.blogPost.user.firstName} {this.state.blogPost.user.lastName} <time class="timeago" dateTime={toJSDate(this.state.blogPost.createdAt)} title={toJSDate(this.state.blogPost.createdAt)}>{timeSince(toJSDate(this.state.blogPost.createdAt))}</time> ago
               </Typography>
             <Typography variant="subtitle1" color="textPrimary">
               {this.state.blogPost.postContent}
             </Typography>
-          <Row>
-            <Col>
-              <br></br>
-              {this.state.auth !== ''? 
-              <div>
-              <Typography variant="subtitle1" color="textPrimary">
-                Leave a comment
+            <Row>
+              <Col>
+                <br></br>
+                {this.state.auth !== '' ?
+                  <div>
+                    <Typography variant="subtitle1" color="textPrimary">
+                      Leave a comment
                 </Typography>
-              <TextareaAutosize style={{ width: "100%" }} label="top level comment" rowsMin={3} onChange={this.handleNewBlogCommentChange} />
-              <Button style={{ marginBottom: "15px" }} size="medium" color="primary" onClick={() => this.clickSubmitHandler()}>Create Comment</Button>
-              <ErrorAlert></ErrorAlert>
-              <SuccessAlert></SuccessAlert>
-              <hr
-                style={{
-                  marginTop: "-10px",
-                }}
-              />
-              </div> : null }
-              <Typography
-                component="h6"
-                variant="h6"
-                align="left"
-                color="textSecondary"
-              >
-                Comments
+                    <TextareaAutosize style={{ width: "100%" }} label="top level comment" rowsMin={3} onChange={this.handleNewBlogCommentChange} />
+                    <Button style={{ marginBottom: "15px" }} size="medium" color="primary" onClick={() => this.clickSubmitHandler()}>Create Comment</Button>
+                    <ErrorAlert></ErrorAlert>
+                    <SuccessAlert></SuccessAlert>
+                    <hr
+                      style={{
+                        marginTop: "-10px",
+                      }}
+                    />
+                  </div> : null}
+                <Typography
+                  component="h6"
+                  variant="h6"
+                  align="left"
+                  color="textSecondary"
+                >
+                  Comments
                 </Typography>
-              <hr
-                style={{
-                  marginTop: "5px",
-                  width: "100%",
-                  marginBottom: "2px"
-                }}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              {this.state.commentData !== '' ? <BlogComments isAdmin={this.state.groupData.isAdmin} blogPost={this.state.blogPost} auth={this.state.auth} groupId={this.state.groupData.groupId} commentData={this.state.commentData} moreResults={this.state.moreResults} getBlogComments={this.getBlogComments} showSuccessHandler = {this.showSuccessHandler}/> : null}
-              {this.state.moreResults && this.state.commentData.length > 2 ? <Button size="large" color="primary" onClick={() => this.getBlogComments(this.state.auth, this.state.groupData.groupId, this.state.blogPost.blogPostId, this.state.page + 1)}>
-                Show more comments</Button> : null}
-            </Col>
-          </Row>
+                <hr
+                  style={{
+                    marginTop: "5px",
+                    width: "100%",
+                    marginBottom: "2px"
+                  }}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                {this.state.commentData !== '' ? <BlogComments isAdmin={this.state.groupData.isAdmin} blogPost={this.state.blogPost} auth={this.state.auth} groupId={this.state.groupData.groupId} commentData={this.state.commentData} moreResults={this.state.moreResults} getBlogComments={this.getBlogComments} showSuccessHandler={this.showSuccessHandler} /> : null}
+                {this.state.moreResults && this.state.commentData.length > 2 ? <Button size="large" color="primary" onClick={() => this.getBlogComments(this.state.auth, this.state.groupData.groupId, this.state.blogPost.blogPostId, this.state.page + 1)}>
+                  Show more comments</Button> : null}
+              </Col>
+            </Row>
           </Paper>
-          </Container>
-        </div>
+        </Container>
+      </div>
       );
     } else if (this.state.notFound) {
-      return <p style = {{textAlign:"center", fontSize:"40px"}}>404 Page Not Found</p>
+      return <p style={{ textAlign: "center", fontSize: "40px" }}>404 Page Not Found</p>
     }
 
     return null;
@@ -240,14 +242,14 @@ export class BlogPost extends Component {
           if (response.status <= 201) {
             response.json().then((data) => {
               console.log(data)
-              if(page === 1) {
+              if (page === 1) {
                 this.setState({
                   commentData: data,
                 });
               } else {
                 var newData = this.state.commentData.concat(data)
                 console.log(newData.length)
-                if(newData.length % 3 !== 0 || data.length === 0) {
+                if (newData.length % 3 !== 0 || data.length === 0) {
                   this.setState({
                     moreResults: false,
                     commentData: newData,

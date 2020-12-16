@@ -1,23 +1,23 @@
 import React from 'react'
 
 class Authenticate extends React.Component {
-    constructor (props) {
-      super(props)
-  
-      this.state = {
-      }
-    }
+  constructor(props) {
+    super(props)
 
-    componentDidMount() {
-        window.location.href = 'https://groups.cahillaw.me/login'
+    this.state = {
     }
-
-    render = () => {
-      return (
-        null
-      )
-    }
-
   }
-  
-  export default Authenticate
+
+  componentDidMount() {
+    window.location.href = 'https://groups.cahillaw.me/login'
+  }
+
+  render = () => {
+    return (
+      null
+    )
+  }
+
+}
+
+export default Authenticate

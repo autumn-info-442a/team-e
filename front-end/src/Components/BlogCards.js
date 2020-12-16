@@ -8,7 +8,7 @@ import {
   CardContent,
   CardMedia,
   Hidden,
-  Dialog, 
+  Dialog,
   DialogContent
 } from "@material-ui/core";
 import { Link } from 'react-router-dom'
@@ -67,7 +67,7 @@ export class BlogCards extends Component {
     this.setState({
       showModal: true,
       blogId: blogId
-     })
+    })
   }
 
   clickSubmitHandler() {
@@ -75,7 +75,7 @@ export class BlogCards extends Component {
     this.setState({
       showModal: false,
       blogId: ''
-     })
+    })
   }
 
 
@@ -86,21 +86,21 @@ export class BlogCards extends Component {
     if (this.state.blogs) {
       return (
         <div>
-              {<Dialog 
-              open={this.state.showModal}
-              onClose={() => this.setState({ showModal: false })}
-              aria-labelledby="Delete Blog Post"
-              aria-describedby="simple-modal-description"
-            >
+          {<Dialog
+            open={this.state.showModal}
+            onClose={() => this.setState({ showModal: false })}
+            aria-labelledby="Delete Blog Post"
+            aria-describedby="simple-modal-description"
+          >
             <DialogContent>
-               <Container maxWidth="lg">
-              <Typography component="h5" align="center" variant="h5" color="textPrimary" gutterBottom>
-              Are you sure you want to delete this blog post?
+              <Container maxWidth="lg">
+                <Typography component="h5" align="center" variant="h5" color="textPrimary" gutterBottom>
+                  Are you sure you want to delete this blog post?
               </Typography>
-              <Button style={{marginLeft: "auto"}} id="delete" variant= "dark" size= "sm" onClick={() => this.clickSubmitHandler()}>Confirm</Button>
+                <Button style={{ marginLeft: "auto" }} id="delete" variant="dark" size="sm" onClick={() => this.clickSubmitHandler()}>Confirm</Button>
               </Container>
-              </DialogContent>
-              </Dialog > }
+            </DialogContent>
+          </Dialog >}
           <Container style={{ padding: "1rem 0" }} maxWidth="md">
             <NewBlog
               groupId={this.props.groupId}
@@ -110,46 +110,46 @@ export class BlogCards extends Component {
               <Grid container spacing={4}>
                 {this.state.blogs.map((blogPost) => (
                   <Grid item xs={12} md={12}>
-                    <Card style={{ display: "flex", padding:"5px" }}>
+                    <Card style={{ display: "flex", padding: "5px" }}>
                       <Hidden xsDown>
                         <div style={{ width: 160, backgroundColor: "#EE9D94", borderRadius: "5px" }}>
-                      </div>
+                        </div>
                       </Hidden>
                       <div style={{ flex: 1 }}>
                         <CardContent>
-                        <Row>
-                    <Col xs={10}>
-                          <Typography component="h3" variant="h5">
-                            {blogPost.postTitle}
-                          </Typography>
-                          <Typography style={{margin:"2px 0 10px 0"}} variant="subtitle1" color="textSecondary">
-                            Created by {blogPost.user.firstName} {blogPost.user.lastName} <time class="timeago" dateTime={toJSDate(blogPost.createdAt)} title={toJSDate(blogPost.createdAt)}>{timeSince(toJSDate(blogPost.createdAt))}</time> ago
+                          <Row>
+                            <Col xs={10}>
+                              <Typography component="h3" variant="h5">
+                                {blogPost.postTitle}
+                              </Typography>
+                              <Typography style={{ margin: "2px 0 10px 0" }} variant="subtitle1" color="textSecondary">
+                                Created by {blogPost.user.firstName} {blogPost.user.lastName} <time class="timeago" dateTime={toJSDate(blogPost.createdAt)} title={toJSDate(blogPost.createdAt)}>{timeSince(toJSDate(blogPost.createdAt))}</time> ago
                             </Typography>
-                          <Typography variant="subtitle1" paragraph>
-                            {blogPost.postContent.substring(0, 115) + "..."}
-                          </Typography>
-                          <Button ><Link to={{
-                            pathname: '/group/' + this.props.groupId + '/blog/' + blogPost.blogPostId,
-                            state: {
-                              groupId: this.props.groupId,
-                              data: this.props.data,
-                              blogPost: blogPost,
-                            }
-                          }}>Continue Reading...</Link>
-                          </Button>
-                          </Col>
-                  <Col xs={2}>
-                          {/* if isAdmin or wrote the comment? Simplifief to if admin */}
-                          {this.props.isAdmin
-                            ? <IconButton onClick={() => this.handleDelete(blogPost.blogPostId)} aria-label="delete" variant="contained" size="small" style={{ padding: "0", marginRight: "0px", marginLeft: "60px" }}><RemoveCircleOutlineIcon style={{ fontSize: "15px" }} /></IconButton>
-                             : null} 
+                              <Typography variant="subtitle1" paragraph>
+                                {blogPost.postContent.substring(0, 115) + "..."}
+                              </Typography>
+                              <Button ><Link to={{
+                                pathname: '/group/' + this.props.groupId + '/blog/' + blogPost.blogPostId,
+                                state: {
+                                  groupId: this.props.groupId,
+                                  data: this.props.data,
+                                  blogPost: blogPost,
+                                }
+                              }}>Continue Reading...</Link>
+                              </Button>
+                            </Col>
+                            <Col xs={2}>
+                              {/* if isAdmin or wrote the comment? Simplifief to if admin */}
+                              {this.props.isAdmin
+                                ? <IconButton onClick={() => this.handleDelete(blogPost.blogPostId)} aria-label="delete" variant="contained" size="small" style={{ padding: "0", marginRight: "0px", marginLeft: "60px" }}><RemoveCircleOutlineIcon style={{ fontSize: "15px" }} /></IconButton>
+                                : null}
                             </Col></Row>
                         </CardContent>
                       </div>
                     </Card>
                   </Grid>
                 ))}
-              </Grid> : <bold>No blog posts yet...</bold>}
+              </Grid> : <div style={{ padding: "40px", marginLeft: "10px", marginTop: "15px", marginBottom: "10px" }}><bold>No blog posts yet...</bold></div>}
           </Container>
         </div>
       );
@@ -180,7 +180,7 @@ export class BlogCards extends Component {
 
   removeFromBlogCards = (blogPostId) => {
     var blogs = this.state.blogs
-    for(var i = 0; i<blogs.length; i++) {
+    for (var i = 0; i < blogs.length; i++) {
       if (blogs[i].blogPostId === blogPostId) {
         blogs.splice(i, 1)
         break

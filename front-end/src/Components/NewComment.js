@@ -14,8 +14,6 @@ import {
 import Alert from '@material-ui/lab/Alert';
 import { Redirect } from "react-router-dom";
 
-// Get replyID 
-
 export class NewComment extends React.Component {
   constructor(props) {
     super(props)

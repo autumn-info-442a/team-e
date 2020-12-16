@@ -78,7 +78,7 @@ export class UserDashboard extends Component {
             <DialogContent>
               <Container maxWidth="lg">
                 <Typography component="h5" align="center" variant="h5" color="textPrimary" gutterBottom>
-                  Are you sure you want to leave this group? 
+                  Are you sure you want to leave this group?
               </Typography>
                 <Button style={{ marginLeft: "auto" }} id="delete" variant="dark" size="sm" onClick={() => this.clickLeaveHandler()}>Confirm</Button>
               </Container>
@@ -120,7 +120,7 @@ export class UserDashboard extends Component {
                     <Typography style={{ marginBottom: "25px" }} gutterBottom variant="h4" component="h4">
                       {card.groupName}</Typography>
                     <Typography style={{ marginBottom: "10px" }}>
-                      {card.groupDescription.length > 115 ? card.groupDescription.substring(0, 75) + "..." : card.groupDescription}</Typography>
+                      {card.groupDescription.length > 74 ? card.groupDescription.substring(0, 74) + "..." : card.groupDescription}</Typography>
                   </CardContent>
                   <CardActions>
                     <Button>
@@ -135,18 +135,18 @@ export class UserDashboard extends Component {
                         View{" "}
                       </Link>
                     </Button>
-                    <Button size="medium"  onClick={() => this.handleDelete(card.groupId)}>
+                    <Button size="medium" onClick={() => this.handleDelete(card.groupId)}>
                       Delete</Button>
                   </CardActions>
                 </Card>
               </Grid>
             ))}</Grid> :
               <Grid xs={6} sm={4} md={4}>
-                <Container style={{width:"300%", margin: "auto", padding:"10px"}}>
-                    <Typography gutterBottom variant="h5" component="h2" style={{textAlign:"center", fontSize:"20px"}}>
-                      You have 0 created groups.
+                <Container style={{ width: "300%", margin: "auto", padding: "10px" }}>
+                  <Typography gutterBottom variant="h5" component="h2" style={{ textAlign: "center", fontSize: "20px" }}>
+                    You have 0 created groups.
                       </Typography>
-                      </Container>
+                </Container>
               </Grid>}
           </Container>
           <hr
@@ -175,7 +175,7 @@ export class UserDashboard extends Component {
                     <Typography style={{ marginBottom: "25px" }} gutterBottom variant="h4" component="h4">
                       {card.groupName}</Typography>
                     <Typography style={{ marginBottom: "10px" }}>
-                      {card.groupDescription.length > 115 ? card.groupDescription.substring(0, 75) + "..." : card.groupDescription}</Typography>
+                      {card.groupDescription.length > 74 ? card.groupDescription.substring(0, 74) + "..." : card.groupDescription}</Typography>
                   </CardContent>
                   <CardActions>
                     <Button>
@@ -197,11 +197,11 @@ export class UserDashboard extends Component {
               </Grid>
             ))}</Grid> :
               <Grid xs={6} sm={4} md={4}>
-                <Container style={{width:"300%", margin: "auto", padding:"10px"}}>
-                    <Typography gutterBottom variant="h5" component="h2" style={{textAlign:"center", fontSize:"20px"}}>
-                      You have 0 joined groups.
+                <Container style={{ width: "300%", margin: "auto", padding: "10px" }}>
+                  <Typography gutterBottom variant="h5" component="h2" style={{ textAlign: "center", fontSize: "20px" }}>
+                    You have 0 joined groups.
                       </Typography>
-                      </Container>
+                </Container>
               </Grid>}
           </Container>
           <hr
@@ -230,7 +230,7 @@ export class UserDashboard extends Component {
                     <Typography style={{ marginBottom: "25px" }} gutterBottom variant="h4" component="h4">
                       {card.groupName}</Typography>
                     <Typography style={{ marginBottom: "10px" }}>
-                      {card.groupDescription.length > 115 ? card.groupDescription.substring(0, 75) + "..." : card.groupDescription}</Typography>
+                      {card.groupDescription.length > 74 ? card.groupDescription.substring(0, 74) + "..." : card.groupDescription}</Typography>
                   </CardContent>
                   <CardActions>
                     <Button>
@@ -250,11 +250,11 @@ export class UserDashboard extends Component {
               </Grid>
             ))}</Grid> :
               <Grid xs={6} sm={4} md={4}>
-                <Container style={{width:"300%", margin: "auto", padding:"10px"}}>
-                    <Typography gutterBottom variant="h5" component="h2" style={{textAlign:"center", fontSize:"20px"}}>
-                      You have 0 saved groups.
+                <Container style={{ width: "300%", margin: "auto", padding: "10px" }}>
+                  <Typography gutterBottom variant="h5" component="h2" style={{ textAlign: "center", fontSize: "20px" }}>
+                    You have 0 saved groups.
                       </Typography>
-                      </Container>
+                </Container>
               </Grid>}
           </Container>
         </div>
