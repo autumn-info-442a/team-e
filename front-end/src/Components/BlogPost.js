@@ -9,18 +9,30 @@ export class BlogPost extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newComment: ''
+      newComment: '',
+      commentData: '',
+      moreResults: true,
+      page: 1,
+      showSuccess: false
     };
   }
 
   componentDidMount() {
-    console.log(this.props.location.state)
     var auth = GetCookie("access_token");
-    this.setState({
-      auth: auth,
-      blogPost: this.props.location.state.blogPost,
-      groupData: this.props.location.state.data
-    })
+    if(this.props.location.state) {
+      this.getBlogComments(auth,this.props.location.state.data.groupId,this.props.location.state.blogPost.blogPostId, 1)
+      this.setState({
+        auth: auth,
+        blogPost: this.props.location.state.blogPost,
+        groupData: this.props.location.state.data
+      })
+    } else {
+      var groupId = this.props.location.pathname.split("/", 5)[2];
+      var blogId = this.props.location.pathname.split("/", 5)[4];
+      this.getGroup(auth, groupId)
+      this.getBlogPost(auth, groupId, blogId)
+      this.getBlogComments(auth, groupId, blogId, 1)
+    }
   }
 
   handleNewBlogCommentChange = (event) => {
@@ -45,6 +57,17 @@ export class BlogPost extends Component {
     }
   }
 
+  removeAlert() {
+    this.setState({
+      showError: false,
+      errorMessage: "",
+    });
+  }
+
+  removeSuccessAlert() {
+    this.setState({ showSuccess: false });
+  }
+
 
   render() {
     const ErrorAlert = () => {
@@ -59,6 +82,22 @@ export class BlogPost extends Component {
       }
     }
 
+    const SuccessAlert = () => {
+      if (this.state.showSuccess === true) {
+        return (
+          <Alert
+            severity="success"
+            onClose={() => this.removeSuccessAlert()}
+            dismissible
+          >
+            Comment posted!
+          </Alert>
+        );
+      } else {
+        return null;
+      }
+    };
+
     if (this.state.blogPost && this.state.groupData) {    
       return (<div>
           <Container maxWidth="md">
@@ -66,7 +105,7 @@ export class BlogPost extends Component {
               {this.state.blogPost.postTitle}
               </Typography>
             < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "200px", height: "3px" }} />
-            <Paper variant="elevation" style={{padding: "5px"}}>
+            <Paper variant="elevation" style={{ padding: "5px", marginBottom:"20px"}}>
             <div style={{width:"100%", marginBottom: "10px"}} ><img style={{ maxHeight: "400px", marginLeft: "auto", marginRight: "auto", display: "block"}} src="https://source.unsplash.com/random" /></div>
             <Typography  variant="subtitle1" align="center">
             Created by {this.state.blogPost.user.firstName} {this.state.blogPost.user.lastName} <time class="timeago" dateTime={toJSDate(this.state.blogPost.createdAt)} title={toJSDate(this.state.blogPost.createdAt)}>{timeSince(toJSDate(this.state.blogPost.createdAt))}</time> ago
@@ -85,6 +124,7 @@ export class BlogPost extends Component {
               <TextareaAutosize style={{ width: "100%" }} label="top level comment" rowsMin={3} onChange={this.handleNewBlogCommentChange} />
               <Button style={{ marginBottom: "15px" }} size="medium" color="primary" onClick={() => this.clickSubmitHandler()}>Create Comment</Button>
               <ErrorAlert></ErrorAlert>
+              <SuccessAlert></SuccessAlert>
               <hr
                 style={{
                   marginTop: "-10px",
@@ -110,13 +150,17 @@ export class BlogPost extends Component {
           </Row>
           <Row>
             <Col>
-              <BlogComments isAdmin={this.state.groupData.isAdmin} auth={this.state.auth} blogPost={this.state.blogPost} groupData={this.state.groupData} />
+              {this.state.commentData !== '' ? <BlogComments isAdmin={this.state.groupData.isAdmin} blogPost={this.state.blogPost} auth={this.state.auth} groupId={this.state.groupData.groupId} commentData={this.state.commentData} moreResults={this.state.moreResults} /> : null}
+              {this.state.moreResults && this.state.commentData.length > 2 ? <Button size="large" color="primary" onClick={() => this.getBlogComments(this.state.auth, this.state.groupData.groupId, this.state.blogPost.blogPostId, this.state.page + 1)}>
+                Show more comments</Button> : null}
             </Col>
           </Row>
           </Paper>
           </Container>
         </div>
       );
+    } else if (this.state.notFound) {
+      return <p style = {{textAlign:"center", fontSize:"40px"}}>404 Page Not Found</p>
     }
 
     return null;
@@ -154,12 +198,118 @@ export class BlogPost extends Component {
           if (response.status <= 201) {
             response.json().then((data) => {
               console.log(data)
+              var commentData = this.state.commentData
+              commentData.unshift(data)
+              this.setState({
+                commentData: commentData,
+                showSuccess: true
+              })
             })
           } else {
             console.log("failed :(", response.status)
           }
         })
     }, 0)
+  }
+
+  getBlogComments = (auth, groupId, blogId, page) => {
+    setTimeout(() => {
+      console.log(page)
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId + "/comments?";
+      if (page !== '') {
+        url = url + "page=" + page;
+      }
+
+      fetch(url, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+        .then((response) => {
+          if (response.status <= 201) {
+            response.json().then((data) => {
+              console.log(data)
+              if(page === 1) {
+                this.setState({
+                  commentData: data,
+                });
+              } else {
+                var newData = this.state.commentData.concat(data)
+                console.log(newData.length)
+                if(newData.length % 3 !== 0 || data.length === 0) {
+                  this.setState({
+                    moreResults: false,
+                    commentData: newData,
+                    page: this.state.page + 1
+                  })
+                } else {
+                  this.setState({
+                    commentData: newData,
+                    page: this.state.page + 1
+                  })
+                }
+              }
+            });
+          } else {
+            console.log("failed :(")
+          }
+        })
+    }, 0)
+  }
+
+  getGroup = (auth, groupId) => {
+    setTimeout(() => {
+      console.log(auth);
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId;
+      fetch(url, {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth,
+        },
+      }).then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            this.setState({
+              groupData: data,
+              auth: auth
+            });
+          });
+        } else {
+          console.log("failed :(");
+        }
+      });
+    }, 0);
+  };
+
+  getBlogPost = (auth, groupId, blogId) => {
+    setTimeout(() => {
+      console.log(auth);
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + '/blog/' + blogId
+      fetch(url, {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth,
+        },
+      }).then((response) => {
+        if (response.status <= 201) {
+          response.json().then((data) => {
+            this.setState({
+              blogPost: data,
+              auth: auth
+            });
+          });
+        } else {
+          console.log("failed :(");
+          this.setState({
+            notFound: true
+          })
+        }
+      });
+    }, 0);
   }
 }
 

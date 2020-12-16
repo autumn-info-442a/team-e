@@ -132,7 +132,7 @@ export class BlogCards extends Component {
                             {blogPost.postContent.substring(0, 115) + "..."}
                           </Typography>
                           <Button ><Link to={{
-                            pathname: '/blog/' + blogPost.blogPostId,
+                            pathname: '/group/' + this.props.groupId + '/blog/' + blogPost.blogPostId,
                             state: {
                               groupId: this.props.groupId,
                               data: this.props.data,
@@ -173,6 +173,7 @@ export class BlogCards extends Component {
       }).then((response) => {
         if (response.status <= 201) {
           console.log("success");
+          this.removeFromBlogCards(blogId)
         } else {
           console.log("failed :(", response.status);
         }
@@ -180,4 +181,17 @@ export class BlogCards extends Component {
     }, 0);
   }
 
+  removeFromBlogCards = (blogPostId) => {
+    var blogs = this.state.blogs
+    for(var i = 0; i<blogs.length; i++) {
+      if (blogs[i].blogPostId === blogPostId) {
+        blogs.splice(i, 1)
+        break
+      }
+    }
+
+    this.setState({
+      blogs: blogs
+    })
+  }
 }

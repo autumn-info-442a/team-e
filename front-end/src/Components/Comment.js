@@ -54,7 +54,6 @@ export class Comment extends React.Component {
               <CardContent
                 style={{ padding: "5px", borderBottom: "0.5px solid #ebebeb" }}
               >
-                {console.log("CARD", card)}
                  <Row>
                   <Col xs={10}>
                   <Typography

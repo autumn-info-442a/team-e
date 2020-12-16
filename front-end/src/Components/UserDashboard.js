@@ -89,7 +89,6 @@ export class UserDashboard extends Component {
             >
               Admin Groups
             </Typography>
-            {/* End hero unit */}
             {this.state.data.adminGroups.length > 0 ? <Grid container spacing={4}>{this.state.data.adminGroups.map((card) => (
                 <Grid item key={card} xs={6} sm={4} md={4}>
                   <Card
@@ -122,6 +121,8 @@ export class UserDashboard extends Component {
                           View{" "}
                         </Link>
                       </Button>
+                      <Button size="medium" color="primary" onClick={() => this.deleteGroup(this.state.auth, card.groupId)}> 
+                      Delete Group</Button>
                     </CardActions>
                   </Card>
                 </Grid>
@@ -356,6 +357,41 @@ export class UserDashboard extends Component {
     for(var i = 0; i<data.joinedGroups.length; i++) {
       if (data.joinedGroups[i].groupId === groupId) {
         data.joinedGroups.splice(i, 1)
+        break
+      }
+    }
+
+    this.setState({
+      data: data
+    })
+  }
+
+  deleteGroup = (auth, groupId) => {
+    setTimeout(() => {
+      var url = "https://groups.cahillaw.me/v1/groups/" + groupId 
+      fetch(url, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        }
+      })
+        .then((response) => {
+          if (response.status <= 201) {
+            console.log("success")
+            this.removeFromAdminGroups(groupId)
+          } else {
+            console.log("failed :(", response.status)
+          }
+        })
+    }, 0)
+  }
+
+  removeFromAdminGroups = (groupId) => {
+    var data = this.state.data
+    for(var i = 0; i<data.adminGroups.length; i++) {
+      if (data.adminGroups[i].groupId === groupId) {
+        data.adminGroups.splice(i, 1)
         break
       }
     }

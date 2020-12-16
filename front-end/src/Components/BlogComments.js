@@ -14,11 +14,6 @@ export class BlogComments extends React.Component {
     };
   }
 
-  componentDidMount() {
-    console.log("POST", this.props.blogPost);
-    this.getBlogComments(this.props.auth, this.props.groupData.groupId, this.props.blogPost.blogPostId, 1);
-  }
-
   handleDelete(blogCommentId) {
     this.setState({
       showModal: true,
@@ -52,28 +47,34 @@ export class BlogComments extends React.Component {
               </Container>
               </DialogContent>
               </Dialog > }
-        {this.state.data ? (
+        {this.props.commentData  && this.props.commentData.length > 0 ? (
           <div>
-            {this.state.data.map((card) => (
+            {this.props.commentData.map((card) => (
               <CardContent key={card.blogCommentId}
                 style={{ padding: "5px", borderBottom: "0.5px solid #ebebeb" }}
               >
                 <Row>
                   <Col xs={10}>
-                  <Typography
+                  {!card.deleted ? <Typography
                   component="p"
                   variant="p"
                   style={{ fontSize: "15px" }}
                 >
                   {card.commentContent}
-                </Typography>
+                  </Typography> : <Typography
+                  component="p"
+                  variant="p"
+                  style={{ fontSize: "15px", color:"#e34949" }}
+                >
+                  Comment deleted
+                  </Typography>}
                 <div style = {{float: "left", fontSize: "13px", fontWeight: "500"}}>{card.user.firstName} {card.user.lastName} </div>
                 <div style = {{float: "left", marginLeft: "8px", fontSize: "13px"}}>posted <time class="timeago" dateTime={toJSDate(card.createdAt)} title={toJSDate(card.createdAt)}>{timeSince(toJSDate(card.createdAt))}</time> ago</div>
                 <br></br>
                   </Col>
                   <Col xs={2}>
                 {/* if isAdmin or wrote the comment? Simplifief to if admin */}
-                {this.props.isAdmin
+                {this.props.isAdmin && !card.deleted
                 ? <IconButton onClick={() => this.handleDelete(card.blogCommentId)} aria-label="delete" variant="contained" size="small" style={{padding:"0", marginRight:"0px", marginLeft:"60px"}}><RemoveCircleOutlineIcon style={{fontSize: "15px"}}/></IconButton>
                 : null}
                   </Col>
@@ -89,40 +90,11 @@ export class BlogComments extends React.Component {
             }}
             maxWidth="md"
           >
-            <h4 id="title">No comments yet...</h4>
+            <bold>No comments yet...</bold>
           </Container>
         )}
       </div>
     );
-  }
-
-  getBlogComments = (auth, groupId, blogId, page) => {
-    setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId + "/comments?"
-      if (page !== '') {
-        url = url + "page=" + page
-      }
-
-      fetch(url, {
-        method: 'get',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': auth
-        }
-      })
-        .then((response) => {
-          if (response.status <= 201) {
-            response.json().then((data) => {
-                this.setState({
-                    data: data
-                })
-              console.log(data)
-            })
-          } else {
-            console.log("failed :(")
-          }
-        })
-    }, 0)
   }
 
   deleteBlogComment = (auth, groupId, blogId, commentId) => {
@@ -137,12 +109,27 @@ export class BlogComments extends React.Component {
       }).then((response) => {
         if (response.status <= 201) {
           console.log("success");
+          this.setAsDeleted(commentId);
         } else {
           console.log("failed :(", response.status);
         }
       });
     }, 0);
   };
+
+  setAsDeleted = (blogCommentId) => {
+    var commentData = this.props.commentData
+    for(var i = 0; i<commentData.length; i++) {
+      if (commentData[i].blogCommentId === blogCommentId) {
+        commentData[i].deleted = true
+        break
+      }
+    }
+
+    this.setState({
+      commentData: commentData
+    })
+  }
 
 }
 

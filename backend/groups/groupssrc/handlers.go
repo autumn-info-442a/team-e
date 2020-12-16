@@ -2,6 +2,7 @@ package groupssrc
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"path"
 	"strconv"
@@ -522,15 +523,15 @@ func (ctx *GroupContext) CommentHandler(w http.ResponseWriter, r *http.Request) 
 //GenericBlogPostHandler handles requests to create new blog posts
 func (ctx *GroupContext) GenericBlogPostHandler(w http.ResponseWriter, r *http.Request) {
 	user := &User{}
-	user.UserID = 0
-
 	userHeader := r.Header.Get("X-User")
-	if len(userHeader) != 0 {
+	if len(userHeader) > 0 {
 		errDecode := json.Unmarshal([]byte(userHeader), &user)
 		if errDecode != nil {
 			http.Error(w, "Error getting user", http.StatusInternalServerError)
 			return
 		}
+	} else {
+		user.UserID = 0
 	}
 
 	pathid := r.URL.Path
@@ -580,6 +581,8 @@ func (ctx *GroupContext) GenericBlogPostHandler(w http.ResponseWriter, r *http.R
 		//inputs: blog post struct
 		//output: blog post struct, 201 status code
 	} else if r.Method == http.MethodPost {
+		fmt.Println(group.User.UserID)
+		fmt.Println(user.UserID)
 		if group.JoinedState != "Joined" && group.User.UserID != user.UserID {
 			http.Error(w, "Access forbidden, not in group", http.StatusForbidden)
 			return
@@ -617,15 +620,16 @@ func (ctx *GroupContext) GenericBlogPostHandler(w http.ResponseWriter, r *http.R
 //BlogPostHandler is the blog controller, handles requests for an existing blog post
 func (ctx *GroupContext) BlogPostHandler(w http.ResponseWriter, r *http.Request) {
 	user := &User{}
-	user.UserID = 0
-
 	userHeader := r.Header.Get("X-User")
-	if len(userHeader) != 0 {
+	fmt.Println(len(userHeader))
+	if len(userHeader) > 0 {
 		errDecode := json.Unmarshal([]byte(userHeader), &user)
 		if errDecode != nil {
 			http.Error(w, "Error getting user", http.StatusInternalServerError)
 			return
 		}
+	} else {
+		user.UserID = 0
 	}
 
 	pathid := r.URL.Path
@@ -685,7 +689,9 @@ func (ctx *GroupContext) BlogPostHandler(w http.ResponseWriter, r *http.Request)
 		//inputs: blog post id
 		//output: 200 status code
 	} else if r.Method == http.MethodDelete {
-		if group.JoinedState != "Joined" || user.UserID != group.User.UserID { //2nd is if user is group admin
+		fmt.Println(group.User.UserID)
+		fmt.Println(user.UserID)
+		if group.JoinedState != "Joined" && user.UserID != group.User.UserID { //2nd is if user is group admin
 			http.Error(w, "Access forbidden, not in group", http.StatusForbidden)
 			return
 		}
@@ -941,7 +947,7 @@ func (ctx *GroupContext) BlogCommentHandler(w http.ResponseWriter, r *http.Reque
 		//output: 200 status code
 	} else if r.Method == http.MethodDelete {
 		//you created comment / you are group admin
-		if bc.User.UserID != user.UserID || bc.User.UserID != group.User.UserID {
+		if bc.User.UserID != user.UserID && bc.User.UserID != group.User.UserID {
 			http.Error(w, "Access forbidden", http.StatusForbidden)
 			return
 		}

@@ -275,6 +275,7 @@ export class Group extends Component {
                    groupId={this.state.groupId}
                    data = {this.state.data}
                    isAdmin = {this.state.data.isAdmin}
+                   auth = {this.state.auth}
                   />
                 </Tab>
                 {this.state.data.isAdmin ? <Tab eventKey="profile" title="Member Requests">
@@ -330,6 +331,8 @@ export class Group extends Component {
           </Container>
         </div>
       );
+    } else if (this.state.notFound) {
+      return <p style = {{textAlign:"center", fontSize:"40px"}}>404 Page Not Found</p>
     }
 
     return null;
@@ -404,6 +407,9 @@ export class Group extends Component {
           });
         } else {
           console.log("failed :(");
+          this.setState({
+            notFound: true
+          })
         }
       });
     }, 0);

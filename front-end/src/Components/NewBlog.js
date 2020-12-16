@@ -18,7 +18,6 @@ import {
   DialogContent,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-import { Redirect } from "react-router-dom";
 
 export class NewBlog extends React.Component {
   constructor(props) {
@@ -29,7 +28,6 @@ export class NewBlog extends React.Component {
       errorMessage: "",
       postTitle: "",
       postContent: "",
-      redirect: false,
       blogPost: '',
       buttonText: "Create Post",
       buttonColor: "default"
@@ -130,17 +128,6 @@ export class NewBlog extends React.Component {
     if (this.props.data != '') {
       return (
         <div>
-          {this.state.redirect ?
-      <Redirect to={{
-        pathname: '/blog/' + this.state.blogPost.blogPostId,
-        state: {
-          groupId: this.props.groupId,
-          data: this.props.data,
-          blogPost: this.state.blogPost,
-        }
-      }} />
-            : <div></div>
-          }
           {this.props.data.joinedStatus === "Joined" || this.props.data.isAdmin ? (
             <div>
               <Button style={{ left:"45%" }}
@@ -243,10 +230,7 @@ export class NewBlog extends React.Component {
         if (response.status <= 201) {
           response.json().then((data) => {
             console.log(data);
-            this.setState({
-              blogPost: data,
-              redirect: true
-            })
+            window.location.href = '/group/' + groupId + '/blog/' + data.blogPostId
           });
         } else {
           console.log("failed :(", response.status);

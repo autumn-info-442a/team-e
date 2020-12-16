@@ -28,7 +28,8 @@ export default class App extends Component {
               <Route path="/groups" component={Groups} />
               <Route path="/grouppage" component={BlogCards} />
               <Route path="/blog" component={BlogPost} />
-              <Route path="/group" component={Group} />
+              <Route exact path="/group/:groupId" component={Group} />
+              <Route exact path="/group/:groupId/blog/:blogId" component={BlogPost}></Route>
               <Route exact path = "/authenticate" component={Authenticate}/>
               <Route path = "/redirect" component={RedirectPage} />
               <Route path = "/create" component={NewGroup} />

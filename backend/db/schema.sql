@@ -66,8 +66,8 @@ create table if not exists blog_comment (
     created_at DATETIME,
     deleted boolean,
     foreign key (user_id) REFERENCES user(user_id),
-    foreign key (bp_id) REFERENCES blog_post(bp_id),
-    foreign key (reply_id) REFERENCES blog_comment(bc_id)
+    foreign key (bp_id) REFERENCES blog_post(bp_id) ON DELETE CASCADE,
+    foreign key (reply_id) REFERENCES blog_comment(bc_id) ON DELETE CASCADE
 );
 
 create table if not exists saved_group (
@@ -79,7 +79,6 @@ create table if not exists saved_group (
 );
 
 ALTER TABLE saved_group ADD UNIQUE `unique_index`(user_id, group_id);
-
 
 create table if not exists membership (
     membership_id int not null auto_increment primary key,
