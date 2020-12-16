@@ -144,7 +144,13 @@ export class NewGroup extends React.Component {
                 showError: true,
                 errorMessage: 'Group description must be under 240 characters'
             })
-        } else {
+        } else if (this.state.groupName.length > 1 && this.state.groupDesc.length < 1) {
+            this.setState({
+                showError: true,
+                errorMessage: "Enter a group description to continue."
+            })
+        }
+        else {
             this.createGroup(this.props.auth, this.state.categoryId, this.state.groupName, this.state.groupDesc)
         }
       }

@@ -66,7 +66,7 @@ export class NewBlog extends React.Component {
     if (this.state.buttonText == "Create Post") {
       this.setState({
         buttonText: "Confirm",
-        buttonColor: "secondary"
+        buttonColor: "primary"
       })
     } else {
     if (this.state.postTitle.length < 1) {
