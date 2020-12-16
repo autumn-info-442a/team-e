@@ -153,14 +153,14 @@ export class Group extends Component {
         )
       } else if (this.state.data.joinedStatus === "Pending") {
         return (
-          <Typography variant="subtitle1" color="textPrimary">
+          <Typography style={{ fontSize: "0.875rem", fontWeight: "bold", padding: "6px 8px" }} variant="subtitle1" color="textPrimary">
             Request Pending
           </Typography>
         )
       } else if (this.state.data.isAdmin === true) {
         return (
-          <Typography alignRight variant="subtitle1" color="textPrimary">
-            Admin
+          <Typography alignRight variant="subtitle1" style={{ fontSize: "0.875rem", fontWeight: "bold", padding: "6px 8px" }} color="textPrimary">
+            ADMIN
           </Typography>
         )
       } else {
@@ -201,40 +201,29 @@ export class Group extends Component {
                 <Tab eventKey="home" title="Group Description">
                   <Row>
                     <Col className="pt-2 pl-3">
-                      <div style={{ width: "100%", marginBottom: "5px", marginLeft: "5px" }}>
-                        <img
-                          style={{
-                            maxWidth: "500px",
-                            maxHeight: "400px",
-                            display: "block",
-
-                          }}
-                          src="https://source.unsplash.com/random"
-                          alt="random pic"
-                        />
+                      <div style={{ width: "100%", margin: "3px 0 5px 5px", backgroundColor: "pink", maxHeight: "500px", minHeight: "310px", borderRadius: "5px" }}>
                       </div>
                     </Col>
-                    <Col className="mt-5 p-3">
-                      <Row>
-                        <Col>
-                          {this.state.auth !== '' ? <RequestElement></RequestElement> : null}
-                        </Col>
-                        <Col >
-                          {this.state.auth !== '' ? <Button size="medium" color="primary" onClick={() => this.onSave(this.state.data)}>
-                            {this.state.data.isSaved === true ? "Unsave" : "Save"}</Button> : null}
-                        </Col>
+                    <Col className="mt-3 p-3">
+                      <Row className="mb-3 px-3">
+                        {this.state.auth !== '' ? <RequestElement></RequestElement> : null}
+                        {this.state.auth !== '' ? <Button size="medium" color="primary" onClick={() => this.onSave(this.state.data)}>
+                          {this.state.data.isSaved === true ? "Unsave" : "Save"}</Button> : null}
                       </Row>
-                      <Typography
-                        component="h6"
-                        variant="h6"
-                        align="left"
-                        color="textSecondary"
-                      >
-                        {this.state.data.groupDescription === "" ? "No group description." : this.state.data.groupDescription}
-                      </Typography>
-                      <Typography variant="subtitle1" color="textPrimary">
-                        Created by {this.state.data.isAdmin ? "you" : (this.state.data.user.firstName + " " + this.state.data.user.lastName)} <time class="timeago" dateTime={toJSDate(this.state.data.createdAt)} title={toJSDate(this.state.data.createdAt)}>{timeSince(toJSDate(this.state.data.createdAt))}</time> ago in {this.state.data.category.categoryName}
-                      </Typography>
+                      <Container style={{ padding: "0px 10px" }}>
+                        <Typography
+                          component="h6"
+                          variant="h6"
+                          align="left"
+                          color="textSecondary"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          {this.state.data.groupDescription === "" ? "No group description." : this.state.data.groupDescription}
+                        </Typography>
+                        <Typography variant="subtitle1" color="textPrimary">
+                          Created by {this.state.data.isAdmin ? "you" : (this.state.data.user.firstName + " " + this.state.data.user.lastName)} <time class="timeago" dateTime={toJSDate(this.state.data.createdAt)} title={toJSDate(this.state.data.createdAt)}>{timeSince(toJSDate(this.state.data.createdAt))}</time> ago in {this.state.data.category.categoryName}
+                        </Typography>
+                      </Container>
                     </Col>
                   </Row>
                   <Row>

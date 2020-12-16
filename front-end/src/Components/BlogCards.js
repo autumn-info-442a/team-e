@@ -110,13 +110,10 @@ export class BlogCards extends Component {
               <Grid container spacing={4}>
                 {this.state.blogs.map((blogPost) => (
                   <Grid item xs={12} md={12}>
-                    <Card style={{ display: "flex" }}>
+                    <Card style={{ display: "flex", padding:"5px" }}>
                       <Hidden xsDown>
-                        <CardMedia
-                          style={{ width: 160 }}
-                          image="https://source.unsplash.com/random"
-                          title="TITLE"
-                        />
+                        <div style={{ width: 160, backgroundColor: "pink", borderRadius: "3px" }}>
+                      </div>
                       </Hidden>
                       <div style={{ flex: 1 }}>
                         <CardContent>
@@ -125,7 +122,7 @@ export class BlogCards extends Component {
                           <Typography component="h3" variant="h5">
                             {blogPost.postTitle}
                           </Typography>
-                          <Typography variant="subtitle1" color="textSecondary">
+                          <Typography style={{margin:"2px 0 10px 0"}} variant="subtitle1" color="textSecondary">
                             Created by {blogPost.user.firstName} {blogPost.user.lastName} <time class="timeago" dateTime={toJSDate(blogPost.createdAt)} title={toJSDate(blogPost.createdAt)}>{timeSince(toJSDate(blogPost.createdAt))}</time> ago
                             </Typography>
                           <Typography variant="subtitle1" paragraph>

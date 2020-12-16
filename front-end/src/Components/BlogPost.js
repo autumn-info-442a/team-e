@@ -113,7 +113,7 @@ export class BlogPost extends Component {
             < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "200px", height: "3px" }} />
             <Paper variant="elevation" style={{ padding: "5px", marginBottom:"20px"}}>
             <div style={{width:"100%", marginBottom: "10px"}} ><img style={{ maxHeight: "400px", marginLeft: "auto", marginRight: "auto", display: "block"}} src="https://source.unsplash.com/random" /></div>
-            <Typography  variant="subtitle1" align="center">
+            <Typography style={{marginBottom:"25px"}} variant="subtitle1" align="center">
             Created by {this.state.blogPost.user.firstName} {this.state.blogPost.user.lastName} <time class="timeago" dateTime={toJSDate(this.state.blogPost.createdAt)} title={toJSDate(this.state.blogPost.createdAt)}>{timeSince(toJSDate(this.state.blogPost.createdAt))}</time> ago
               </Typography>
             <Typography variant="subtitle1" color="textPrimary">

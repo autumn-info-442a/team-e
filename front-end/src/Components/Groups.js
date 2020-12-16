@@ -15,7 +15,8 @@ export class Groups extends Component {
       auth: '',
       pagesShown: 1,
       query: '',
-      moreDataToLoad: true
+      moreDataToLoad: true,
+      search: false
     };
   }
 
@@ -38,6 +39,13 @@ export class Groups extends Component {
     card.isSaved === true
       ? this.unsaveGroup(this.state.auth, card.groupId)
       : this.saveGroup(this.state.auth, card.groupId)
+  }
+
+  search(value) {
+    this.setState({
+      search: true
+    })
+    this.searchGroups(this.state.auth, this.props.location.state.categoryId, this.state.pagesShown, value)
   }
 
   // returns the view for the groups page
@@ -65,8 +73,8 @@ export class Groups extends Component {
             <div style={{ margin: "auto", width: "60%" }}>
               <SearchBar
                 value={this.state.query}
-                onChange={(newValue) => this.setState({ query: newValue })}
-                onRequestSearch={() => this.searchGroups(this.state.auth, this.props.location.state.categoryId, 1, this.state.query)}
+                onChange={(newValue) => this.search(newValue)}
+                onRequestSearch={(newValue) => this.search(newValue)}
               />
             </div>
             <NewGroup auth={this.state.auth} categoryId={this.props.location.state.categoryId} />
@@ -74,6 +82,9 @@ export class Groups extends Component {
         </Container>
         <Container style={{ padding: "3.5rem 0" }} maxWidth="md">
           <Grid container spacing={4}>
+          {this.state.data !== undefined && this.state.data.length < 1
+              ? <Typography gutterBottom variant="h5" component="h4">No groups matching the search query were found. Try creating one!</Typography>
+              : null}
             {this.state.data != undefined && this.state.data.map((card) => (
               <Grid item key={card.groupId} xs={12} sm={6} md={4}>
                 <Card style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: "20px" }}>
@@ -238,7 +249,7 @@ export class Groups extends Component {
           if (response.status <= 201) {
             response.json().then((data) => {
               console.log("SEARCH", data)
-              if (!this.state.data) {
+              if (!this.state.data || this.state.search) {
                 this.setState({
                   data: data
                 })
