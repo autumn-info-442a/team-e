@@ -1,24 +1,11 @@
 import { React, Component } from 'react'
-import { Link } from '@material-ui/core'
-// import { Categories } from "./Categories";
-import { UserDashboard } from "./UserDashboard";
 import { Navbar, Nav, Button, Container } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { GetCookie } from '../UtilityFunctions'
 import '../css/NavBar.css'
+import Logo from '../images/logo.png'
 
 export class NavBar extends Component {
-
-  //     // handles navigation changes
-  //     // input: user selected page name via an event
-  //     // output: returns the redirect request to the requested page 
-  //     handleNav(event) {
-  //         return pageNav;
-  //     }
-
-  // global navbar for website
-  // redirects users to selected pages
-
   constructor (props) {
     super(props)
 
@@ -63,7 +50,7 @@ export class NavBar extends Component {
       <Navbar className="color-nav" variant="light">
         <Container className = "navcontainer">
 
-        <Navbar.Brand href = '/'><img src="../../../public/img/logo.png" /></Navbar.Brand>
+        <Navbar.Brand href = '/'><img height="50" src={Logo}/></Navbar.Brand>
 
         <Nav className="ml-auto">
         <Nav.Link><NavLink to="/">Home</NavLink></Nav.Link>

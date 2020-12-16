@@ -90,6 +90,12 @@ export class Group extends Component {
     }
   }
 
+  showSuccessHandler = () => {
+    this.setState({
+      showSuccess: true
+    })
+  }
+
   removeAlert() {
     this.setState({
       showError: false,
@@ -264,7 +270,7 @@ export class Group extends Component {
                   </Row>
                   <Row>
                     <Col>
-                      {this.state.commentData !== '' ? <Comment isAdmin={this.state.data.isAdmin} auth={this.state.auth} groupId={this.state.groupId} commentData={this.state.commentData} moreResults={this.state.moreResults} /> : null}
+                      {this.state.commentData !== '' ? <Comment isAdmin={this.state.data.isAdmin} auth={this.state.auth} groupId={this.state.groupId} commentData={this.state.commentData} moreResults={this.state.moreResults} getGroupComments={this.getGroupComments} showSuccessHandler = {this.showSuccessHandler} /> : null}
                       {this.state.moreResults && this.state.commentData.length > 2 ? <Button size="large" color="primary" onClick={() => this.getGroupComments(this.state.auth, this.state.groupId, this.state.page + 1)}>
                         Show more comments</Button> : null}
                     </Col>

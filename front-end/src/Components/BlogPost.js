@@ -57,6 +57,12 @@ export class BlogPost extends Component {
     }
   }
 
+  showSuccessHandler = () => {
+    this.setState({
+      showSuccess: true
+    })
+  }
+
   removeAlert() {
     this.setState({
       showError: false,
@@ -88,7 +94,7 @@ export class BlogPost extends Component {
           <Alert
             severity="success"
             onClose={() => this.removeSuccessAlert()}
-            dismissible
+            dismissible="true"
           >
             Comment posted!
           </Alert>
@@ -150,7 +156,7 @@ export class BlogPost extends Component {
           </Row>
           <Row>
             <Col>
-              {this.state.commentData !== '' ? <BlogComments isAdmin={this.state.groupData.isAdmin} blogPost={this.state.blogPost} auth={this.state.auth} groupId={this.state.groupData.groupId} commentData={this.state.commentData} moreResults={this.state.moreResults} /> : null}
+              {this.state.commentData !== '' ? <BlogComments isAdmin={this.state.groupData.isAdmin} blogPost={this.state.blogPost} auth={this.state.auth} groupId={this.state.groupData.groupId} commentData={this.state.commentData} moreResults={this.state.moreResults} getBlogComments={this.getBlogComments} showSuccessHandler = {this.showSuccessHandler}/> : null}
               {this.state.moreResults && this.state.commentData.length > 2 ? <Button size="large" color="primary" onClick={() => this.getBlogComments(this.state.auth, this.state.groupData.groupId, this.state.blogPost.blogPostId, this.state.page + 1)}>
                 Show more comments</Button> : null}
             </Col>
