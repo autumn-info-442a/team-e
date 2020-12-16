@@ -38,7 +38,11 @@ export class Categories extends Component {
 }
 
 getColor() {
-  return '#'+Math.floor(Math.random()*16777215).toString(16);
+  var randomColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+  if (randomColor == "fff") {
+    randomColor = "6c757d";
+  }
+  return randomColor;
 }
 
   render() {
