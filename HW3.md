@@ -45,8 +45,7 @@
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. Reading from left to right, all groups withing the clicked on category should be in alphabetical order.
 
-10. **COMPLETE** Users should be able to create a new group if none of the search results were what they were looking for by clicking on a “create group” button. If the user is logged in, 
-it will redirect to the create new group page, otherwise it will redirect the user to the login page to log in.
+10. **COMPLETE** Users should be able to create a new group if none of the search results were what they were looking for by clicking on a “create group” button. If the user is logged in, it will redirect to the create new group page, otherwise it will redirect the user to the login page to log in.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User searches or scrolls for a group 5. If the group they're looking for doesn't exist, they can click the "create group" button 6. If the user isn't logged in, the user will be directed to the log in screen, then can repeat this process.
 
@@ -180,13 +179,15 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on the create group button, displaying an element that will allow the user to create a new group 5. If the user enters the exact name of an existing group in the current category, the system should allow the group to be created as groups name are not unique.
 
-39. **TO DO** The system must limit the number of characters per text box to 32 characters for group name and 240 for description.
+39. **COMPLETE** The system must limit the number of characters per text box to 32 characters for group name and 240 for description.
 
-- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on the create group button, displaying an element that will allow the user to create a new group 5. The user should be able to type into the group name and group description boxes 6. If the user types more than 32 characters into the group name box, an error will display 7. If the user types more than 240 characters into the group description box, an error will display.
+- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on the create group button, displaying a modal that will allow the user to create a new group 5. The user should be able to type into the group name and group description boxes 6. If the user types more than 32 characters into the group name box and tries to submit, an error will display 7. If the user types more than 240 characters into the group description box and tries to submit, an error will display.
 
-40. **TO DO** The system must grey out the “Create group” button until all 3 inputs are filled out correctly.
+40. **REVISED** The system must give an error if the user tries to create a new group with missing group information.
 
-- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on the create group button, displaying an element that will allow the user to create a new group 5. The user must not be able to submit the new group information until the user enters a group name, chooses a category, and enters a group description.
+- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on the create group button, displaying an element that will allow the user to create a new group 5. The user should be given an error if they try to submit the new group when there's missing group information (name, category, description).
+
+- Reasoning for REVISED: We decided to revise this requirement to better match the workflow of the modal. Instead of greying out the "create group" button, we implemented an error that will be thrown if the user tries to create the group with missing information. By doing this, we are keeping the buttons consistent in format and are following the same workflow for throwing errors when forms aren't correctly filled out.
 
 41. **IMPOSSIBLE** Users must be able to create an account if the form contains all of the correct information.
 
@@ -198,9 +199,11 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. The user should be able to review the following information on the group page: group name, group description, and category the group is in.
 
-43. **TO DO** The group administrator’s email should be displayed if the user is in the group.
+43. **IMPOSSIBLE** The group administrator’s email should be displayed if the user is in the group.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. If the user is a member of the group, they should be able to see the group admin's email in the group details section.
+
+- Reasoning for IMPOSSIBLE: We determined that this requirement was impossible because the user's email is not returned from the Google authentication we used, unless we choose to always return the email from Google authentication. We decided against the latter as we believe it could be a privacy issue if the user's email is accessible at all times in the application. If the students want to share their contact information, they can discuss that in comments, find each other through social media or the student directory.
 
 44. **IMPOSSIBLE** The system must allow the user to route back to the previous page by clicking the back arrow.
 
@@ -212,7 +215,7 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. If the user is logged into their account and has not joined the group they clicked, the user should be able to request to join the group.
 
-46. **TO DO** The system must change the join status to pending if they requested to join. The join button will now say pending and will be greyed out.
+46. **COMPLETE** The system must change the join status to pending if they requested to join. The join button will now say pending and will be greyed out.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. If the user is logged into their account and has not joined the group they clicked, the user should be able to request to join the group 6. The user's join status should change to pending and be greyed out once the user has requested to join the group.
 
@@ -220,23 +223,25 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. The number of members in the group should be displayed to the user 6. If the user tries to join a group with 10 members, an error will be displayed.
 
-48. **TO DO** The user must be able to leave any group that they have joined by clicking on the “leave group” button.
+48. **NEED TO REVISE** The user must be able to leave any group that they have joined by clicking on the “leave group” button.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. If the user is logged into their account and is a member of the group, the user should be able to click the leave group button which will redact the user's membership from the group.
 
-49. **TO DO** The system should allow users to leave comments by clicking on the comment button, and each comment should have a max character count where the user is unable to keep typing if they hit the limit.
+49. **REVISED** The system should allow users to leave comments by clicking on the comment button, and each comment should have a max character count error that will be thrown if the user creates a comment over the character limit.
 
-- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. The user should be able to post a comment to the group by clicking the comment button 6. If the user reaches the max character count for a comment, an error will be displayed.
+- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. The user should be able to post a comment to the group by clicking the comment button 6. If the user reaches the max character count for a comment, an error will be displayed after the user tries to create the comment.
+
+- Reasoning for REVISED: We revised this requirement to match how we implemented the error to be thrown if the character count is at the limit. Instead of throwing the error while the user is typing, we implemented the error to be thrown if the user tries to create a comment over the character limit. This change was made according to our development team and implementation methods that were chosen to be used.
 
 50. **COMPLETE** The system should display comments below the group information and show these comments in chronological order with the most recent comment being at the top.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User should be able to view comments on blog posts in chronological order.
 
-51. **COMPLETE** Users must be able to view and reply to comments on each post from a thread system below the post.
+51. **TO DO** Users must be able to view and reply to comments on each post from a thread system below the post.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User should be able to view comments on blog posts 7. User should be able to view and reply to comments that are connected to a blog post.
 
-52. **TO DO** The system should only display the three most recent comments unless “load more comments” is pressed.
+52. **COMPLETE** The system should only display the three most recent comments unless “load more comments” is pressed.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User should be able to view the three most recent comments on the blog post 7. If the user presses the load more comments button, the user should be able to see all the comments on the blog post.
 
@@ -276,11 +281,11 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Reasoning for IMPOSSIBLE: We decided that this requirement isn't necessary becuase users can just use their browser's back arrow to swipe of their touch pad.
 
-60. **TO DO** The system must allow the user to enter a title for their post, including letters and numbers with a maximum of 50 characters.
+60. **COMPLETE** The system must allow the user to enter a title for their post, including letters and numbers with a maximum of 50 characters.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User clicks on create new post 7. User should be able to enter a post title 8. If the user has a title more than 50 characters, an error will appear.
 
-61. **TO DO** The system must allow the user to enter a description (body text) for their post. Including letters and numbers with a maximum of 1,000 characters.
+61. **COMPLETE** The system must allow the user to enter a description (body text) for their post. Including letters and numbers with a maximum of 1,000 characters.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User clicks on create new post 7. User should be able to enter a post description containing any characters 8. If the user has a description more than 1000 characters, an error will appear.
 
@@ -298,7 +303,7 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User clicks on create new post 7. If the user doesn't fill out all post details, an error will appear.
 
-65. **TO DO** The system must display a confirmation, ensuring that the user wants to post to the group or not by either clicking the post or cancel button.
+65. **COMPLETE** The system must display a confirmation, ensuring that the user wants to post to the group or not by either clicking the post or cancel button.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User clicks on create new post 7. User fills out the new post details 8. User can submit post by hitting the create post button 9. A confirmation message will appear, confirming if the user wants to post.
 
@@ -308,7 +313,7 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User should be able to view the groups that the user has joined.
 
-67. **TO DO** For each displayed group, there should be a “leave group” button within the tile that allows users to leave groups that they have previously joined.
+67. **COMPLETE** For each displayed group, there should be a “leave group” button within the tile that allows users to leave groups that they have previously joined.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User should be able to view the groups that the user has joined 5. User should be able to click the leave group button to leave a group they have joined.
 
@@ -344,7 +349,7 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Reasoning for REVISED: We decided to revise this requirement to properly match the workflow that we've implemented into our application. To view pending request information, the Admin user just needs to click into a group they are an admin for, then view the Member Requests tab in the group. The pending requests should display the requester user's details.
 
-74. **TO DO** The system must allow the Admin user to click on a pending request to make the decision to admit them.
+74. **COMPLETE** The system must allow the Admin user to click on a pending request to make the decision to admit them.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User clicks into a group under "Admin Groups" -- no groups will exist in this section if the user hasn't created any groups 5. User routes to the groups page 6. User clicks Member Requests 7. User should see the pending user requests 8. User can then make a decision
 
@@ -352,7 +357,7 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User clicks into a group under "Admin Groups" -- no groups will exist in this section if the user hasn't created any groups 5. User routes to the groups page 6. User clicks Member Requests 7. User should see the pending user requests 8. User can then make a decision 9. A confirmation should pop up when the user makes their decision.
 
-76. **TO DO** The system must allow the pending user to access the group if they are admitted by setting the user as a group member or cancel the request if they are denied.
+76. **COMPLETE** The system must allow the pending user to access the group if they are admitted by setting the user as a group member or cancel the request if they are denied.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User clicks into a group under "Admin Groups" -- no groups will exist in this section if the user hasn't created any groups 5. The user should be able to click on the pending request to make an admission decision 6. If admitted, the user that requested admission should be able to enter the group they requested membership for.
 
@@ -364,6 +369,6 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User should be able to view the groups that they have created 5. User should be able to hit the delete button on a group tile to delete the group 6. A confirmation message will popup to confirm the user's decision.
 
-79. **TO DO** The system must remove the pending request from the Admin user’s view after a decision has been made.
+79. **COMPLETE** The system must remove the pending request from the Admin user’s view after a decision has been made.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User clicks into a group under "Admin Groups" -- no groups will exist in this section if the user hasn't created any groups 5. The user should be able to click on the pending request to make an admission decision 6. Once a decision has been made, the pending request should be removed from the pending requests section.

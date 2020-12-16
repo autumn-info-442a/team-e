@@ -63,8 +63,8 @@ export class NavBar extends Component {
       <Navbar className="color-nav" variant="light">
         <Container className = "navcontainer">
 
-        <Navbar.Brand href = '/'>Explore</Navbar.Brand>
-        
+        <Navbar.Brand href = '/'><img src="../../../public/img/logo.png" /></Navbar.Brand>
+
         <Nav className="ml-auto">
         <Nav.Link><NavLink to="/">Home</NavLink></Nav.Link>
         {this.state.loggedIn ? <Nav.Link><NavLink to="/dashboard">My Groups</NavLink></Nav.Link> : null}
