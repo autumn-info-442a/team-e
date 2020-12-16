@@ -110,9 +110,12 @@ export class BlogPost extends Component {
             <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
               {this.state.blogPost.postTitle}
               </Typography>
-            < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "200px", height: "3px" }} />
+            < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "300px", height: "3px" }} />
             <Paper variant="elevation" style={{ padding: "5px", marginBottom:"20px"}}>
-            <div style={{width:"100%", marginBottom: "10px"}} ><img style={{ maxHeight: "400px", marginLeft: "auto", marginRight: "auto", display: "block"}} src="https://source.unsplash.com/random" /></div>
+            <div style={{width:"100%", marginBottom: "10px"}} >
+              <div style={{ minHeight: "350px", maxHeight: "450px", minWidth:"50%", borderRadius:"5px",
+              maxWidth:"600px", marginLeft: "auto", marginRight: "auto", display: "block", backgroundColor:"#A09BCC"}}
+               /></div>
             <Typography style={{marginBottom:"25px"}} variant="subtitle1" align="center">
             Created by {this.state.blogPost.user.firstName} {this.state.blogPost.user.lastName} <time class="timeago" dateTime={toJSDate(this.state.blogPost.createdAt)} title={toJSDate(this.state.blogPost.createdAt)}>{timeSince(toJSDate(this.state.blogPost.createdAt))}</time> ago
               </Typography>

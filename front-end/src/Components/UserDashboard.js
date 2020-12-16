@@ -10,7 +10,8 @@ export class UserDashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: false
+      showModal: false,
+      showLeaveModal: false
     };
   }
 
@@ -62,9 +63,24 @@ export class UserDashboard extends Component {
             <DialogContent>
               <Container maxWidth="lg">
                 <Typography component="h5" align="center" variant="h5" color="textPrimary" gutterBottom>
-                  Are you sure you want to delete this group?
+                  Are you sure you want to delete this group? All contents, including members and blog posts, will be deleted.
               </Typography>
                 <Button style={{ marginLeft: "auto" }} id="delete" variant="dark" size="sm" onClick={() => this.clickSubmitHandler()}>Confirm</Button>
+              </Container>
+            </DialogContent>
+          </Dialog >}
+          {<Dialog
+            open={this.state.showLeaveModal}
+            onClose={() => this.setState({ showLeaveModal: false })}
+            aria-labelledby="Leave Group"
+            aria-describedby="simple-modal-description"
+          >
+            <DialogContent>
+              <Container maxWidth="lg">
+                <Typography component="h5" align="center" variant="h5" color="textPrimary" gutterBottom>
+                  Are you sure you want to leave this group? 
+              </Typography>
+                <Button style={{ marginLeft: "auto" }} id="delete" variant="dark" size="sm" onClick={() => this.clickLeaveHandler()}>Confirm</Button>
               </Container>
             </DialogContent>
           </Dialog >}
@@ -119,8 +135,8 @@ export class UserDashboard extends Component {
                         View{" "}
                       </Link>
                     </Button>
-                    <Button size="medium" color="primary" onClick={() => this.handleDelete(card.groupId)}>
-                      Delete Group</Button>
+                    <Button size="medium"  onClick={() => this.handleDelete(card.groupId)}>
+                      Delete</Button>
                   </CardActions>
                 </Card>
               </Grid>
@@ -174,8 +190,8 @@ export class UserDashboard extends Component {
                         View
                         </Link>
                     </Button>
-                    <Button size="medium" color="primary" onClick={() => this.leaveGroup(this.state.auth, card.groupId)}>
-                      Leave Group</Button>
+                    <Button size="medium" onClick={() => this.handleLeave(card.groupId)}>
+                      Leave</Button>
                   </CardActions>
                 </Card>
               </Grid>
@@ -318,9 +334,21 @@ export class UserDashboard extends Component {
       showModal: false,
       groupId: ''
     })
-    //  setTimeout(()=>{
-    //   this.props.getGroupComments(this.props.auth, this.props.groupId, 1)
-    //  },1000)
+  }
+
+  handleLeave(leaveGroupId) {
+    this.setState({
+      showLeaveModal: true,
+      leaveGroupId: leaveGroupId
+    })
+  }
+
+  clickLeaveHandler() {
+    this.leaveGroup(this.state.auth, this.state.leaveGroupId)
+    this.setState({
+      showLeaveModal: false,
+      leaveGroupId: ''
+    })
   }
 
   deleteGroup = (auth, groupId) => {

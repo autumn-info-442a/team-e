@@ -92,7 +92,7 @@ export class Groups extends Component {
                     <Typography style={{ marginBottom: "25px" }} gutterBottom variant="h4" component="h4">
                       {card.groupName}</Typography>
                     <Typography style={{ marginBottom: "10px" }}>
-                      {card.groupDescription.length > 115 ? card.groupDescription.substring(0, 75) + "..." : card.groupDescription}</Typography>
+                      {card.groupDescription.length > 75 ? card.groupDescription.substring(0, 75) + "..." : card.groupDescription}</Typography>
                   </CardContent>
                   <CardActions>
                     <Button><Link to={{

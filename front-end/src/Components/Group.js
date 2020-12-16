@@ -201,7 +201,7 @@ export class Group extends Component {
                 <Tab eventKey="home" title="Group Description">
                   <Row>
                     <Col className="pt-2 pl-3">
-                      <div style={{ width: "100%", margin: "3px 0 5px 5px", backgroundColor: "pink", maxHeight: "500px", minHeight: "310px", borderRadius: "5px" }}>
+                      <div style={{ width: "100%", margin: "3px 0 5px 5px", backgroundColor: "#90CCDE", maxHeight: "500px", minHeight: "310px", borderRadius: "5px" }}>
                       </div>
                     </Col>
                     <Col className="mt-3 p-3">
@@ -292,10 +292,8 @@ export class Group extends Component {
                               flexDirection: "column",
                             }}
                           >
-                            <CardMedia
-                              style={{ paddingTop: "56.25%" }}
-                              image="https://source.unsplash.com/random"
-                              title="Image title"
+                            <div
+                              style={{ paddingTop: "56.25%", backgroundColor: "pink", width:"100%" }}
                             />
                             <CardContent style={{ flexGrow: 1 }}>
                               <Typography

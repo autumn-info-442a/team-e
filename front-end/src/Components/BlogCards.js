@@ -112,7 +112,7 @@ export class BlogCards extends Component {
                   <Grid item xs={12} md={12}>
                     <Card style={{ display: "flex", padding:"5px" }}>
                       <Hidden xsDown>
-                        <div style={{ width: 160, backgroundColor: "pink", borderRadius: "3px" }}>
+                        <div style={{ width: 160, backgroundColor: "#EE9D94", borderRadius: "5px" }}>
                       </div>
                       </Hidden>
                       <div style={{ flex: 1 }}>
