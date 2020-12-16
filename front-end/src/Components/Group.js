@@ -31,9 +31,11 @@ export class Group extends Component {
       moreResults: true,
       page: 1,
       acceptBtnText: "Accept",
-      acceptBtnColor: "default",
+      acceptBtnColor: "primary",
       declineBtnText: "Decline",
       declineBtnColor: "default",
+      acceptMembershipID: '',
+      declineMembershipID: ''
     };
     this.onClick = this.onClick.bind(this);
   }
@@ -293,7 +295,7 @@ export class Group extends Component {
                             }}
                           >
                             <div
-                              style={{ paddingTop: "56.25%", backgroundColor: "pink", width:"100%" }}
+                              style={{ paddingTop: "56.25%", backgroundColor: "pink", width: "100%" }}
                             />
                             <CardContent style={{ flexGrow: 1 }}>
                               <Typography
@@ -307,17 +309,17 @@ export class Group extends Component {
                             <CardActions>
                               <Button
                                 size="small"
-                                color={this.state.acceptBtnColor}
+                                color={this.state.acceptMembershipID == request.membershipID ? this.state.acceptBtnColor : "primary"}
                                 onClick={() => this.acceptMembership(request.membershipID)}
                               >
-                                {this.state.acceptBtnText}
+                                {this.state.acceptMembershipID == request.membershipID ? this.state.acceptBtnText : "ACCEPT"}
                               </Button>
                               <Button
                                 size="small"
-                                color={this.state.declineBtnColor}
+                                color={this.state.declineMembershipID == request.membershipID ? this.state.declineBtnColor : "default"}
                                 onClick={() => this.declineMembership(request.membershipID)}
                               >
-                                {this.state.declineBtnText}
+                                {this.state.declineMembershipID == request.membershipID ? this.state.declineBtnText : "DECLINE"}
                               </Button>
                             </CardActions>
                           </Card>
@@ -338,25 +340,37 @@ export class Group extends Component {
     return null;
   }
 
-  declineMembership(membershipID) {
+  declineMembership(declineMembershipID) {
     if (this.state.declineBtnText == "Decline") {
       this.setState({
         declineBtnText: "Confirm",
-        declineBtnColor: "secondary"
+        declineBtnColor: "secondary",
+        declineMembershipID: declineMembershipID
       })
     } else {
-      this.declineMembershipRequest(this.state.auth, this.state.data.groupId, membershipID)
+      this.declineMembershipRequest(this.state.auth, this.state.data.groupId, declineMembershipID)
+      this.setState({
+        declineBtnText: "Decline",
+        declineBtnColor: "default",
+        declineMembershipID: ''
+      })
     }
   }
 
-  acceptMembership(membershipID) {
+  acceptMembership(acceptMembershipID) {
     if (this.state.acceptBtnText == "Accept") {
       this.setState({
         acceptBtnText: "Confirm",
-        acceptBtnColor: "primary"
+        acceptBtnColor: "default",
+        acceptMembershipID: acceptMembershipID
       })
     } else {
-      this.acceptMembershipRequest(this.state.auth, this.state.data.groupId, membershipID)
+      this.acceptMembershipRequest(this.state.auth, this.state.data.groupId, acceptMembershipID)
+      this.setState({
+        acceptBtnText: "Accept",
+        acceptBtnColor: "primary",
+        acceptMembershipID: ''
+      })
     }
   }
 
@@ -464,7 +478,7 @@ export class Group extends Component {
 
   createMembershipRequest = (auth, groupId) => {
     setTimeout(() => {
-      if(this.state.data.numMembers < 9) {
+      if (this.state.data.numMembers < 9) {
         var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests";
         fetch(url, {
           method: "post",
