@@ -28,7 +28,7 @@ export class Groups extends Component {
     window.addEventListener('scroll', this.loadMore);
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     window.removeEventListener('scroll', this.loadMore);
   }
 
@@ -44,63 +44,63 @@ export class Groups extends Component {
   // loads list of groups - navigates to a group page if clicked on
   // shows group info as a pop up
   render() {
-    if(this.state.data) {
-
-    
-    return (<div> 
-      <Container maxWidth="md">
-        <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
-          {this.props.location.state.categoryName}
-        </Typography>
-        < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "200px", height: "3px" }} />
-        <Row className="w-100"><Button size="medium" color="primary" >
-          <Link to={{
-            pathname: '/',
-            state: {
-              auth: this.state.auth,
-            }
-          }}>Back</Link></Button>
+    if (this.state.data) {
 
 
-          <div style={{ margin: "auto", width: "60%" }}>
-            <SearchBar
-              value={this.state.query}
-              onChange={(newValue) => this.setState({ query: newValue })}
-              onRequestSearch={() => this.searchGroups(this.state.auth, this.props.location.state.categoryId, 1, this.state.query)}
-            />
-          </div>
-          <NewGroup auth={this.state.auth} categoryId={this.props.location.state.categoryId}/>
-        </Row>
-      </Container>
-      <Container style={{ padding: "3.5rem 0" }} maxWidth="md">
-        <Grid container spacing={4}>
-          {this.state.data != undefined && this.state.data.map((card) => (
-            <Grid item key={card.groupId} xs={12} sm={6} md={4}>
-              <Card style={{ height: '100%', display: 'flex', flexDirection: 'column',  padding:"20px" }}>
-                <CardContent style={{ flexGrow: 1 , padding:"20px"}}>
-                  <Typography style={{marginBottom: "25px"}} gutterBottom variant="h4" component="h4"> 
-                    {card.groupName}</Typography>
-                  <Typography style={{marginBottom: "10px"}}>
-                    {card.groupDescription}</Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small" onClick={() => this.onSave(card)}>
-                    {card.isSaved === true ? "Unsave" : "Save"}</Button>
-                  <Button><Link to={{
-                    pathname: '/group/' + card.groupId,
-                    state: {
-                      auth: this.state.auth,
-                      groupId: card.groupId
-                    }
-                  }}>View </Link></Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </div>
-    );
+      return (<div>
+        <Container maxWidth="md">
+          <Typography component="h2" variant="h2" align="center" color="textPrimary" gutterBottom>
+            {this.props.location.state.categoryName}
+          </Typography>
+          < hr style={{ marginTop: "-1rem", backgroundColor: "#3399FF", width: "200px", height: "3px" }} />
+          <Row className="w-100"><Button size="medium" color="primary" >
+            <Link to={{
+              pathname: '/',
+              state: {
+                auth: this.state.auth,
+              }
+            }}>Back</Link></Button>
+
+
+            <div style={{ margin: "auto", width: "60%" }}>
+              <SearchBar
+                value={this.state.query}
+                onChange={(newValue) => this.setState({ query: newValue })}
+                onRequestSearch={() => this.searchGroups(this.state.auth, this.props.location.state.categoryId, 1, this.state.query)}
+              />
+            </div>
+            <NewGroup auth={this.state.auth} categoryId={this.props.location.state.categoryId} />
+          </Row>
+        </Container>
+        <Container style={{ padding: "3.5rem 0" }} maxWidth="md">
+          <Grid container spacing={4}>
+            {this.state.data != undefined && this.state.data.map((card) => (
+              <Grid item key={card.groupId} xs={12} sm={6} md={4}>
+                <Card style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: "20px" }}>
+                  <CardContent style={{ flexGrow: 1, padding: "20px" }}>
+                    <Typography style={{ marginBottom: "25px" }} gutterBottom variant="h4" component="h4">
+                      {card.groupName}</Typography>
+                    <Typography style={{ marginBottom: "10px" }}>
+                      {card.groupDescription.length > 115 ? card.groupDescription.substring(0, 75) + "..." : card.groupDescription}</Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button><Link to={{
+                      pathname: '/group/' + card.groupId,
+                      state: {
+                        auth: this.state.auth,
+                        groupId: card.groupId
+                      }
+                    }}>View </Link></Button>
+                    <Button size="small" onClick={() => this.onSave(card)}>
+                      {card.isSaved === true ? "Unsave" : "Save"}</Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </div>
+      );
     }
 
     return null;
@@ -251,7 +251,7 @@ export class Groups extends Component {
                 } else {
                   this.setState({
                     data: newData,
-                    pagesShown: this.state.pagesShown + 1 
+                    pagesShown: this.state.pagesShown + 1
                   })
                 }
               }

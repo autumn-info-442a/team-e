@@ -29,7 +29,11 @@ export class Group extends Component {
       commentData: '',
       showSuccess: false,
       moreResults: true,
-      page: 1
+      page: 1,
+      acceptBtnText: "Accept",
+      acceptBtnColor: "default",
+      declineBtnText: "Decline",
+      declineBtnColor: "default",
     };
     this.onClick = this.onClick.bind(this);
   }
@@ -103,7 +107,7 @@ export class Group extends Component {
     });
   }
 
-    removeSuccessAlert() {
+  removeSuccessAlert() {
     this.setState({ showSuccess: false });
   }
 
@@ -124,7 +128,7 @@ export class Group extends Component {
       }
     }
 
-     const SuccessAlert = () => {
+    const SuccessAlert = () => {
       if (this.state.showSuccess === true) {
         return (
           <Alert
@@ -142,29 +146,29 @@ export class Group extends Component {
 
     /*|| this.state.data.isAdmin*/
     const RequestElement = () => {
-      if(this.state.data.joinedStatus === "Joined") {
+      if (this.state.data.joinedStatus === "Joined") {
         return (
-          <Button size="medium" color="primary" onClick={() => this.leaveGroup(this.state.auth, this.state.data.groupId)}> 
-          Leave Group</Button>
+          <Button size="medium" color="primary" onClick={() => this.leaveGroup(this.state.auth, this.state.data.groupId)}>
+            Leave Group</Button>
         )
       } else if (this.state.data.joinedStatus === "Pending") {
         return (
           <Typography variant="subtitle1" color="textPrimary">
-          Request Pending
-        </Typography>
+            Request Pending
+          </Typography>
         )
       } else if (this.state.data.isAdmin === true) {
         return (
           <Typography alignRight variant="subtitle1" color="textPrimary">
-          Admin
-        </Typography>
+            Admin
+          </Typography>
         )
-      }  else {
+      } else {
         return (
-          <Button size="medium" color="primary" onClick={() => this.createMembershipRequest(this.state.auth, this.state.data.groupId)}> 
-          Request to Join</Button>
+          <Button size="medium" color="primary" onClick={() => this.createMembershipRequest(this.state.auth, this.state.data.groupId)}>
+            Request to Join</Button>
         )
-      }  
+      }
     }
 
     if (this.state.data !== '') {
@@ -188,7 +192,7 @@ export class Group extends Component {
                 height: "3px",
               }}
             />
-            <Paper variant="elevation" style={{ padding: "5px", marginBottom:"20px"}}>
+            <Paper variant="elevation" style={{ padding: "5px", marginBottom: "20px" }}>
               <Tabs
                 id="controlled-tab-example"
                 activeKey={this.state.value}
@@ -197,13 +201,13 @@ export class Group extends Component {
                 <Tab eventKey="home" title="Group Description">
                   <Row>
                     <Col className="pt-2 pl-3">
-                      <div style={{ width: "100%", marginBottom: "5px", marginLeft:"5px" }}>
+                      <div style={{ width: "100%", marginBottom: "5px", marginLeft: "5px" }}>
                         <img
                           style={{
                             maxWidth: "500px",
                             maxHeight: "400px",
                             display: "block",
-                           
+
                           }}
                           src="https://source.unsplash.com/random"
                           alt="random pic"
@@ -211,22 +215,22 @@ export class Group extends Component {
                       </div>
                     </Col>
                     <Col className="mt-5 p-3">
-                    <Row>
-                    <Col>
-                    {this.state.auth !== '' ?  <RequestElement></RequestElement> : null}
-                    </Col>
-                    <Col >
-                    {this.state.auth !== '' ? <Button size="medium" color="primary" onClick={() => this.onSave(this.state.data)}>
-                      {this.state.data.isSaved === true ? "Unsave" : "Save"}</Button> : null}
-                      </Col>
-                    </Row>
+                      <Row>
+                        <Col>
+                          {this.state.auth !== '' ? <RequestElement></RequestElement> : null}
+                        </Col>
+                        <Col >
+                          {this.state.auth !== '' ? <Button size="medium" color="primary" onClick={() => this.onSave(this.state.data)}>
+                            {this.state.data.isSaved === true ? "Unsave" : "Save"}</Button> : null}
+                        </Col>
+                      </Row>
                       <Typography
                         component="h6"
                         variant="h6"
                         align="left"
                         color="textSecondary"
                       >
-                       {this.state.data.groupDescription === "" ? "No group description." : this.state.data.groupDescription}
+                        {this.state.data.groupDescription === "" ? "No group description." : this.state.data.groupDescription}
                       </Typography>
                       <Typography variant="subtitle1" color="textPrimary">
                         Created by {this.state.data.isAdmin ? "you" : (this.state.data.user.firstName + " " + this.state.data.user.lastName)} <time class="timeago" dateTime={toJSDate(this.state.data.createdAt)} title={toJSDate(this.state.data.createdAt)}>{timeSince(toJSDate(this.state.data.createdAt))}</time> ago in {this.state.data.category.categoryName}
@@ -236,21 +240,21 @@ export class Group extends Component {
                   <Row>
                     <Col>
                       <br></br>
-                      {this.state.auth !== '' ? 
-                      <div>
-                        <Typography variant="subtitle1" color="textPrimary">
-                        Leave a comment
+                      {this.state.auth !== '' ?
+                        <div>
+                          <Typography variant="subtitle1" color="textPrimary">
+                            Leave a comment
                         </Typography>
-                      <TextareaAutosize style={{ width: "100%" }} label="top level comment" rowsMin={3} onChange={this.handleNewTLCommentChange} />
-                      <Button style={{ marginBottom: "15px" }} size="medium" color="primary" onClick={() => this.clickSubmitHandler()}>Create Comment</Button>
-                      <ErrorAlert></ErrorAlert>
-                      <SuccessAlert></SuccessAlert>
-                      <hr
-                        style={{
-                          marginTop: "-10px",
-                        }}
-                      />
-                      </div> : null}
+                          <TextareaAutosize style={{ width: "100%" }} label="top level comment" rowsMin={3} onChange={this.handleNewTLCommentChange} />
+                          <Button style={{ marginBottom: "15px" }} size="medium" color="primary" onClick={() => this.clickSubmitHandler()}>Create Comment</Button>
+                          <ErrorAlert></ErrorAlert>
+                          <SuccessAlert></SuccessAlert>
+                          <hr
+                            style={{
+                              marginTop: "-10px",
+                            }}
+                          />
+                        </div> : null}
                       <Typography
                         component="h6"
                         variant="h6"
@@ -270,7 +274,7 @@ export class Group extends Component {
                   </Row>
                   <Row>
                     <Col>
-                      {this.state.commentData !== '' ? <Comment isAdmin={this.state.data.isAdmin} auth={this.state.auth} groupId={this.state.groupId} commentData={this.state.commentData} moreResults={this.state.moreResults} getGroupComments={this.getGroupComments} showSuccessHandler = {this.showSuccessHandler} /> : null}
+                      {this.state.commentData !== '' ? <Comment isAdmin={this.state.data.isAdmin} auth={this.state.auth} groupId={this.state.groupId} commentData={this.state.commentData} moreResults={this.state.moreResults} getGroupComments={this.getGroupComments} showSuccessHandler={this.showSuccessHandler} /> : null}
                       {this.state.moreResults && this.state.commentData.length > 2 ? <Button size="large" color="primary" onClick={() => this.getGroupComments(this.state.auth, this.state.groupId, this.state.page + 1)}>
                         Show more comments</Button> : null}
                     </Col>
@@ -278,58 +282,58 @@ export class Group extends Component {
                 </Tab>
                 <Tab eventKey="blog" title="Blog Posts">
                   <BlogCards
-                   groupId={this.state.groupId}
-                   data = {this.state.data}
-                   isAdmin = {this.state.data.isAdmin}
-                   auth = {this.state.auth}
+                    groupId={this.state.groupId}
+                    data={this.state.data}
+                    isAdmin={this.state.data.isAdmin}
+                    auth={this.state.auth}
                   />
                 </Tab>
                 {this.state.data.isAdmin ? <Tab eventKey="profile" title="Member Requests">
-                <div style={{padding: "8px"}}>
-                  <Grid container spacing={4}>
-                    {this.state.requests !== '' && this.state.requests.length > 0 ? this.state.requests.map((request) => (
-                      <Grid item key={request} xs={4} sm={3} md={3}>
-                        <Card
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            flexDirection: "column",
-                          }}
-                        >
-                          <CardMedia
-                            style={{ paddingTop: "56.25%" }}
-                            image="https://source.unsplash.com/random"
-                            title="Image title"
-                          />
-                          <CardContent style={{ flexGrow: 1 }}>
-                            <Typography
-                              gutterBottom
-                              variant="h5"
-                              component="h2"
-                            >
-                              {request.user.firstName} {request.user.lastName}
-                            </Typography>
-                          </CardContent>
-                          <CardActions>
-                            <Button
-                              size="small"
-                              color="primary"
-                              onClick={() => this.acceptMembershipRequest(this.state.auth, this.state.data.groupId, request.membershipID)}
-                            >
-                              Accept
-                            </Button>
-                            <Button
-                              size="small"
-                              color="primary"
-                              onClick={() => this.declineMembershipRequest(this.state.auth, this.state.data.groupId, request.membershipID)}
-                            >
-                              Reject
-                            </Button>
-                          </CardActions>
-                        </Card>
-                      </Grid>
-                    )) : <bold style={{marginLeft: "10px", marginTop: "20px", marginBottom: "10px"}}>No membership requests to display</bold>}
-                  </Grid>
+                  <div style={{ padding: "8px" }}>
+                    <Grid container spacing={4}>
+                      {this.state.requests !== '' && this.state.requests.length > 0 ? this.state.requests.map((request) => (
+                        <Grid item key={request} xs={4} sm={3} md={3}>
+                          <Card
+                            style={{
+                              height: "100%",
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <CardMedia
+                              style={{ paddingTop: "56.25%" }}
+                              image="https://source.unsplash.com/random"
+                              title="Image title"
+                            />
+                            <CardContent style={{ flexGrow: 1 }}>
+                              <Typography
+                                gutterBottom
+                                variant="h5"
+                                component="h2"
+                              >
+                                {request.user.firstName} {request.user.lastName}
+                              </Typography>
+                            </CardContent>
+                            <CardActions>
+                              <Button
+                                size="small"
+                                color={this.state.acceptBtnColor}
+                                onClick={() => this.acceptMembership(request.membershipID)}
+                              >
+                                {this.state.acceptBtnText}
+                              </Button>
+                              <Button
+                                size="small"
+                                color={this.state.declineBtnColor}
+                                onClick={() => this.declineMembership(request.membershipID)}
+                              >
+                                {this.state.declineBtnText}
+                              </Button>
+                            </CardActions>
+                          </Card>
+                        </Grid>
+                      )) : <bold style={{ marginLeft: "10px", marginTop: "20px", marginBottom: "10px" }}>No membership requests to display</bold>}
+                    </Grid>
                   </div>
                 </Tab> : null}
               </Tabs>
@@ -338,10 +342,32 @@ export class Group extends Component {
         </div>
       );
     } else if (this.state.notFound) {
-      return <p style = {{textAlign:"center", fontSize:"40px"}}>404 Page Not Found</p>
+      return <p style={{ textAlign: "center", fontSize: "40px" }}>404 Page Not Found</p>
     }
 
     return null;
+  }
+
+  declineMembership(membershipID) {
+    if (this.state.declineBtnText == "Decline") {
+      this.setState({
+        declineBtnText: "Confirm",
+        declineBtnColor: "secondary"
+      })
+    } else {
+      this.declineMembershipRequest(this.state.auth, this.state.data.groupId, membershipID)
+    }
+  }
+
+  acceptMembership(membershipID) {
+    if (this.state.acceptBtnText == "Accept") {
+      this.setState({
+        acceptBtnText: "Confirm",
+        acceptBtnColor: "primary"
+      })
+    } else {
+      this.acceptMembershipRequest(this.state.auth, this.state.data.groupId, membershipID)
+    }
   }
 
   createGroupComment = (auth, groupId, commentContent, replyId) => {
@@ -404,7 +430,7 @@ export class Group extends Component {
           response.json().then((data) => {
             console.log(data);
             console.log(data.isJoined)
-            if(data.isAdmin) {
+            if (data.isAdmin) {
               this.getMembersipRequests(auth, groupId)
             }
             this.setState({
@@ -510,7 +536,7 @@ export class Group extends Component {
       }).then((response) => {
         if (response.status <= 201) {
           console.log("success");
-          this.removeFromRequests(requestId) 
+          this.removeFromRequests(requestId)
         } else {
           console.log("failed :(", response.status);
         }
@@ -586,14 +612,14 @@ export class Group extends Component {
         if (response.status <= 201) {
           response.json().then((data) => {
             console.log("GET COMMENTS", data);
-            if(page === 1) {
+            if (page === 1) {
               this.setState({
                 commentData: data,
               });
             } else {
               var newData = this.state.commentData.concat(data)
               console.log(newData.length)
-              if(newData.length % 3 !== 0 || data.length === 0) {
+              if (newData.length % 3 !== 0 || data.length === 0) {
                 this.setState({
                   moreResults: false,
                   commentData: newData,
@@ -641,7 +667,7 @@ export class Group extends Component {
 
   removeFromRequests = (membershipID) => {
     var requests = this.state.requests
-    for(var i = 0; i<requests.length; i++) {
+    for (var i = 0; i < requests.length; i++) {
       if (requests[i].membershipID === membershipID) {
         requests.splice(i, 1)
         break

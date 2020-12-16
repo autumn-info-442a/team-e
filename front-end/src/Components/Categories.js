@@ -33,17 +33,9 @@ export class Categories extends Component {
 
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     window.removeEventListener('scroll', this.loadMore);
-}
-
-getColor() {
-  var randomColor = '#'+Math.floor(Math.random()*16777215).toString(16);
-  if (randomColor == "fff") {
-    randomColor = "6c757d";
   }
-  return randomColor;
-}
 
   render() {
     return (
@@ -68,20 +60,20 @@ getColor() {
           />
           <SearchBar
             value={this.state.query}
-            onChange={(newValue) => this.setState({ query: newValue })}
-            onRequestSearch={() =>
-              this.getCategories(this.state.auth, this.state.query)
+            onChange={(newValue) => this.getCategories(this.state.auth, newValue)}
+            onRequestSearch={(newValue) =>
+              this.getCategories(this.state.auth, newValue)
             }
           />
         </Container>
         <Container style={{ padding: "3.5rem 0" }} maxWidth="md">
           <Grid container spacing={4}>
-            {this.state.data !== undefined && this.state.data.categories.length < 1 
-            ? <Typography gutterBottom variant="h5" component="h4">No categories matching the search term were found.</Typography> 
-            : null}
+            {this.state.data !== undefined && this.state.data.categories.length < 1
+              ? <Typography gutterBottom variant="h5" component="h4">No categories matching the search query were found.</Typography>
+              : null}
             {this.state.data !== undefined &&
               this.state.data.categories.slice(0, this.state.numMaxResults).map((card) => (
-                
+
                 <Grid item key={card.categoryId} xs={12} sm={6} md={4}>
                   <Card
                     style={{
@@ -91,7 +83,7 @@ getColor() {
                     }}
                   >
                     <CardMedia
-                      style={{ paddingTop: "40.25%", backgroundColor: this.getColor(), opacity: 0.5}}
+                      style={{ paddingTop: "40.25%", backgroundColor: this.getColor(card.categoryId) }}
                       // image="https://source.unsplash.com/random"
                       title="Category image"
                     />
@@ -120,9 +112,9 @@ getColor() {
               ))}
           </Grid>
           <br></br>
-          <Container style={{display: "flex",  flexWrap: "wrap", justifyContent: "center", marginTop: "10px"}}>
-          {this.state.data !== undefined && this.state.data.categories.length > 9 && this.state.numMaxResults < this.state.data.categories.length ? 
-          <Button size="large" color="primary" onClick={() => this.setState({ numMaxResults: this.state.numMaxResults + 9})}>
+          <Container style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", marginTop: "10px" }}>
+            {this.state.data !== undefined && this.state.data.categories.length > 9 && this.state.numMaxResults < this.state.data.categories.length ?
+              <Button size="large" color="primary" onClick={() => this.setState({ numMaxResults: this.state.numMaxResults + 9 })}>
                 Show more results</Button> : null}
           </Container>
         </Container>
@@ -132,7 +124,7 @@ getColor() {
 
   loadMore = () => {
     if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement.scrollHeight) {
-        this.setState({ numMaxResults: this.state.numMaxResults + 9})
+      this.setState({ numMaxResults: this.state.numMaxResults + 9 })
     }
   }
 
@@ -163,6 +155,30 @@ getColor() {
       });
     }, 0);
   };
+
+  getColor(categoryId) {
+    if (categoryId%10 == 0) {
+      return "#EE9D94"
+    } else if (categoryId%10 == 1) {
+    return "#9DBBE3"
+  } else if (categoryId%10 == 2) {
+    return "#BFE3DF"
+  } else if (categoryId%10 == 3) {
+    return "#A09BCC"
+  } else if (categoryId%10 == 4) {
+    return "#FFF5CC"
+  } else if (categoryId%10 == 5) {
+    return "#90CCDE"
+  } else if (categoryId%10 == 6) {
+    return "teal"
+  } else if (categoryId%10 == 7) {
+    return "#D3F1D2"
+  } else if (categoryId%10 == 8) {
+    return "#F3C6D1"
+  } else {
+    return "#FFD9BD"
+  }
+  }
 
   // saveCategory = (auth, categoryId) => {
   //   setTimeout(() => {

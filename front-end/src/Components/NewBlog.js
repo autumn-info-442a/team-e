@@ -39,13 +39,6 @@ export class NewBlog extends React.Component {
     this.setState({
       auth: auth,
     });
-    // var groupId = this.props.groupId;
-    // console.log("CHECK", groupId);
-    /*  setTimeout(() =>{
-        console.log(this.props.data.isAdmin)
-  
-      }, 2000)
-      */
   }
 
   handlePostTitleChange = (event) => {
@@ -67,38 +60,38 @@ export class NewBlog extends React.Component {
         buttonColor: "primary"
       })
     } else {
-    if (this.state.postTitle.length < 1) {
-      this.setState({
-        showError: true,
-        errorMessage: "Empty post title.",
-      });
-    } else if (this.state.postTitle.length > 50) {
-      this.setState({
-        showError: true,
-        errorMessage: "Post title must be under 50 characters.",
-      });
-    } else if (this.state.postContent.length > 1000) {
-      this.setState({
-        showError: true,
-        errorMessage: "Post must be under 1000 characters.",
-      });
-    } else {
-      this.createBlogPost(
-        this.state.auth,
-        this.props.groupId,
-        this.state.postTitle,
-        this.state.postContent
-      );
-      console.log(this.props.groupId)
-      console.log(this.props.data.isJoined)
-      console.log(this.props.data.isAdmin)
-      this.setState({
-        showModal: false,
-        showSuccess: true,
-      });   
-      console.log("check post is created");
+      if (this.state.postTitle.length < 1) {
+        this.setState({
+          showError: true,
+          errorMessage: "Empty post title.",
+        });
+      } else if (this.state.postTitle.length > 50) {
+        this.setState({
+          showError: true,
+          errorMessage: "Post title must be under 50 characters.",
+        });
+      } else if (this.state.postContent.length > 1000) {
+        this.setState({
+          showError: true,
+          errorMessage: "Post must be under 1000 characters.",
+        });
+      } else {
+        this.createBlogPost(
+          this.state.auth,
+          this.props.groupId,
+          this.state.postTitle,
+          this.state.postContent
+        );
+        console.log(this.props.groupId)
+        console.log(this.props.data.isJoined)
+        console.log(this.props.data.isAdmin)
+        this.setState({
+          showModal: false,
+          showSuccess: true,
+        });
+        console.log("check post is created");
+      }
     }
-  }
   }
 
   removeAlert() {
@@ -130,7 +123,7 @@ export class NewBlog extends React.Component {
         <div>
           {this.props.data.joinedStatus === "Joined" || this.props.data.isAdmin ? (
             <div>
-              <Button style={{ left:"45%" }}
+              <Button style={{ left: "45%" }}
                 size="medium"
                 color="primary"
                 onClick={() => this.setState({ showModal: true })}
@@ -140,7 +133,7 @@ export class NewBlog extends React.Component {
               {/* <SuccessAlert></SuccessAlert> */}
               <Dialog
                 open={this.state.showModal}
-                onClose={() => this.setState({ showModal: false,  buttonText: "Create Post",  buttonColor: "default" })}
+                onClose={() => this.setState({ showModal: false, buttonText: "Create Post", buttonColor: "default" })}
                 aria-labelledby="Create Post"
                 aria-describedby="simple-modal-description"
               >
@@ -185,15 +178,15 @@ export class NewBlog extends React.Component {
                         onChange={this.handlePostContentChange}
                       />
                       <div style={{ width: "100%", margin: "10px auto 0px auto" }}>
-                      <Button
-                        id="create"
-                        variant="outlined"
-                        color={this.state.buttonColor}
-                        size="sm"
-                        onClick={() => this.clickSubmitHandler()}
-                      >
-                        {this.state.buttonText}
-                      </Button>
+                        <Button
+                          id="create"
+                          variant="outlined"
+                          color={this.state.buttonColor}
+                          size="sm"
+                          onClick={() => this.clickSubmitHandler()}
+                        >
+                          {this.state.buttonText}
+                        </Button>
                       </div>
                       <hr></hr>
                       <ErrorAlert></ErrorAlert>
