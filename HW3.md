@@ -15,7 +15,7 @@
 
 - Verification Steps: 1. User accesses the application 2. User clicks on any category they'd like 3. User should be able to view the category's list of groups, even if they aren't logged in.
 
-- Reason for REVISED: We revised this requirement to allow for npn-logged in users to have access to the category's page. We made this decision as it gives users the opportunity to explore the pages before they've logged in, affording the chance to determine if making an account will provide them with meaningful connections.
+- Reason for REVISED: We revised this requirement to allow for non-logged in users to have access to the category's page. We made this decision as it gives users the opportunity to explore the pages before they've logged in, affording the chance to determine if making an account will provide them with meaningful connections.
 
 4.  **COMPLETE** The system must show all categories, and the user must be able to scroll down to see the rest if they do not all fit on the page.
 
@@ -29,7 +29,7 @@
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User must be able to view a section at the top of the page listing recommended categories.
 
-- Reasoning for IMPOSSIBLE: We determined that this requirement doesn't fit the needs of our MVP to be beneficial to our application's users. Having the ability to see recommended groups if a useful feature for efficiency, which could be implemented later on down the line, but isn't a feature that will afford users to make meaningful connections with each other.
+- Reasoning for IMPOSSIBLE: We determined that this requirement doesn't fit the needs of our MVP to be beneficial to the users on our application. Having the ability to see recommended groups if a useful feature for efficiency, which could be implemented later on down the line, but isn't a feature that will afford users to make meaningful connections with each other right away. See the New Account Survey requirements for more information on why we made this decision.
 
 ### Viewing Groups in a Category
 
@@ -45,15 +45,17 @@
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. Reading from left to right, all groups withing the clicked on category should be in alphabetical order.
 
-10. **COMPLETE** Users should be able to create a new group if none of the search results were what they were looking for by clicking on a “create group” button. If the user is logged in, it will redirect to the create new group page, otherwise it will redirect the user to the login page to log in.
+10. **REVISED** Users should be able to create a new group if none of the search results were what they were looking for by clicking on a “create group” button. If the user is logged in, it will redirect to the create new group page, otherwise there will not be a create group button on the page.
 
-- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User searches or scrolls for a group 5. If the group they're looking for doesn't exist, they can click the "create group" button 6. If the user isn't logged in, the user will be directed to the log in screen, then can repeat this process.
+- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User searches or scrolls for a group 5. If the group they're looking for doesn't exist, they can click the "create group" button 6. If the user isn't logged in, the user won't have access to the create group button.
+
+- Reasoning for REVISED: We revised this requirement due to the permissions as a non-logged in user. We decided that a non-logged in user shouldn't that they ability to see the create group button. The create group button will only be displayed in the case that a user is logged in to their UW account.
 
 11. **REVISED** The system might display saved groups under the My Groups page.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the My Groups by clicking it in the navigation bar 3. Users should be able to see saved groups at the bottom of the page. There will be no saved groups if the user hasn't saved any groups since making their account.
 
-- Reasoning for REVISED: We revised this requirement to make the home page more elegant and less clutered. We determined it was best to display the saved groups under the My Groups tab on the navigation bar as My Groups contains information about Admin Groups, Joined Groups, and now Saved Groups. It made sense from a user standpoint to make this decision to move the location of Saved Groups.
+- Reasoning for REVISED: We revised this requirement to make the home page more elegant and less cluttered. We determined it was best to display the saved groups under the My Groups tab on the navigation bar as My Groups contains information about Admin Groups, Joined Groups, and now Saved Groups. It made sense from a user standpoint to make this decision to move the location of Saved Groups.
 
 ### Search Bar
 
@@ -81,7 +83,7 @@
 
 17. **COMPLETE** The system must display a nav bar at the top of all pages to allow for easy navigation.
 
-- Verification Steps: 1. User accesses the application 2. User mouses towards the top of the application 3. User should be able to easily navigate to Home, My Groups (when logged in), and Log In/Log Out.
+- Verification Steps: 1. User accesses the application 2. User mouses towards the top of the application 3. User should be able to easily navigate to Home, My Groups (when logged in), and Log in with UW Gmail/Log Out.
 
 18. **COMPLETE** The system must have a logo on the nav bar, redirecting the user to the home page when clicked.
 
@@ -91,15 +93,15 @@
 
 - Verification Steps: 1. User accesses the application 2. In the navbar, the user should be able to click My Groups if the user is logged in. 3. If the user isn't logged in, they won't have access to the My Groups tab until they log in.
 
-Reason for REVISED: We revised this requirement because we made the decision to not display the My Groups tab if the user isn't logged in. Once the user logs in, they will then have access to the My Groups tab.
+Reason for REVISED: We revised this requirement because we made the decision to not display the My Groups tab if the user isn't logged in. Once the user logs in, they will then have access to the My Groups tab. We made this decision as it made sense from a permissions standpoint to limit the functionality of the application until the user logs in to their account.
 
 20. **COMPLETE** The system must have a Log In tab on the nav bar, redirecting the user to the Log In page when clicked. The system must change the Log In element to Log Out once a user has logged in.
 
 - Verification Steps: 1. User accesses the application 2. In the navbar, the user should be able to click Log In, taking them to the log in screen. 3. Once the user logs in, the element should change to Log Out, vice versa.
 
-### Log in
+### Log in IMPOSSIBLE
 
-- Reasoning for IMPOSSIBLE: We made the decision to delete this feature from our application as we chose to use Google for identity management purposes. We chose to do this as we wanted to restrict the application to only UW email users (at least for now). This decision makes the log in process easier and more elegant for users when they access our application and sign in to their UW account.
+- Reasoning for IMPOSSIBLE: We made the decision to delete this feature from our application as we chose to use Google for identity management purposes. We chose to do this as we wanted to restrict the application to only UW email users (at least for now). This decision makes the log in process easier and more elegant for users when they access our application and sign into their UW Gmail account.
 
 21. **IMPOSSIBLE** Users must be able to type into the email and password text box.
 
@@ -121,7 +123,7 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. In the navbar, the user should be able to click Log In to be routed to the log in page. 3. If the user doesn't have an account, the user should be able to click the sign up button to create an account.
 
-### New Account Survey
+### New Account Survey IMPOSSIBLE
 
 - Reasoning for IMPOSSIBLE: We made the decision to delete this feature from our application because it doesn't contribute to making meaningful connections amongst users. The result of this survey would have been recommended categories for the new user that would be displayed at the top of the home page. We concluded that recommended sections wouldn't contribute to the experience of finding new categories as we have ~50 predefined categories that are easily accessible. We diverted the time from making this feature to ensuring that the home page experience was great for our users.
 
@@ -187,7 +189,7 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on the create group button, displaying an element that will allow the user to create a new group 5. The user should be given an error if they try to submit the new group when there's missing group information (name, category, description).
 
-- Reasoning for REVISED: We decided to revise this requirement to better match the workflow of the modal. Instead of greying out the "create group" button, we implemented an error that will be thrown if the user tries to create the group with missing information. By doing this, we are keeping the buttons consistent in format and are following the same workflow for throwing errors when forms aren't correctly filled out.
+- Reasoning for REVISED: We decided to revise this requirement to better match the workflow of the modal. Instead of greying out the "create group" button, we implemented an error that will be thrown if the user tries to create the group with missing information. By doing this, we are keeping modal buttons consistent in format and are following the same workflow for throwing errors when forms aren't correctly filled out.
 
 41. **IMPOSSIBLE** Users must be able to create an account if the form contains all of the correct information.
 
@@ -203,13 +205,13 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. If the user is a member of the group, they should be able to see the group admin's email in the group details section.
 
-- Reasoning for IMPOSSIBLE: We determined that this requirement was impossible because the user's email is not returned from the Google authentication we used, unless we choose to always return the email from Google authentication. We decided against the latter as we believe it could be a privacy issue if the user's email is accessible at all times in the application. If the students want to share their contact information, they can discuss that in comments, find each other through social media or the student directory.
+- Reasoning for IMPOSSIBLE: We determined that this requirement was impossible because the user's email is not returned from the Google authentication method we used, unless we choose to always return the email from the Google authentication method. We decided against the latter as we believe it could be a privacy issue if the user's email is accessible at all times in the application. If the students want to share their contact information, they can discuss that in comments (reply feature shoutout Andy), find each other through social media or the student directory.
 
 44. **IMPOSSIBLE** The system must allow the user to route back to the previous page by clicking the back arrow.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. The user should be able to route back to the previous page by hitting the back arrow.
 
-- Reasoning for IMPOSSIBLE: We decided that this requirement isn't necessary becuase users can just use their browser's back arrow to swipe of their touch pad.
+- Reasoning for IMPOSSIBLE: We decided that this requirement isn't necessary because users can just use their browser's back arrow to swipe of their touch pad.
 
 45. **COMPLETE** If the user is logged in and not in the group, the system must allow the user to request to join the group by clicking the ask to join button.
 
@@ -219,31 +221,37 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. If the user is logged into their account and has not joined the group they clicked, the user should be able to request to join the group 6. The user's join status should change to pending and be greyed out once the user has requested to join the group.
 
-47. **TO DO** The system must limit the number of group members to 10, displaying an error message if a user requests to join and the member count is already 10.
+47. **COMPLETE** The system must limit the number of group members to 10, displaying an error message if a user requests to join and the member count is already 10.
 
-- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. The number of members in the group should be displayed to the user 6. If the user tries to join a group with 10 members, an error will be displayed.
+- Verification Steps (will be tricky as a group needs to have 10 people in it): 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. The number of members in the group should be displayed to the user 6. If the user tries to join a group with 10 members, an error will be displayed.
 
-48. **NEED TO REVISE** The user must be able to leave any group that they have joined by clicking on the “leave group” button.
+48. **COMPLETE** The user must be able to leave any group that they have joined by clicking on the “leave group” button.
 
-- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. If the user is logged into their account and is a member of the group, the user should be able to click the leave group button which will redact the user's membership from the group.
+- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. If the user is logged into their account and is a member of the group, the user should be able to click the leave group button which will redact the user's membership from the group 6. If the user isn't a member of the group, the user must request to join, be admitted be the group admin, then can click to leave the group.
 
 49. **REVISED** The system should allow users to leave comments by clicking on the comment button, and each comment should have a max character count error that will be thrown if the user creates a comment over the character limit.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. The user should be able to post a comment to the group by clicking the comment button 6. If the user reaches the max character count for a comment, an error will be displayed after the user tries to create the comment.
 
-- Reasoning for REVISED: We revised this requirement to match how we implemented the error to be thrown if the character count is at the limit. Instead of throwing the error while the user is typing, we implemented the error to be thrown if the user tries to create a comment over the character limit. This change was made according to our development team and implementation methods that were chosen to be used.
+- Reasoning for REVISED: We revised this requirement to match how we implemented the error to be thrown if the character count is at the limit. Instead of throwing the error while the user is typing over the limit, we implemented the error to be thrown if the user tries to create a comment over the character limit. This change was made according to our development team and implementation methods that were chosen to be used.
 
-50. **COMPLETE** The system should display comments below the group information and show these comments in chronological order with the most recent comment being at the top.
+50. **REVISED** The system should display comments below the group information and show these comments in chronological order with the most recent comment being at the top.
 
-- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User should be able to view comments on blog posts in chronological order.
+- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User should be able to view comments on the group in chronological order.
 
-51. **COMPLETE** Users must be able to view and reply to comments on each post from a thread system below the post.
+- Reasoning for REVISED: We revised this requirement's verbiage to match the location of where it's located in the application--group tab--and not on blog posts.
 
-- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User should be able to view comments on blog posts 7. User should be able to view and reply to comments that are connected to a blog post by hitting the reply button.
+51. **REVISED** Users must be able to view and reply to comments on groups in a thread system below the original comment.
 
-52. **COMPLETE** The system should only display the three most recent comments unless “load more comments” is pressed.
+- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User should be able to view comments on the group 6. User should be able to reply to comments by hitting the reply button.
 
-- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User should be able to view the three most recent comments on the blog post 7. If the user presses the load more comments button, the user should be able to see all the comments on the blog post.
+- Reasoning for REVISED: We revised this requirement's verbiage to match the location of where it's located in the application--group tab--and not on blog posts.
+
+52. **REVISED** The system should only display the three most recent comments unless “load more comments” is pressed.
+
+- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User should be able to view the three most recent comments on the group 7. If the user presses the load more comments button, the user should be able to see all the comments on the blog post.
+
+- Reasoning for REVISED: We revised this requirement's verbiage to match the location of where it's located in the application--group tab--and not on blog posts.
 
 53. **COMPLETE** Users should be able to save the group so they can return to the page at a later date (through the my groups page) by clicking on the save button. Once saved, you can click it again to unsave.
 
@@ -265,9 +273,11 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Reasoning for REVISION: Changed the verbiage of buttons to accurately match the application.
 
-57. **COMPLETE** The system should only allow users to post if they have already joined the group by only displaying the add post button to group members.
+57. **REVISED** The system should only allow users to post if they have already joined the group by only displaying the create new post button to group members.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User should only be able to see the create new post button if they are logged in and have already joined the group.
+
+- Reasoning for REVISION: Changed the verbiage of buttons to accurately match the application.
 
 58. **COMPLETE** Users must be able to comment on any post in the group by clicking the comment button (comments work the same was as in the view group tab).
 
@@ -279,7 +289,7 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User should be able to click the back arrow to route back to the previous page.
 
-- Reasoning for IMPOSSIBLE: We decided that this requirement isn't necessary becuase users can just use their browser's back arrow to swipe of their touch pad.
+- Reasoning for IMPOSSIBLE: We decided that this requirement isn't necessary because users can just use their browser's back arrow to swipe of their touch pad.
 
 60. **COMPLETE** The system must allow the user to enter a title for their post, including letters and numbers with a maximum of 50 characters.
 
@@ -317,7 +327,7 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User should be able to view the groups that the user has joined 5. User should be able to click the leave group button to leave a group they have joined.
 
-68. **TO DO** When hitting the leave button, the system must display a confirmation, ensuring that the user wants to leave the group by clicking the confirm or cancel button.
+68. **COMPLETE** When hitting the leave button, the system must display a confirmation, ensuring that the user wants to leave the group by clicking the confirm or cancel button.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User should be able to view the groups that the user has joined 5. User should be able to click the leave group button to leave a group they have joined 6. A confirmation popup should appear to confirm this action.
 
@@ -347,13 +357,13 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User clicks into a group under "Admin Groups" -- no groups will exist in this section if the user hasn't created any groups 5. User routes to the groups page 6. User clicks Member Requests 7. User should see the pending user requests and their details if another user has requested membership into the group.
 
-- Reasoning for REVISED: We decided to revise this requirement to properly match the workflow that we've implemented into our application. To view pending request information, the Admin user just needs to click into a group they are an admin for, then view the Member Requests tab in the group. The pending requests should display the requester user's details.
+- Reasoning for REVISED: We decided to revise this requirement to properly match the workflow that we've implemented into our application. To view pending request information, the Admin user just needs to click into a group they are an admin for, then view the Member Requests tab in the group. The pending requests should display the requested user's details.
 
 74. **COMPLETE** The system must allow the Admin user to click on a pending request to make the decision to admit them.
 
-- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User clicks into a group under "Admin Groups" -- no groups will exist in this section if the user hasn't created any groups 5. User routes to the groups page 6. User clicks Member Requests 7. User should see the pending user requests 8. User can then make a decision
+- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User clicks into a group under "Admin Groups" -- no groups will exist in this section if the user hasn't created any groups 5. User routes to the groups page 6. User clicks Member Requests 7. User should see the pending user requests 8. User can then make a decision.
 
-75. **TO DO** The system must display a confirmation when the Admin user clicks on a pending request, allowing them to click yes or no.
+75. **COMPLETE** The system must display a confirmation when the Admin user clicks on a pending request, allowing them to click confirm.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User clicks into a group under "Admin Groups" -- no groups will exist in this section if the user hasn't created any groups 5. User routes to the groups page 6. User clicks Member Requests 7. User should see the pending user requests 8. User can then make a decision 9. A confirmation should pop up when the user makes their decision.
 
@@ -365,9 +375,11 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User should be able to view the groups that they have created 5. User should be able to hit the delete button on a group tile to delete the group.
 
-78. **COMPLETE** The system must display a delete confirmation screen, allowing the user to delete the group by clicking yes, or no to not delete the group.
+78. **REVISED** The system must display a delete confirmation popup, allowing the user to confirm the deletion the group.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User should be able to view the groups that they have created 5. User should be able to hit the delete button on a group tile to delete the group 6. A confirmation message will popup to confirm the user's decision.
+
+- Reasoning for REVISED: We revised this requirement to match how we implemented the confirmation message. We decided that a popup confirmation would be best for this action as deleting a group will delete all of its information. So, we want the user to adequately think about this decision by showing them a confirmation popup.
 
 79. **COMPLETE** The system must remove the pending request from the Admin user’s view after a decision has been made.
 
