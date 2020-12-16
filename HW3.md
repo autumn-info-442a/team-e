@@ -57,7 +57,7 @@
 
 ### Search Bar
 
-12. **TO DO** Users must be able to type into the search bar while the system updates search results as the user types.
+12. **COMPLETE** Users must be able to type into the search bar while the system updates search results as the user types.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks into the search bar 4. User enters letters into the search bar 5. Search results should update as the user types their search query.
 
@@ -83,7 +83,7 @@
 
 - Verification Steps: 1. User accesses the application 2. User mouses towards the top of the application 3. User should be able to easily navigate to Home, My Groups (when logged in), and Log In/Log Out.
 
-18. **TO DO** The system must have a logo on the nav bar, redirecting the user to the home page when clicked.
+18. **COMPLETE** The system must have a logo on the nav bar, redirecting the user to the home page when clicked.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the top left of the page. 3. User should be able to see the Explore logo 4. If the user clicks the Explore logo, they should be routed to the home page.
 
@@ -237,9 +237,9 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User should be able to view comments on blog posts in chronological order.
 
-51. **TO DO** Users must be able to view and reply to comments on each post from a thread system below the post.
+51. **COMPLETE** Users must be able to view and reply to comments on each post from a thread system below the post.
 
-- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User should be able to view comments on blog posts 7. User should be able to view and reply to comments that are connected to a blog post.
+- Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on a category 4. User clicks on a group 5. User clicks on blog posts 6. User should be able to view comments on blog posts 7. User should be able to view and reply to comments that are connected to a blog post by hitting the reply button.
 
 52. **COMPLETE** The system should only display the three most recent comments unless “load more comments” is pressed.
 
@@ -361,11 +361,11 @@ Reason for REVISED: We revised this requirement because we made the decision to 
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User clicks into a group under "Admin Groups" -- no groups will exist in this section if the user hasn't created any groups 5. The user should be able to click on the pending request to make an admission decision 6. If admitted, the user that requested admission should be able to enter the group they requested membership for.
 
-77. **TO DO** The system must be able to recognize when a user is an admin for a group (a group they created), giving them the ability to delete the group if desired from the “Your Admin Groups” tab by hitting the delete button.
+77. **COMPLETE** The system must be able to recognize when a user is an admin for a group (a group they created), giving them the ability to delete the group if desired from the “Your Admin Groups” tab by hitting the delete button.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User should be able to view the groups that they have created 5. User should be able to hit the delete button on a group tile to delete the group.
 
-78. **TO DO** The system must display a delete confirmation screen, allowing the user to delete the group by clicking yes, or no to not delete the group.
+78. **COMPLETE** The system must display a delete confirmation screen, allowing the user to delete the group by clicking yes, or no to not delete the group.
 
 - Verification Steps: 1. User accesses the application 2. User navigates to the home page by clicking either Explore or Home 3. User clicks on My Groups 4. User should be able to view the groups that they have created 5. User should be able to hit the delete button on a group tile to delete the group 6. A confirmation message will popup to confirm the user's decision.
 
