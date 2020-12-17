@@ -9,7 +9,7 @@ class Authenticate extends React.Component {
   }
 
   componentDidMount() {
-    window.location.href = 'https://groups.cahillaw.me/login'
+    window.location.href = 'https://groups2.cahillaw.me/login'
   }
 
   render = () => {

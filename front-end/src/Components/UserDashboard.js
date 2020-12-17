@@ -22,7 +22,7 @@ export class UserDashboard extends Component {
 
   getAdminGroups = (auth) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/admin";
+      var url = "https://groups2.cahillaw.me/v1/admin";
 
       fetch(url, {
         method: "get",
@@ -288,7 +288,7 @@ export class UserDashboard extends Component {
 
   leaveGroup = (auth, groupId) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests"
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/requests"
       fetch(url, {
         method: 'delete',
         headers: {
@@ -353,7 +353,7 @@ export class UserDashboard extends Component {
 
   deleteGroup = (auth, groupId) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId
       fetch(url, {
         method: 'delete',
         headers: {

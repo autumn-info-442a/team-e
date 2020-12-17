@@ -135,7 +135,7 @@ export class Groups extends Component {
     }
 
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups"
+      var url = "https://groups2.cahillaw.me/v1/groups"
       fetch(url, {
         method: 'post',
         headers: {
@@ -158,7 +158,7 @@ export class Groups extends Component {
 
   getGroup = (auth, groupId) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId
       fetch(url, {
         method: 'get',
         headers: {
@@ -180,7 +180,7 @@ export class Groups extends Component {
 
   saveGroup = (auth, groupId) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/save"
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/save"
       fetch(url, {
         method: 'post',
         headers: {
@@ -201,7 +201,7 @@ export class Groups extends Component {
 
   unsaveGroup = (auth, groupId) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/save"
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/save"
       fetch(url, {
         method: 'delete',
         headers: {
@@ -236,7 +236,7 @@ export class Groups extends Component {
 
   searchGroups = (auth, categoryId, page, query) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/search?"
+      var url = "https://groups2.cahillaw.me/v1/search?"
       if (categoryId !== '') {
         url = url + "category=" + categoryId
       }

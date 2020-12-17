@@ -211,7 +211,7 @@ export class NewBlog extends React.Component {
     };
 
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog";
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/blog";
       fetch(url, {
         method: "post",
         headers: {

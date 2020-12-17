@@ -49,7 +49,7 @@ export class NewGroup extends React.Component {
 
     console.log(body)
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups"
+      var url = "https://groups2.cahillaw.me/v1/groups"
       fetch(url, {
         method: 'post',
         headers: {
@@ -73,7 +73,7 @@ export class NewGroup extends React.Component {
 
   getCategories = (auth, query) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/categories?"
+      var url = "https://groups2.cahillaw.me/v1/categories?"
       if (query !== '') {
         url = url + "query=" + query
       }

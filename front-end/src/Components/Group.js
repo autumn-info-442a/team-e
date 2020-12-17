@@ -413,7 +413,7 @@ export class Group extends Component {
         }
       }
 
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/comments"
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/comments"
       fetch(url, {
         method: 'post',
         headers: {
@@ -442,7 +442,7 @@ export class Group extends Component {
   getGroup = (auth, groupId) => {
     setTimeout(() => {
       console.log(auth);
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId;
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId;
       fetch(url, {
         method: "get",
         headers: {
@@ -473,7 +473,7 @@ export class Group extends Component {
 
   getMembersipRequests = (auth, groupId) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests";
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/requests";
 
       fetch(url, {
         method: "get",
@@ -499,7 +499,7 @@ export class Group extends Component {
   createMembershipRequest = (auth, groupId) => {
     setTimeout(() => {
       if (this.state.data.numMembers < 9) {
-        var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests";
+        var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/requests";
         fetch(url, {
           method: "post",
           headers: {
@@ -527,7 +527,7 @@ export class Group extends Component {
   acceptMembershipRequest = (auth, groupId, requestId) => {
     setTimeout(() => {
       var url =
-        "https://groups.cahillaw.me/v1/groups/" +
+        "https://groups2.cahillaw.me/v1/groups/" +
         groupId +
         "/requests/" +
         requestId;
@@ -551,7 +551,7 @@ export class Group extends Component {
   declineMembershipRequest = (auth, groupId, requestId) => {
     setTimeout(() => {
       var url =
-        "https://groups.cahillaw.me/v1/groups/" +
+        "https://groups2.cahillaw.me/v1/groups/" +
         groupId +
         "/requests/" +
         requestId;
@@ -574,7 +574,7 @@ export class Group extends Component {
 
   saveGroup = (auth, groupId) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/save"
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/save"
       fetch(url, {
         method: 'post',
         headers: {
@@ -599,7 +599,7 @@ export class Group extends Component {
 
   unsaveGroup = (auth, groupId) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/save"
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/save"
       fetch(url, {
         method: 'delete',
         headers: {
@@ -625,7 +625,7 @@ export class Group extends Component {
   getGroupComments = (auth, groupId, page) => {
     setTimeout(() => {
       var url =
-        "https://groups.cahillaw.me/v1/groups/" + groupId + "/comments?";
+        "https://groups2.cahillaw.me/v1/groups/" + groupId + "/comments?";
       if (page !== "") {
         url = url + "page=" + page;
       }
@@ -670,7 +670,7 @@ export class Group extends Component {
 
   leaveGroup = (auth, groupId) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/requests"
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/requests"
       fetch(url, {
         method: 'delete',
         headers: {

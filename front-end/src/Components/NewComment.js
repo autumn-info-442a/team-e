@@ -156,7 +156,7 @@ export class NewComment extends React.Component {
         }
       }
 
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/comments"
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/comments"
       fetch(url, {
         method: 'post',
         headers: {

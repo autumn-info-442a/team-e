@@ -130,7 +130,7 @@ export class Categories extends Component {
 
   getCategories = (auth, query) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/categories?";
+      var url = "https://groups2.cahillaw.me/v1/categories?";
       if (query !== "") {
         url = url + "query=" + query;
       }

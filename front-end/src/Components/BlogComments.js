@@ -81,7 +81,7 @@ export class BlogComments extends React.Component {
             }
           }
 
-          var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId + "/comments"
+          var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId + "/comments"
           console.log(url)
           fetch(url, {
             method: 'post',
@@ -198,7 +198,7 @@ export class BlogComments extends React.Component {
 
   deleteBlogComment = (auth, groupId, blogId, commentId) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId + "/comments/" + commentId;
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId + "/comments/" + commentId;
       fetch(url, {
         method: "delete",
         headers: {

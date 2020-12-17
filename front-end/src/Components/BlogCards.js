@@ -39,7 +39,7 @@ export class BlogCards extends Component {
 
   getBlogPosts = (auth, groupId) => {
     setTimeout(() => {
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog"
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/blog"
 
       fetch(url, {
         method: 'get',
@@ -160,7 +160,7 @@ export class BlogCards extends Component {
   deleteBlogPost = (auth, groupId, blogId) => {
     setTimeout(() => {
       var url =
-        "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId;
+        "https://groups2.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId;
       fetch(url, {
         method: "delete",
         headers: {

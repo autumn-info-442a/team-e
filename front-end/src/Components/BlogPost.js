@@ -195,7 +195,7 @@ export class BlogPost extends Component {
         }
       }
 
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId + "/comments"
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId + "/comments"
       console.log(url)
       fetch(url, {
         method: 'post',
@@ -226,7 +226,7 @@ export class BlogPost extends Component {
   getBlogComments = (auth, groupId, blogId, page) => {
     setTimeout(() => {
       console.log(page)
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId + "/comments?";
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + "/blog/" + blogId + "/comments?";
       if (page !== '') {
         url = url + "page=" + page;
       }
@@ -273,7 +273,7 @@ export class BlogPost extends Component {
   getGroup = (auth, groupId) => {
     setTimeout(() => {
       console.log(auth);
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId;
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId;
       fetch(url, {
         method: "get",
         headers: {
@@ -298,7 +298,7 @@ export class BlogPost extends Component {
   getBlogPost = (auth, groupId, blogId) => {
     setTimeout(() => {
       console.log(auth);
-      var url = "https://groups.cahillaw.me/v1/groups/" + groupId + '/blog/' + blogId
+      var url = "https://groups2.cahillaw.me/v1/groups/" + groupId + '/blog/' + blogId
       fetch(url, {
         method: "get",
         headers: {
